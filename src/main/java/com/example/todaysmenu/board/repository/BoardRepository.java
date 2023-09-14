@@ -1,0 +1,15 @@
+package com.example.todaysmenu.board.repository;
+
+import com.example.todaysmenu.board.entity.BoardDTO;
+import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
+
+@Mapper
+public interface BoardRepository {
+    public List<BoardDTO> list();
+    public BoardDTO info(int tfb_seq);
+    public void insert(BoardDTO freeboarddto);
+    public void update(BoardDTO freeboarddto);
+    public void delete(int tfb_seq);
+}

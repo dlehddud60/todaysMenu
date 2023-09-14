@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.todaysmenu.board.repository.BoardRepository">
+
+    <select id="list" resultType="com.example.todaysmenu.board.entity.BoardDTO">
+        /*com.example.todaysmenu.board.repository.BoardRepository.list[목록]*/
+        SELECT  TFB_SEQ
+        ,       TFB_TITLE_NM
+        ,       TFB_TEXT
+        ,       TFB_INPUT_TY
+        ,       TFB_INPUT_NM
+        ,       TFB_INPUT_DT
+        ,       TFB_INPUT_IP
+        ,       TFB_MODER_TY
+        ,       TFB_MODER_NM
+        ,       TFB_MODER_DT
+        ,       TFB_MODER_IP
+        FROM    TM_FREE_BOARD
+        ORDER BY TFB_SEQ DESC
+    </select>
+
+    <select id="info" resultType="com.example.todaysmenu.board.entity.BoardDTO">
+        /*com.example.todaysmenu.board.repository.BoardRepository.info[상세]*/
+        SELECT  TFB_SEQ
+        ,       TFB_TITLE_NM
+        ,       TFB_TEXT
+        ,       TFB_INPUT_TY
+        ,       TFB_INPUT_NM
+        ,       TFB_INPUT_DT
+        ,       TFB_INPUT_IP
+        ,       TFB_MODER_TY
+        ,       TFB_MODER_NM
+        ,       TFB_MODER_DT
+        ,       TFB_MODER_IP
+        FROM    TM_FREE_BOARD
+    </select>
+
+    <insert id="insert" parameterType="com.example.todaysmenu.board.entity.BoardDTO">
+        /*com.example.todaysmenu.board.repository.BoardRepository.insert[등록]*/
+        INSERT INTO TM_FREE_BOARD
+        (   TFB_SEQ
+        ,   TFB_TITLE_NM
+        ,   TFB_TEXT
+        ,   TFB_INPUT_TY
+        ,   TFB_INPUT_NM
+        ,   TFB_INPUT_DT
+        ,   TFB_INPUT_IP
+        ,   TFB_MODER_TY
+        ,   TFB_MODER_NM
+        ,   TFB_MODER_DT
+        ,   TFB_MODER_IP
+        )
+        VALUES
+        (   TM_TFB_SEQ.nextval
+        ,   #{tfb_title_nm}
+        ,   #{tfb_text}
+        ,   NULL
+        ,   NULL
+        ,   SYSDATE
+        ,   NULL
+        ,   NULL
+        ,   NULL
+        ,   SYSDATE
+        ,   NULL
+        )
+    </insert>
+
+    <update id="update">
+        /*com.example.todaysmenu.board.repository.BoardRepository.update[수정]*/
+        UPDATE	TM_FREE_BOARD
+        SET		TFB_MODER_TY 	= null
+        ,		TFB_MODER_NM 	= null
+        ,		TFB_MODER_DT 	= null
+        ,		TFB_MODER_IP	= null
+        ,       TFB_TITLE_NM    = #{tfb_title_nm}
+        ,       TFB_TEXT        = #{tfb_text}
+        WHERE	TFB_SEQ			= #{tfb_seq}
+    </update>
+
+    <delete id="delete">
+        /*com.example.todaysmenu.board.repository.BoardRepository.delete[삭제]*/
+        DELETE FROM	TM_FREE_BOARD
+        WHERE	1 = 1
+        AND		TFB_SEQ = #{tfb_seq}
+    </delete>
+
+</mapper>
