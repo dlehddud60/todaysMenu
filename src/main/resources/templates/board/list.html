@@ -1,0 +1,35 @@
+<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<form>
+    <div class="container pt-5">
+        <h1>자유게시판</h1>
+        <p>점심시간 무엇을 먹을지 고민하는 분들에게 오늘의 메뉴를 추천해드립니다.</p>
+        <p>The .container class provides a responsive fixed width container.</p>
+        <p>Resize the browser window to see that the container width will change at different breakpoints.</p>
+
+
+        <table class="table table-hover">
+            <thead>
+
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">작성일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <div th:each="list : ${list}">
+                <tr class="table-primary">
+                    <th scope="row" th:text="${list.data_seq}"></th>
+                    <td>
+                        <a th:href="@{/board/view.do(tfb_seq = ${list.tfb_seq})}" th:text="${list.tfb_title_nm}" ></a>
+                    </td>
+                    <td th:text="${list.tfb_input_nm}"></td>
+                    <td th:text="${list.tfb_input_dt}"></td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
+        <a class="btn btn-success" href="/board/write.do" role="button">등록</a>
+    </div>
+</form>
