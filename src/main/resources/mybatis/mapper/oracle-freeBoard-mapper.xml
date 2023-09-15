@@ -27,18 +27,18 @@
 
     <select id="info" resultType="com.example.todaysmenu.board.entity.BoardDTO">
         /*com.example.todaysmenu.board.repository.BoardRepository.info[상세]*/
-        SELECT  TFB_SEQ
-        ,       TFB_TITLE_NM
-        ,       TFB_TEXT
-        ,       TFB_INPUT_TY
-        ,       TFB_INPUT_NM
-        ,       TFB_INPUT_DT
-        ,       TFB_INPUT_IP
-        ,       TFB_MODER_TY
-        ,       TFB_MODER_NM
-        ,       TFB_MODER_DT
-        ,       TFB_MODER_IP
-        FROM    TM_FREE_BOARD
+        SELECT  TFB.TFB_SEQ
+        ,       TFB.TFB_TITLE_NM
+        ,       TFB.TFB_TEXT
+        ,       TFB.TFB_INPUT_TY
+        ,       TFB.TFB_INPUT_NM
+        ,       TO_CHAR(TFB.TFB_INPUT_DT,'YYYY-MM-dd') AS TFB_INPUT_DT
+        ,       TFB.TFB_INPUT_IP
+        ,       TFB.TFB_MODER_TY
+        ,       TFB.TFB_MODER_NM
+        ,       TO_CHAR(TFB.TFB_MODER_DT,'YYYY-MM-dd') AS TFB_MODER_DT
+        ,       TFB.TFB_MODER_IP
+        FROM    TM_FREE_BOARD TFB
         WHERE   TFB_SEQ = #{tfb_seq}
     </select>
 
@@ -62,7 +62,7 @@
         ,   #{tfb_title_nm}
         ,   #{tfb_text}
         ,   NULL
-        ,   NULL
+        ,   '이동영'
         ,   SYSDATE
         ,   NULL
         ,   NULL

@@ -1,0 +1,20 @@
+<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<form method="post" action="/board/proc.do">
+    <input type="hidden" name="tfb_seq" th:value="${info.tfb_seq}">
+    <div class="container pt-5">
+        <div class="form-group">
+            <label class="col-form-label mt-4" for="inputDefault">제목</label>
+            <input type="text" class="form-control" placeholder="제목을 입력해주세요." id="inputDefault" name="tfb_title_nm"
+                   th:value="${info.tfb_title_nm}">
+        </div>
+        <div class="form-group">
+            <label class="form-label mt-4">내용</label>
+            <textarea class="form-control" id="" rows="10" placeholder="내용을 입력해주세요" name="tfb_text"
+                      th:text="${info.tfb_text}"></textarea>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary" th:text="수정"></button>
+    </div>
+</form>
+
+

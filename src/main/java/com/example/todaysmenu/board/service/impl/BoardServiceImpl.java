@@ -29,24 +29,26 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardDTO info(int tfb_seq) {
-        log.info("info 호출===========");
+        log.info("info 호출==========={}",tfb_seq);
         return boardRepository.info(tfb_seq);
     }
 
     @Override
     public void insert(BoardDTO freeboarddto) {
-        log.info("insert 호출===========");
+        log.info("insert 호출==========={}",freeboarddto);
       boardRepository.insert(freeboarddto);
     }
 
     @Override
     public void update(BoardDTO freeboarddto) {
-
+        log.info("update 호출==========={}",freeboarddto);
+        boardRepository.update(freeboarddto);
     }
 
     @Override
     public void delete(int tfb_seq) {
-
+        log.info("delete 호출==========={}",tfb_seq);
+        boardRepository.delete(tfb_seq);
     }
 
 

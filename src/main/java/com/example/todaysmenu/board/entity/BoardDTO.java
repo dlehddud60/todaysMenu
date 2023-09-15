@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BoardDTO {
-    private int tfb_seq;
-    private int data_seq;
+    private String tfb_seq;
+    private String data_seq;
     private String tfb_title_nm;
     private String tfb_text;
     private String tfb_input_ty;
