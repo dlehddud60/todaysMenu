@@ -3,6 +3,19 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.todaysmenu.board.repository.BoardRepository">
+    <sql id="header">
+        SELECT  ROWNUM AS ROW_NUM
+        ,       T1.*
+        FROM(
+                SELECT T1.*
+                FROM(
+    </sql>
+    <sql id="footer">
+            ) T1
+            WHERE   ROWNUM <![CDATA[<=]]> #{pageNum} * #{amount}
+        ) T1
+        WHERE   RN > (#{pageNum}-1) * #{amount}
+    </sql>
 
     <select id="count" resultType="int">
         /*com.example.todaysmenu.board.repository.BoardRepository.count[목록]*/
@@ -48,28 +61,23 @@
     </select>
 
     <select id="listPaging" resultType="com.example.todaysmenu.board.entity.BoardDTO">
-        <![CDATA[
-            SELECT  ROWNUM AS ROW_NUM
-            ,       T1.*
-            FROM(
-                    SELECT  ROWNUM AS RN
-                    ,       TFB.TFB_SEQ
-                    ,       TFB.TFB_TITLE_NM
-                    ,       TFB.TFB_TEXT
-                    ,       TFB.TFB_INPUT_TY
-                    ,       TFB.TFB_INPUT_NM
-                    ,       TO_CHAR(TFB.TFB_INPUT_DT,'YYYY-MM-dd') AS TFB_INPUT_DT
-                    ,       TFB.TFB_INPUT_IP
-                    ,       TFB.TFB_MODER_TY
-                    ,       TFB.TFB_MODER_NM
-                    ,       TO_CHAR(TFB.TFB_MODER_DT,'YYYY-MM-dd') AS TFB_MODER_DT
-                    ,       TFB.TFB_MODER_IP
-                    FROM    TM_FREE_BOARD TFB
-                    WHERE   ROWNUM <= #{pageNum} * #{amount}
-                    ORDER BY TFB_SEQ DESC
-                ) T1
-                WHERE   RN > (#{pageNum}-1) * #{amount}
-            ]]>
+        /*com.example.todaysmenu.board.repository.BoardRepository.listPaging[목록페이징]*/
+        <include refid="header"/>
+        SELECT  ROWNUM AS RN
+        ,       TFB.TFB_SEQ
+        ,       TFB.TFB_TITLE_NM
+        ,       TFB.TFB_TEXT
+        ,       TFB.TFB_INPUT_TY
+        ,       TFB.TFB_INPUT_NM
+        ,       TO_CHAR(TFB.TFB_INPUT_DT,'YYYY-MM-dd') AS TFB_INPUT_DT
+        ,       TFB.TFB_INPUT_IP
+        ,       TFB.TFB_MODER_TY
+        ,       TFB.TFB_MODER_NM
+        ,       TO_CHAR(TFB.TFB_MODER_DT,'YYYY-MM-dd') AS TFB_MODER_DT
+        ,       TFB.TFB_MODER_IP
+        FROM    TM_FREE_BOARD TFB
+        ORDER BY TFB_SEQ DESC
+        <include refid="footer"/>
     </select>
 
     <insert id="insert" parameterType="com.example.todaysmenu.board.entity.BoardDTO">

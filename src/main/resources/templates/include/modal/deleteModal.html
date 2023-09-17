@@ -1,0 +1,29 @@
+<a class="btn btn-danger" th:text="삭제" id="showDelModal"></a>
+<div class="modal" id="delModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" th:text="삭제"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>삭제 하시겠습니까?</p>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-danger" th:href="@{/board/delete.do(tfb_seq = ${param.tfb_seq})}" th:text="삭제"></a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#showDelModal").on("click", function (e) {
+            e.preventDefault();
+            $("#delModal").modal("show");
+
+        });
+    });
+</script>

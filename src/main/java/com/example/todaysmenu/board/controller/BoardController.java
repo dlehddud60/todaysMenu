@@ -52,10 +52,8 @@ public class BoardController {
         String  tfb_seq = boardDTO.getTfb_seq();
         log.info("=======dataSeq========{}",tfb_seq);
         if(tfb_seq == null){
-            log.info("insert===========");
             boardService.insert(boardDTO);
         }else{
-            log.info("update===========");
             boardService.update(boardDTO);
             rttr.addFlashAttribute("result","success");
             rttr.addAttribute("pageNum",cri.getPageNum());
@@ -67,7 +65,6 @@ public class BoardController {
 
     @GetMapping("/view.do")
     public String view(@RequestParam int tfb_seq, Model model, @ModelAttribute("cri") Criteria cri) {
-        log.info("view.do invoked.===========");
         model.addAttribute("info", boardService.info(tfb_seq));
         return "board/view";
     }
@@ -85,7 +82,7 @@ public class BoardController {
 
     @GetMapping("/delChk.do")
     public String delChk(@RequestParam(value = "tfb_seq",required=false)List<Integer> tfb_seq,Criteria cri,RedirectAttributes rttr) {
-        log.info("========tfb_seq{}",tfb_seq);
+        log.info("tfb_seq{}",tfb_seq);
         for (int i = 0; i < tfb_seq.size(); i++) {
             boardService.delete(tfb_seq.get(i));
         }

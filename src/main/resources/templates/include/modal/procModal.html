@@ -1,0 +1,35 @@
+<th:block th:if="${param.tfb_seq} == null">
+  <a class="btn btn-primary" th:href="@{/board/index.do}" th:text="목록"></a>
+</th:block>
+<th:block th:unless="${param.tfb_seq} == null">
+  <a class="btn btn-primary" th:href="@{/board/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
+</th:block>
+<button type="button" class="btn btn-success" th:text="${param.tfb_seq} == null ? '등록' : '수정'" id="showProcModal"></button>
+<div class="modal" id="procModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" th:text="${param.tfb_seq} == null ? '등록' : '수정'"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p th:text="${param.tfb_seq} == null ? '등록을 하시겠습니까?' : '수정을 하시겠습니까?'"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn btn-success" th:text="${param.tfb_seq} == null ? '등록' : '수정'"></button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(function () {
+    $("#showProcModal").on("click", function (e) {
+        e.preventDefault();
+        $("#procModal").modal("show");
+
+    });
+  });
+</script>
