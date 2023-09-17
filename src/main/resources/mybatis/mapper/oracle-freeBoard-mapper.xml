@@ -6,7 +6,7 @@
     <sql id="where">
       WHERE 1 = 1
       <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(search)">
-      AND	UPPER(TFB.TFB_TITLE_NM)  LIKE '%' || UPPER(#{search}) || '%'
+      AND	UPPER(TFB.TFB_TITLE_NM) || UPPER(TFB.TFB_INPUT_NM)  LIKE '%' || UPPER(#{search}) || '%'
       </if>
     </sql>
     <sql id="header">

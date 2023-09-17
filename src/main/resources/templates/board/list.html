@@ -35,7 +35,7 @@
 
             <div class="container p-5 my-5 bg-info text-white">
                 <h1>검색</h1>
-                <input class="form-control me-2" type="search" placeholder="제목 + 작성자를 입력해주시길 바랍니다." aria-label="Search" name="search">
+                <input class="form-control me-2" type="search" placeholder="제목 + 작성자를 입력해주시길 바랍니다." aria-label="Search" name="search" th:value="${param.search}">
                 <br>
                 <button class="btn btn-outline-success" type="submit" style="float:right;">검색</button>
             </div>
