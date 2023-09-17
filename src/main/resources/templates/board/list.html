@@ -9,6 +9,10 @@
             frmList.find("input[name='pageNum']").val($(this).attr("href"));
             frmList.submit();
         });
+        $("#reset").on("click", function (e) {
+            $("input[name='search']").val("");
+            frmList.submit();
+        });
     });
 
     function selectAll(selectAll) {
@@ -33,11 +37,12 @@
             <h1>자유게시판</h1>
             <p>점심시간 무엇을 먹을지 고민하는 분들에게 오늘의 메뉴를 추천해드립니다.</p>
 
-            <div class="container p-5 my-5 bg-info text-white">
+            <div class="container p-5 my-5 bg-secondary text-white">
                 <h1>검색</h1>
                 <input class="form-control me-2" type="search" placeholder="제목 + 작성자를 입력해주시길 바랍니다." aria-label="Search" name="search" th:value="${param.search}">
                 <br>
-                <button class="btn btn-outline-success" type="submit" style="float:right;">검색</button>
+                <button class="btn btn-warning" type="button" style="float:right;" id="reset">초기화</button>
+                <button class="btn btn-success" type="submit" style="float:right;">검색</button>
             </div>
 
             <select class="form-select" id="pageAmount" style="width: 100px;float:right;" onchange="setPageAmount()">
