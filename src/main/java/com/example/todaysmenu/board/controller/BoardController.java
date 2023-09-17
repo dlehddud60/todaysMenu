@@ -30,6 +30,7 @@ public class BoardController {
         int total = boardService.count(cri);
         model.addAttribute("list", boardService.list(cri));
         model.addAttribute("pageMaker",new PageDTO(total,cri));
+
         return "board/list";
     }
 
