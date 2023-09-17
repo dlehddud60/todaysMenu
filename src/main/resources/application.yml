@@ -30,6 +30,7 @@ spring:
         idle-timeout: 10000
 
 
+
 mybatis:
   mapper-locations: classpath:mybatis/mapper/*.xml
   configuration:

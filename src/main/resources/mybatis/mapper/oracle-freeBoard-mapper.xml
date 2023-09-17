@@ -3,6 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.todaysmenu.board.repository.BoardRepository">
+    <sql id="where">
+      WHERE 1 = 1
+      <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(search)">
+      AND	UPPER(TFB.TFB_TITLE_NM)  LIKE '%' || UPPER(#{search}) || '%'
+      </if>
+    </sql>
     <sql id="header">
         SELECT  ROWNUM AS ROW_NUM
         ,       T1.*
@@ -63,20 +69,21 @@
     <select id="listPaging" resultType="com.example.todaysmenu.board.entity.BoardDTO">
         /*com.example.todaysmenu.board.repository.BoardRepository.listPaging[목록페이징]*/
         <include refid="header"/>
-        SELECT  ROWNUM AS RN
-        ,       TFB.TFB_SEQ
-        ,       TFB.TFB_TITLE_NM
-        ,       TFB.TFB_TEXT
-        ,       TFB.TFB_INPUT_TY
-        ,       TFB.TFB_INPUT_NM
-        ,       TO_CHAR(TFB.TFB_INPUT_DT,'YYYY-MM-dd') AS TFB_INPUT_DT
-        ,       TFB.TFB_INPUT_IP
-        ,       TFB.TFB_MODER_TY
-        ,       TFB.TFB_MODER_NM
-        ,       TO_CHAR(TFB.TFB_MODER_DT,'YYYY-MM-dd') AS TFB_MODER_DT
-        ,       TFB.TFB_MODER_IP
-        FROM    TM_FREE_BOARD TFB
-        ORDER BY TFB_SEQ DESC
+            SELECT  ROWNUM AS RN
+            ,       TFB.TFB_SEQ
+            ,       TFB.TFB_TITLE_NM
+            ,       TFB.TFB_TEXT
+            ,       TFB.TFB_INPUT_TY
+            ,       TFB.TFB_INPUT_NM
+            ,       TO_CHAR(TFB.TFB_INPUT_DT,'YYYY-MM-dd') AS TFB_INPUT_DT
+            ,       TFB.TFB_INPUT_IP
+            ,       TFB.TFB_MODER_TY
+            ,       TFB.TFB_MODER_NM
+            ,       TO_CHAR(TFB.TFB_MODER_DT,'YYYY-MM-dd') AS TFB_MODER_DT
+            ,       TFB.TFB_MODER_IP
+            FROM    TM_FREE_BOARD TFB
+            <include refid="where"/>
+            ORDER BY TFB_SEQ DESC
         <include refid="footer"/>
     </select>
 

@@ -1,4 +1,4 @@
-package syworks.lib.mybatis;
+package com.example.todaysmenu.lib.mybatis;
 import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Map;
