@@ -1,5 +1,5 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
-<form method="post" action="/board/proc.do">
+<form method="get">
     <div class="container mt-3">
         <h2>자유게시판</h2>
         <table class="table">
@@ -22,9 +22,9 @@
             </tr>
             </tbody>
         </table>
-        <a class="btn btn-success" href="/board/index.do" th:text="목록"></a>
-        <a class="btn btn-info" th:href="@{/board/write.do(tfb_seq = ${info.tfb_seq})}" th:text="수정" ></a>
-        <a class="btn btn-danger" th:href="@{/board/delete.do(tfb_seq = ${info.tfb_seq})}" th:text="삭제"></a>
+        <a class="btn btn-success" th:href="@{/board/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
+        <a class="btn btn-info" th:href="@{/board/write.do(tfb_seq = ${info.tfb_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>
+        <a class="btn btn-danger" th:href="@{/board/delete.do(tfb_seq = ${info.tfb_seq},z)}" th:text="삭제"></a>
     </div>
 </form>
 <div th:insert="~{/include/footter.html}" th:remove="tag"></div>

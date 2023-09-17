@@ -59,7 +59,7 @@ public class BoardController {
     }
 
     @GetMapping("/view.do")
-    public String view(@RequestParam int tfb_seq, Model model) {
+    public String view(@RequestParam int tfb_seq, Model model, @ModelAttribute("cri") Criteria cri) {
         log.info("view.do invoked.===========");
         model.addAttribute("info", boardService.info(tfb_seq));
         return "board/view";

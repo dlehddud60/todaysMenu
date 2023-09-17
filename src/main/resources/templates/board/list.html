@@ -12,6 +12,13 @@
         $("#delChk").on("click", function (e) {
             $("#frmList").attr("action","/board/delChk.do").submit();
         });
+        // $(".move").on("click", function (e) {
+        //     e.preventDefault();
+        //     frmList.append("<input type='hidden' name='tfb_seq' value='"+$(this).attr("href")+"'>");
+        //     frmList.attr("action","/board/view.do");
+        //     frmList.submit();
+        // });
+
     });
     function selectAll(selectAll) {
         $('input[name="tfb_seq"]').prop('checked', selectAll.checked);
@@ -49,7 +56,7 @@
                     </th>
                     <td scope="row" th:text="${list.row_num}"></td>
                     <td>
-                        <a style="text-decoration:none" th:href="@{/board/view.do(tfb_seq = ${list.tfb_seq})}"
+                        <a class="move" style="text-decoration:none" th:href="@{/board/view.do(tfb_seq = ${list.tfb_seq},pageNum = ${pageMaker.cri.pageNum},amount = ${pageMaker.cri.amount})}"
                            th:text="${list.tfb_title_nm}"></a>
                     </td>
                     <td th:text="${list.tfb_input_nm}"></td>
