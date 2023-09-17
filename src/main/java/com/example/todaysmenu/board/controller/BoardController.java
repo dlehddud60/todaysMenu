@@ -84,13 +84,14 @@ public class BoardController {
     }
 
     @GetMapping("/delChk.do")
-    public String delChk(@RequestParam(value = "tfb_seq",required=false)List<Integer> tfb_seq) {
+    public String delChk(@RequestParam(value = "tfb_seq",required=false)List<Integer> tfb_seq,Criteria cri,RedirectAttributes rttr) {
         log.info("========tfb_seq{}",tfb_seq);
-        log.info("========delChk호출======================");
         for (int i = 0; i < tfb_seq.size(); i++) {
-            log.info("======================="+i+1+"번째 delChk======================" );
             boardService.delete(tfb_seq.get(i));
         }
+        rttr.addFlashAttribute("result","success");
+        rttr.addAttribute("pageNum",cri.getPageNum());
+        rttr.addAttribute("amount",cri.getAmount());
         return "redirect:/board/index.do";
     }
 }
