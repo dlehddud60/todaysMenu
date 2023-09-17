@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.todaysmenu.board.repository.BoardRepository">
+
+    <select id="count" resultType="int">
+        /*com.example.todaysmenu.board.repository.BoardRepository.count[목록]*/
+        SELECT	COUNT(1)
+        FROM	TM_FREE_BOARD TFB
+    </select>
 
     <select id="list" resultType="com.example.todaysmenu.board.entity.BoardDTO">
         /*com.example.todaysmenu.board.repository.BoardRepository.list[목록]*/

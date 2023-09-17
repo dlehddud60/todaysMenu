@@ -8,6 +8,7 @@ import java.util.List;
 
 @Mapper
 public interface BoardRepository {
+    public int count(Criteria cri);
     public List<BoardDTO> list();
     public List<BoardDTO> listPaging(Criteria cri);
     public BoardDTO info(int tfb_seq);

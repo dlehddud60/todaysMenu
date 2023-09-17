@@ -24,7 +24,7 @@
         </table>
         <a class="btn btn-success" th:href="@{/board/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
         <a class="btn btn-info" th:href="@{/board/write.do(tfb_seq = ${info.tfb_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>
-        <a class="btn btn-danger" th:href="@{/board/delete.do(tfb_seq = ${info.tfb_seq},z)}" th:text="삭제"></a>
+        <a class="btn btn-danger" th:href="@{/board/delete.do(tfb_seq = ${info.tfb_seq})}" th:text="삭제"></a>
     </div>
 </form>
 <div th:insert="~{/include/footter.html}" th:remove="tag"></div>

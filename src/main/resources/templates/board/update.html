@@ -1,6 +1,8 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
 <form method="post" action="/board/proc.do">
     <input type="hidden" name="tfb_seq" th:value="${info.tfb_seq}">
+    <input type="hidden" name="pageNum" th:value="${param.pageNum}">
+    <input type="hidden" name="amount" th:value="${param.amount}">
     <div class="container pt-5">
         <div class="form-group">
             <label class="col-form-label mt-4" for="inputDefault">제목</label>

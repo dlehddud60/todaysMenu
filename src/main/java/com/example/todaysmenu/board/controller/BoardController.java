@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -26,8 +27,9 @@ public class BoardController {
     @GetMapping("/index.do")
     public String list(Criteria cri, Model model) {
         log.info("index.do 호출 cri{}",cri);
+        int total = boardService.count(cri);
         model.addAttribute("list", boardService.list(cri));
-        model.addAttribute("pageMaker",new PageDTO(123,cri));
+        model.addAttribute("pageMaker",new PageDTO(total,cri));
         return "board/list";
     }
 
@@ -44,7 +46,7 @@ public class BoardController {
     }
 
     @PostMapping("/proc.do")
-    public String proc(BoardDTO boardDTO) {
+    public String proc(BoardDTO boardDTO, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
         log.info("boardDTO : {}", boardDTO);
         String  tfb_seq = boardDTO.getTfb_seq();
         log.info("=======dataSeq========{}",tfb_seq);
@@ -54,6 +56,10 @@ public class BoardController {
         }else{
             log.info("update===========");
             boardService.update(boardDTO);
+            rttr.addFlashAttribute("result","success");
+            rttr.addAttribute("pageNum",cri.getPageNum());
+            rttr.addAttribute("amount",cri.getAmount());
+
         }
         return "redirect:/board/index.do";
     }
@@ -66,10 +72,13 @@ public class BoardController {
     }
 
     @GetMapping("/delete.do")
-    public String  delete(BoardDTO boardDTO){
+    public String  delete(BoardDTO boardDTO, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr){
         log.info("=======boardDTO========{}",boardDTO);
         int tfb_seq = Integer.parseInt(boardDTO.getTfb_seq());
         boardService.delete(tfb_seq);
+        rttr.addFlashAttribute("result","success");
+        rttr.addAttribute("pageNum",cri.getPageNum());
+        rttr.addAttribute("amount",cri.getAmount());
         return "redirect:/board/index.do";
     }
 

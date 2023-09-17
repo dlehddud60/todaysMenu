@@ -23,6 +23,11 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public int count(Criteria cri) {
+        return boardRepository.count(cri);
+    }
+
+    @Override
     public List<BoardDTO> list(Criteria cri) {
         log.info("페이징처리========{}",cri);
         return boardRepository.listPaging(cri);
