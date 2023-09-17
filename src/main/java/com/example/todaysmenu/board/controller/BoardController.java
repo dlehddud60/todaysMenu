@@ -1,6 +1,8 @@
 package com.example.todaysmenu.board.controller;
 
 import com.example.todaysmenu.board.entity.BoardDTO;
+import com.example.todaysmenu.board.entity.Criteria;
+import com.example.todaysmenu.board.entity.PageDTO;
 import com.example.todaysmenu.board.repository.BoardRepository;
 import com.example.todaysmenu.board.service.BoardService;
 import lombok.extern.log4j.Log4j2;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -21,9 +24,10 @@ public class BoardController {
 
 
     @GetMapping("/index.do")
-    public String list(Model model) {
-        log.info("index.do 호출");
-        model.addAttribute("list", boardService.list());
+    public String list(Criteria cri, Model model) {
+        log.info("index.do 호출 cri{}",cri);
+        model.addAttribute("list", boardService.list(cri));
+        model.addAttribute("pageMaker",new PageDTO(123,cri));
         return "board/list";
     }
 

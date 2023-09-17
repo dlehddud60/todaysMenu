@@ -1,6 +1,7 @@
 package com.example.todaysmenu.board.service.impl;
 
 import com.example.todaysmenu.board.entity.BoardDTO;
+import com.example.todaysmenu.board.entity.Criteria;
 import com.example.todaysmenu.board.repository.BoardRepository;
 import com.example.todaysmenu.board.service.BoardService;
 import lombok.extern.log4j.Log4j2;
@@ -22,10 +23,12 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public List<BoardDTO> list() {
-        log.info("list 호출===========");
-        return boardRepository.list();
+    public List<BoardDTO> list(Criteria cri) {
+        log.info("페이징처리========{}",cri);
+        return boardRepository.listPaging(cri);
     }
+
+
 
     @Override
     public BoardDTO info(int tfb_seq) {

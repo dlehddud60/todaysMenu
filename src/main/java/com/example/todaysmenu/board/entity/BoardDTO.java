@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BoardDTO {
     private String tfb_seq;
-    private String data_seq;
+    private String row_num;
     private String tfb_title_nm;
     private String tfb_text;
     private String tfb_input_ty;
