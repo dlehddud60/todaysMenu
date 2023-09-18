@@ -13,10 +13,11 @@
         SELECT  ROWNUM AS ROW_NUM
         ,       T1.*
         FROM(
-                SELECT T1.*
+                SELECT  T1.*
+                ,       ROWNUM AS RN
                 FROM(
     </sql>
-    <sql id="footer">
+    <sql id="footter">
             ) T1
             WHERE   ROWNUM <![CDATA[<=]]> #{pageNum} * #{amount}
         ) T1
@@ -27,6 +28,7 @@
         /*com.example.todaysmenu.board.repository.BoardRepository.count[목록]*/
         SELECT	COUNT(1)
         FROM	TM_FREE_BOARD TFB
+        <include refid="where"/>
     </select>
 
     <select id="list" resultType="com.example.todaysmenu.board.entity.BoardDTO">
@@ -69,8 +71,7 @@
     <select id="listPaging" resultType="com.example.todaysmenu.board.entity.BoardDTO">
         /*com.example.todaysmenu.board.repository.BoardRepository.listPaging[목록페이징]*/
         <include refid="header"/>
-            SELECT  ROWNUM AS RN
-            ,       TFB.TFB_SEQ
+            SELECT  TFB.TFB_SEQ
             ,       TFB.TFB_TITLE_NM
             ,       TFB.TFB_TEXT
             ,       TFB.TFB_INPUT_TY
@@ -84,7 +85,7 @@
             FROM    TM_FREE_BOARD TFB
             <include refid="where"/>
             ORDER BY TFB_SEQ DESC
-        <include refid="footer"/>
+        <include refid="footter"/>
     </select>
 
     <insert id="insert" parameterType="com.example.todaysmenu.board.entity.BoardDTO">
