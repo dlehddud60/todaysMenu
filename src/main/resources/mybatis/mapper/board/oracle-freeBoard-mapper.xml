@@ -9,20 +9,6 @@
       AND	UPPER(TFB.TFB_TITLE_NM) || UPPER(TFB.TFB_INPUT_NM)  LIKE '%' || UPPER(#{search}) || '%'
       </if>
     </sql>
-    <sql id="header">
-        SELECT  ROWNUM AS ROW_NUM
-        ,       T1.*
-        FROM(
-                SELECT  T1.*
-                ,       ROWNUM AS RN
-                FROM(
-    </sql>
-    <sql id="footter">
-            ) T1
-            WHERE   ROWNUM <![CDATA[<=]]> #{pageNum} * #{amount}
-        ) T1
-        WHERE   RN > (#{pageNum}-1) * #{amount}
-    </sql>
 
     <select id="count" resultType="int">
         /*com.example.todaysmenu.board.repository.BoardRepository.count[목록]*/
@@ -70,7 +56,7 @@
 
     <select id="listPaging" resultType="com.example.todaysmenu.board.entity.BoardDTO">
         /*com.example.todaysmenu.board.repository.BoardRepository.listPaging[목록페이징]*/
-        <include refid="header"/>
+        <include refid="pagination.header"/>
             SELECT  TFB.TFB_SEQ
             ,       TFB.TFB_TITLE_NM
             ,       TFB.TFB_TEXT
@@ -85,7 +71,7 @@
             FROM    TM_FREE_BOARD TFB
             <include refid="where"/>
             ORDER BY TFB_SEQ DESC
-        <include refid="footter"/>
+        <include refid="pagination.footer"/>
     </select>
 
     <insert id="insert" parameterType="com.example.todaysmenu.board.entity.BoardDTO">

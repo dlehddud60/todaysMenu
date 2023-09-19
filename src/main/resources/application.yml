@@ -32,7 +32,8 @@ spring:
 
 
 mybatis:
-  mapper-locations: classpath:mybatis/mapper/*.xml
+  mapper-locations: classpath:mybatis/mapper/**/*.xml
   configuration:
     cache-enabled: false
     jdbc-type-for-null: NULL
+

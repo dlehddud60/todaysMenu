@@ -15,28 +15,24 @@
             paramReset();
             frmList.submit();
         });
+        $("#searchButton").on("click", function (e) {
+            paramReset();
+            frmList.submit();
+        });
         $("#searchInput").on("keyup", function (key) {
             if (key.keyCode == 13) {
                 paramReset();
-
+                frmList.submit();
             }
         });
     });
-
     function selectAll(selectAll) {
         $('input[name="tfb_seq"]').prop('checked', selectAll.checked);
     }
-
     function setPageAmount() {
-        paramReset();
+        // paramReset();
         $("[name='amount']").val($("#pageAmount").val());
         $("#frmList").submit();
-    }
-
-    function searchFunc() {
-        if (key.keyCode == 13) {
-            paramReset();
-        }
     }
     function paramReset() {
         $("input[name='pageNum']").val("1");
@@ -62,7 +58,7 @@
                        name="search" id="searchInput" th:value="${param.search}">
                 <br>
                 <button class="btn btn-warning" type="button" style="float:right;" id="reset">초기화</button>
-                <button class="btn btn-success" type="submit" style="float:right;" id="searchButton">검색</button>
+                <button class="btn btn-success" type="button" style="float:right;" id="searchButton">검색</button>
             </div>
 
             <select class="form-select" id="pageAmount" style="width: 100px;float:right;" onchange="setPageAmount()">

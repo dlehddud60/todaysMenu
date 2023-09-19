@@ -7,6 +7,7 @@ import com.example.todaysmenu.board.repository.BoardRepository;
 import com.example.todaysmenu.board.service.BoardService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
