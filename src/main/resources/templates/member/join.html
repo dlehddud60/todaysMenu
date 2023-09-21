@@ -15,15 +15,9 @@
             data: {"tmt_login_id": tmt_login_id}, //서버로 전송할 데이터
             success: function (result) {
                 if (result == 1) {
-
-                    $("#modalHead").html("중복체크");
-                    $("#ModalMessage").html("사용할 수 있는 아이디입니다.");
-                    $("#ModalType").attr("class", "btn btn-success");
+                    modalMess("중복체크","사용할 수 있는 아이디입니다.","success");
                 } else {
-                    $("#modalHead").html("중복체크");
-                    $("#ModalMessage").html("사용할 수 없는 아이디입니다.");
-                    $("#ModalType").attr("class", "btn btn-danger");
-
+                    modalMess("중복체크","사용할 수 없는 아이디입니다.","danger");
                 }
                 $("#commonModal").modal("show");
 
@@ -35,7 +29,7 @@
         });
     }
 
-    function passwordCheck() {
+    function passChk() {
         var tmt_pass_word1 = $("#tmt_pass_word1").val();
         var tmt_pass_word2 = $("#tmt_pass_word2").val();
         if (tmt_pass_word1 != tmt_pass_word2) {
@@ -44,16 +38,29 @@
         } else {
             $("#passMessage").attr("style", "color: green")
             $("#passMessage").html("비밀번호가 서로 일치합니다.")
-            alert(tmt_pass_word1)
             $("#passawordResult").val(tmt_pass_word1);
         }
 
     }
-
+    
+    function ageChk(){
+        var tmt_memb_age= $("#tmt_memb_age").val();
+        if(tmt_memb_age == null || tmt_memb_age == ""){
+            modalMess("나이체크","나이를 입력해주세요","danger");
+        }else{
+            $("#frm").submit();
+        }
+    }
+    function modalMess(head,body,footter) {
+        $("#modalHead").html(head);
+        $("#ModalMessage").html(body);
+        $("#ModalType").attr("class", "btn btn-"+footter);
+        $("#commonModal").modal("show");
+    }
     /*]]>*/
 </script>
 <div class="container mt-3">
-    <form method="post" action="/register.do">
+    <form id="frm" method="post" action="/register.do">
         <input type="hidden" id="passawordResult" name="tmt_pass_word" value="">
         <table class="table table-bordered" style="text-align: center; border: 1px solid #dddddd;">
             <tr>
@@ -67,14 +74,14 @@
 
             <tr>
                 <td style="width: 120px; vertical-align: middle;">비밀번호</td>
-                <td colspan="2"><input id="tmt_pass_word1" name="tmt_pass_word1" onkeyup="passwordCheck();"
+                <td colspan="2"><input id="tmt_pass_word1" name="tmt_pass_word1" onkeyup="passChk();"
                                        class="form-control" type="password" maxlength="20" placeholder="비밀번호를 입력하세요.">
                 </td>
             </tr>
 
             <tr>
                 <td style="width: 120px; vertical-align: middle;">비밀번호 확인</td>
-                <td colspan="2"><input id="tmt_pass_word2" name="tmt_pass_word2" onkeyup="passwordCheck();"
+                <td colspan="2"><input id="tmt_pass_word2" name="tmt_pass_word2" onkeyup="passChk();"
                                        class="form-control" type="password" maxlength="20" placeholder="비밀번호를 확인해주세요.">
                 </td>
             </tr>
@@ -93,7 +100,7 @@
             <tr>
                 <td style="width: 120px; vertical-align: middle;">나이</td>
                 <td colspan="2"><input id="tmt_memb_age" name="tmt_memb_age" class="form-control" type="number"
-                                       maxlength="20" placeholder="나이를 입력해주세요." value="0"></td>
+                                       maxlength="20" placeholder="나이를 입력해주세요."></td>
             </tr>
 
             <tr>
@@ -120,7 +127,7 @@
                                        maxlength="20" placeholder="이메일을 입력해주세요."></td>
             </tr>
         </table>
-        <button type="submit" class="btn btn-success" th:text="등록"></button>
+        <button type="button" class="btn btn-success" th:text="등록" onclick="ageChk();"></button>
     </form>
 </div>
 <div th:insert="~{/include/footter.html}" th:remove="tag"></div>
