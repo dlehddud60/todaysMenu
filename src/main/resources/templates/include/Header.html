@@ -7,7 +7,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
   <title>오늘의 메뉴</title>
 
   <!-- jQuery library -->
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.slim.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 
   <!-- Latest compiled and minified CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -18,7 +18,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <nav class="navbar navbar-expand-lg bg-success" data-bs-theme="dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">오늘의 메뉴</a>
+    <a class="navbar-brand" href="/">오늘의 메뉴</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -49,10 +49,33 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
           </div>
         </li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-sm-2" type="search" placeholder="Search">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-      </form>
+      <th:block th:if="${session.memberDTO == null}">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a class="nav-link" href="/loginForm.do"><span class="nav-item"></span>로그인</a></li>
+          <li><a class="nav-link" href="/join.do"><span class="nav-item"></span>회원가입</a></li>
+        </ul>
+      </th:block>
+      <th:block th:unless="${session.memberDTO == null}">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a class="nav-link" href="#"><span class="nav-item"></span>회원관리</a></li>
+          <li><a class="nav-link" href="#"><span class="nav-item"></span>회원정보수정</a></li>
+          <li><a class="nav-link" href="#"><span class="nav-item"></span>프로필사진등록</a></li>
+          <li><a class="nav-link" href="/logout.do"><span class="nav-item"></span>로그아웃</a></li>
+        </ul>
+      </th:block>
     </div>
   </div>
 </nav>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  $(document).ready(function () {
+    if([[${result != null}]]){
+      $("#ModalType").attr("class", [[${result}]]);
+    }
+    if ([[${msgType != null}]]) {
+      $("#commonModal").modal("show");
+    }
+  });
+  /*]]>*/
+</script>
+<div th:replace="~{/include/modal/modal:: commonModal (${msgType}, ${msg})}"></div>

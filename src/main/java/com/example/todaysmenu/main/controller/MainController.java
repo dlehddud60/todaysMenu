@@ -2,6 +2,7 @@ package com.example.todaysmenu.main.controller;
 
 import com.example.todaysmenu.board.entity.BoardDTO;
 import com.example.todaysmenu.board.service.BoardService;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,11 +16,11 @@ import java.util.List;
 
 @Log4j2
 @Controller
-@RequestMapping("/")
 public class MainController {
-
     @GetMapping("/")
-    public String home() {
+    public String home(HttpSession session) {
+        session.getAttribute("memberDTO");
         return "home";
     }
+
 }

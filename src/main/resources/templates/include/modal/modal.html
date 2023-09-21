@@ -1,0 +1,17 @@
+
+<div th:fragment="commonModal(p1,p2)" class="modal fade" id="commonModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header info">
+        <h1 class="modal-title fs-5" id="modalHead" th:text="${p1}"></h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+      </div>
+      <div id="ModalMessage" class="modal-body" th:text="${p2}">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button id="ModalType" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

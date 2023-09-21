@@ -1,5 +1,16 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  $(document).ready(function (){
+    if([[${msgType != null}]]){
+      $("#commonModal").modal("show");
+    }
+  });
+  /*]]>*/
+</script>
+<div th:replace="~{/include/modal/modal:: commonModal (${msgType}, ${msg})}"></div>
 <div class="container mt-3">
-  <h2>자유게시판</h2>
+  <h2>메인</h2>
   <a class="btn btn-danger" href="/board/index.do" role="button">게시판</a>
 </div>
+<div th:insert="~{/include/footter.html}" th:remove="tag"></div>

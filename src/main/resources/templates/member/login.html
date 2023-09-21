@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
 
-</body>
-</html>
+<div class="container mt-5">
+    <form name="frm" action="login.do" method="post">
+        <table class="table table-bordered" style="text-align: center; border: 1px solid #dddddd;">
+            <tr>
+                <td style="width: 100px; vertical-align: middle;">아이디</td>
+                <td><input id="tmt_login_id" name="tmt_login_id" class="form-control" type="text" maxlength="20" placeholder="아이디를 입력하세요."></td>
+            </tr>
+
+            <tr>
+                <td style="width: 100px; vertical-align: middle;">비밀번호</td>
+                <td colspan="2"><input id="tmt_pass_word" name="tmt_pass_word" class="form-control" type="password" maxlength="20" placeholder="비밀번호를 입력하세요."></td>
+            </tr>
+        </table>
+        <button type="submit" class="btn btn-success" th:text="로그인"></button>
+    </form>
+</div>
+<div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+
