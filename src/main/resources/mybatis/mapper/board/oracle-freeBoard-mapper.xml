@@ -94,11 +94,11 @@
         ,   #{tfb_title_nm}
         ,   #{tfb_text}
         ,   NULL
-        ,   '이동영'
+        ,   #{tfb_input_nm}
         ,   SYSDATE
         ,   NULL
         ,   NULL
-        ,   NULL
+        ,   #{tfb_moder_nm}
         ,   SYSDATE
         ,   NULL
         )
@@ -108,7 +108,7 @@
         /*com.example.todaysmenu.board.repository.BoardRepository.update[수정]*/
         UPDATE	TM_FREE_BOARD
         SET		TFB_MODER_TY 	= null
-        ,		TFB_MODER_NM 	= null
+        ,		TFB_MODER_NM 	= #{tfb_moder_nm}
         ,		TFB_MODER_DT 	= null
         ,		TFB_MODER_IP	= null
         ,       TFB_TITLE_NM    = #{tfb_title_nm}

@@ -1,4 +1,7 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+[[${session.memberDTO}]]<br><br>
+[[${session}]]<br><br>
+[[${memberSession}]]
 <form method="post" action="/board/proc.do">
     <div class="container pt-5">
         <div class="form-group">
