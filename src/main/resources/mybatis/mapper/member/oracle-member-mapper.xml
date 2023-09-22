@@ -20,6 +20,22 @@
         WHERE   TMT_LOGIN_ID = #{tmt_login_id}
     </select>
 
+    <select id="memberInfo" resultType="com.example.todaysmenu.member.entity.MemberDTO">
+        /*com.example.todaysmenu.member.repository.MemberRepository.memberInfo[멤버정보]*/
+        SELECT  TMT_SEQ
+        ,       TMT_LOGIN_ID
+        ,       TMT_PASS_WORD
+        ,       TMT_MEMB_NAME
+        ,       TMT_MEMB_AGE
+        ,       TMT_MEMB_GENDER
+        ,       TMT_MEMB_EMAIL
+        ,       TMT_MEMB_BIRTH_DAY
+        ,       TMT_MEMB_FILE
+        ,       TMT_INPUT_DATE
+        FROM    TM_MEMBER_TBL TMT
+        WHERE   TMT_SEQ = #{tmt_seq}
+    </select>
+
 
     <insert id="register" parameterType="com.example.todaysmenu.member.entity.MemberDTO">
         /*com.example.todaysmenu.member.repository.MemberRepository.register[회원가입]*/
@@ -48,6 +64,20 @@
         ,   SYSDATE
         )
     </insert>
+
+    <update id="memberUpdate"  parameterType="com.example.todaysmenu.member.entity.MemberDTO">
+        /*com.example.todaysmenu.member.repository.MemberRepository.memberUpdate[회원정보수정]*/
+        UPDATE	TM_MEMBER_TBL
+        SET		TMT_LOGIN_ID 	        = #{tmt_login_id}
+        ,		TMT_PASS_WORD 	        = #{tmt_pass_word}
+        ,		TMT_MEMB_NAME 	        = #{tmt_memb_name}
+        ,		TMT_MEMB_AGE	        = #{tmt_memb_age}
+        ,       TMT_MEMB_GENDER         = #{tmt_memb_gender}
+        ,       TMT_MEMB_EMAIL          = #{tmt_memb_email}
+        ,       TMT_MEMB_FILE           = #{tmt_memb_file}
+        ,       TMT_MODER_DATE          = SYSDATE
+        WHERE	TMT_SEQ			        = #{tmt_seq}
+    </update>
 
     <select id="login" resultType="com.example.todaysmenu.member.entity.MemberDTO" parameterType="com.example.todaysmenu.member.entity.MemberDTO">
         /*com.example.todaysmenu.member.repository.MemberRepository.login[로그인]*/

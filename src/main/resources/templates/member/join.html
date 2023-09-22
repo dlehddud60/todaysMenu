@@ -5,68 +5,99 @@
         if ([[${msgType != null}]]) {
             $("#commonModal").modal("show");
         }
+
     });
 
     function registerCheck() {
-        var tmt_login_id = $("#tmt_login_id").val();
-        $.ajax({
-            url: "registerCheck.do",
-            type: "get",
-            data: {"tmt_login_id": tmt_login_id}, //서버로 전송할 데이터
-            success: function (result) {
-                if (result == 1) {
-                    modalMess("중복체크","사용할 수 있는 아이디입니다.","success");
-                } else {
-                    modalMess("중복체크","사용할 수 없는 아이디입니다.","danger");
+        let tmt_login_id = $("#tmt_login_id").val();
+        let idChk = /^[a-z0-9]+$/;
+        if (!idChk.test(tmt_login_id) || tmt_login_id.length < 6) {
+            modalMess("유효성 검사", "아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.", "danger");
+        } else {
+            $.ajax({
+                url: "registerCheck.do",
+                type: "get",
+                data: {"tmt_login_id": tmt_login_id}, //서버로 전송할 데이터
+                success: function (result) {
+                    if (result == 1) {
+                        modalMess("중복체크", "사용할 수 있는 아이디입니다.", "success");
+                    } else {
+                        modalMess("중복체크", "사용할 수 없는 아이디입니다.", "danger");
+                    }
+                    $("#commonModal").modal("show");
+                },
+                error: function () {
+                    alert("error");
                 }
-                $("#commonModal").modal("show");
+            });
+        }
 
-            },
-            error: function () {
-                alert("error");
-            }
-
-        });
     }
 
     function passChk() {
         var tmt_pass_word1 = $("#tmt_pass_word1").val();
         var tmt_pass_word2 = $("#tmt_pass_word2").val();
-        if (tmt_pass_word1 != tmt_pass_word2) {
+        let passChk = /^[a-zA-Z0-9]+$/;
+        if(passChk.test(tmt_pass_word1) || tmt_pass_word1 < 8) {
+            $("#tmt_pass_word2").attr("disabled", true);
             $("#passMessage").attr("style", "color: red")
-            $("#passMessage").html("비밀번호가 서로 일치하지 않습니다.");
-        } else {
-            $("#passMessage").attr("style", "color: green")
-            $("#passMessage").html("비밀번호가 서로 일치합니다.")
-            $("#passawordResult").val(tmt_pass_word1);
+            $("#passMessage").html("비밀번호는 영어 소문자,특수문자,숫자로 구성된 8글자 이상으로 조합하시오.");
+        }else{
+            $("#passMessage").html("ok");
+            $("#tmt_pass_word2").attr("disabled", false);
+            if (tmt_pass_word1 != tmt_pass_word2) {
+                $("#passMessage").attr("style", "color: red")
+                $("#passMessage").html("비밀번호가 서로 일치하지 않습니다.");
+            } else {
+                $("#passMessage").attr("style", "color: green")
+                $("#passMessage").html("비밀번호가 서로 일치합니다.")
+                $("#passawordResult").val(tmt_pass_word1);
+            }
         }
 
+
     }
-    
-    function ageChk(){
-        var tmt_memb_age= $("#tmt_memb_age").val();
-        if(tmt_memb_age == null || tmt_memb_age == ""){
-            modalMess("나이체크","나이를 입력해주세요","danger");
-        }else{
+
+    function ageChk() {
+        var tmt_memb_age = $("#tmt_memb_age").val();
+        if (tmt_memb_age == null || tmt_memb_age == "") {
+            modalMess("나이체크", "나이를 입력해주세요", "danger");
+        } else {
             $("#frm").submit();
         }
     }
-    function modalMess(head,body,footter) {
+
+    function modalMess(head, body, footter) {
         $("#modalHead").html(head);
         $("#ModalMessage").html(body);
-        $("#ModalType").attr("class", "btn btn-"+footter);
+        $("#ModalType").attr("class", "btn btn-" + footter);
         $("#commonModal").modal("show");
     }
+    function emailChk() {
+        let tmt_memb_email = $("#tmt_memb_email").val();
+        let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+        if (!emailPattern.test(tmt_memb_email)) {
+            modalMess("이메일 검사", "이메일 형식에 맞게 입력해주세요.", "danger");
+        }else{
+            modalMess("이메일 검사", "사용가능한 이메일 입니다.", "success");
+        }
+    }
+
+
     /*]]>*/
 </script>
 <div class="container mt-3">
     <form id="frm" method="post" action="/register.do">
         <input type="hidden" id="passawordResult" name="tmt_pass_word" value="">
+        <input type="hidden" id="tmt_seq" name="tmt_seq"
+               th:value="${session.memberDTO != null ? session.memberDTO.tmt_seq : ''}">
         <table class="table table-bordered" style="text-align: center; border: 1px solid #dddddd;">
             <tr>
                 <td style="width: 120px; vertical-align: middle;">아이디</td>
                 <td><input id="tmt_login_id" name="tmt_login_id" class="form-control" type="text" maxlength="20"
-                           placeholder="아이디를 입력하세요."></td>
+                           placeholder="아이디를 입력하세요."
+                           th:value="${session.memberDTO != null ? session.memberDTO.tmt_login_id : ''}"></td>
                 <td style="width: 120px;">
                     <button type="button" class="btn btn-primary btn-sm" onclick="registerCheck();">중복확인</button>
                 </td>
@@ -82,7 +113,7 @@
             <tr>
                 <td style="width: 120px; vertical-align: middle;">비밀번호 확인</td>
                 <td colspan="2"><input id="tmt_pass_word2" name="tmt_pass_word2" onkeyup="passChk();"
-                                       class="form-control" type="password" maxlength="20" placeholder="비밀번호를 확인해주세요.">
+                                       class="form-control" type="password" maxlength="20" placeholder="비밀번호를 확인해주세요." disabled>
                 </td>
             </tr>
             <tr>
@@ -94,37 +125,44 @@
             <tr>
                 <td style="width: 120px; vertical-align: middle;">사용자 이름</td>
                 <td colspan="2"><input id="tmt_memb_name" name="tmt_memb_name" class="form-control" type="text"
-                                       maxlength="20" placeholder="이름을 입력해주세요."></td>
+                                       maxlength="20" placeholder="이름을 입력해주세요."
+                                       th:value="${session.memberDTO != null ? session.memberDTO.tmt_memb_name : ''}">
+                </td>
             </tr>
 
             <tr>
                 <td style="width: 120px; vertical-align: middle;">나이</td>
                 <td colspan="2"><input id="tmt_memb_age" name="tmt_memb_age" class="form-control" type="number"
-                                       maxlength="20" placeholder="나이를 입력해주세요."></td>
+                                       maxlength="20" placeholder="나이를 입력해주세요."
+                                       th:value="${session.memberDTO != null ? session.memberDTO.tmt_memb_age : ''}">
+                </td>
             </tr>
-
             <tr>
                 <td style="width: 120px; vertical-align: middle;">성별</td>
                 <td colspan="2">
                     <div class="form-group" style="text-align: center; margin: 0 auto;">
                         <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-primary active">
-                                <input type="radio" id="tmt_memb_gender" name="tmt_memb_gender" autocomplete="off"
-                                       value="남자"
-                                       checked>남자
+                                <input type="radio" name="tmt_memb_gender" autocomplete="off"
+                                       th:checked="${session.memberDTO != null && session.memberDTO.tmt_memb_gender == '남자' ? true : true}"
+                                       value="남자">남자
                             </label>
                             <label class="btn btn-primary">
-                                <input type="radio" id="tmt_memb_gender" name="tmt_memb_gender" autocomplete="off"
+                                <input type="radio" name="tmt_memb_gender" autocomplete="off"
+                                       th:checked="${session.memberDTO != null && session.memberDTO.tmt_memb_gender == '여자'}"
                                        value="여자">여자
                             </label>
                         </div>
+
                     </div>
                 </td>
             </tr>
             <tr>
                 <td style="width: 120px; vertical-align: middle;">이메일</td>
                 <td colspan="2"><input id="tmt_memb_email" name="tmt_memb_email" class="form-control" type="text"
-                                       maxlength="20" placeholder="이메일을 입력해주세요."></td>
+                                       maxlength="30" placeholder="이메일을 입력해주세요." onchange="emailChk();"
+                                       th:value="${session.memberDTO != null ? session.memberDTO.tmt_memb_email : ''}">
+                </td>
             </tr>
         </table>
         <button type="button" class="btn btn-success" th:text="등록" onclick="ageChk();"></button>

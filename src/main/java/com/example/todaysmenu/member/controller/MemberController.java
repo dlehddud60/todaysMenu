@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +29,7 @@ public class MemberController {
 
 
 
-    @RequestMapping("/join.do")
+    @RequestMapping(value = {"/join.do","/updateLogin.do"})
     public String join() {
         log.info("회원가입 접속");
         return "member/join";
@@ -40,8 +41,8 @@ public class MemberController {
     }
     @RequestMapping("/register.do")
     public String register(MemberDTO memberDTO, String tmt_pass_word1, String tmt_pass_word2,
-                           RedirectAttributes rttr, HttpSession session) {
-        String register = memberService.register(memberDTO,tmt_pass_word1,tmt_pass_word2,rttr,session);
+                           RedirectAttributes rttr, HttpSession session, @RequestParam(value = "tmt_seq",required = false)String tmt_seq) {
+        String register = memberService.register(memberDTO,tmt_pass_word1,tmt_pass_word2,rttr,session,tmt_seq);
 
       return register;
     }

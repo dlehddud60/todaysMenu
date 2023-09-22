@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class MemberDTO {
-    private int tmt_seq;
+    private String  tmt_seq;
     private String tmt_login_id;
     private String tmt_pass_word;
     private String tmt_memb_name;

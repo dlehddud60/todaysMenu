@@ -12,4 +12,6 @@ public interface MemberRepository {
     public MemberDTO registerCheck(String tmt_login_id);
     public int register(MemberDTO memberDTO);
     public MemberDTO login(MemberDTO memberDTO);
+    public String memberInfo(String tmt_seq);
+    public int memberUpdate(MemberDTO memberDTO);
 }
