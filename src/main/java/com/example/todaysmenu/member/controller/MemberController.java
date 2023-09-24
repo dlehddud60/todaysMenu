@@ -68,4 +68,9 @@ public class MemberController {
         return login;
     }
 
+    @RequestMapping("/imageForm.do")
+    public String imageForm() {
+        return "member/imageForm";
+    }
+
 }

@@ -38,6 +38,10 @@ dependencies {
     implementation 'com.oracle.database.security:osdt_core'
     // 마이바티스 쿼리 로그
     implementation group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
+
+    // https://mvnrepository.com/artifact/com.servlets/cos
+    implementation group: 'com.servlets', name: 'cos', version: '09May2002'
+
     // 스프링 시큐리티
 //    implementation 'org.springframework.boot:spring-boot-starter-security'	// spring security
 }

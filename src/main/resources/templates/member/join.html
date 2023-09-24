@@ -38,11 +38,11 @@
         var tmt_pass_word1 = $("#tmt_pass_word1").val();
         var tmt_pass_word2 = $("#tmt_pass_word2").val();
         let passChk = /^[a-zA-Z0-9]+$/;
-        if(passChk.test(tmt_pass_word1) || tmt_pass_word1 < 8) {
+        if (passChk.test(tmt_pass_word1) || tmt_pass_word1 < 8) {
             $("#tmt_pass_word2").attr("disabled", true);
             $("#passMessage").attr("style", "color: red")
             $("#passMessage").html("비밀번호는 영어 소문자,특수문자,숫자로 구성된 8글자 이상으로 조합하시오.");
-        }else{
+        } else {
             $("#passMessage").html("ok");
             $("#tmt_pass_word2").attr("disabled", false);
             if (tmt_pass_word1 != tmt_pass_word2) {
@@ -73,13 +73,14 @@
         $("#ModalType").attr("class", "btn btn-" + footter);
         $("#commonModal").modal("show");
     }
+
     function emailChk() {
         let tmt_memb_email = $("#tmt_memb_email").val();
         let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
         if (!emailPattern.test(tmt_memb_email)) {
             modalMess("이메일 검사", "이메일 형식에 맞게 입력해주세요.", "danger");
-        }else{
+        } else {
             modalMess("이메일 검사", "사용가능한 이메일 입니다.", "success");
         }
     }
@@ -113,7 +114,8 @@
             <tr>
                 <td style="width: 120px; vertical-align: middle;">비밀번호 확인</td>
                 <td colspan="2"><input id="tmt_pass_word2" name="tmt_pass_word2" onkeyup="passChk();"
-                                       class="form-control" type="password" maxlength="20" placeholder="비밀번호를 확인해주세요." disabled>
+                                       class="form-control" type="password" maxlength="20" placeholder="비밀번호를 확인해주세요."
+                                       disabled>
                 </td>
             </tr>
             <tr>

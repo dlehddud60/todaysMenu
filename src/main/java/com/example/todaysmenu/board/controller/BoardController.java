@@ -1,5 +1,6 @@
 package com.example.todaysmenu.board.controller;
 
+import com.example.todaysmenu.board.common.modal.ComModal;
 import com.example.todaysmenu.board.entity.BoardDTO;
 import com.example.todaysmenu.board.entity.Criteria;
 import com.example.todaysmenu.board.entity.PageDTO;
@@ -30,6 +31,7 @@ public class BoardController {
 
     String danger = "btn btn-danger";
     String success = "btn btn-success";
+    public ComModal comModal = new ComModal();
 
     @Autowired
     public BoardService boardService;
@@ -60,7 +62,7 @@ public class BoardController {
             boardWriter = boardInfo.getTfb_input_nm();
         } catch (NullPointerException e) {
             if(memberSession == null) {
-                return redirect(rttr,"실패 메세지","로그인을 해주시길 바랍니다.",danger);
+                return comModal.redirect("board/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",danger);
             }else{
                 return "board/write";
             }
@@ -68,10 +70,10 @@ public class BoardController {
         if(memberWriter.equals(boardWriter) ) {
             log.info("test");
         }else{
-            return redirect(rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",danger);
+            return comModal.redirect("board/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",danger);
         }
         if(memberSession == null) {
-            return redirect(rttr,"실패 메세지","로그인을 해주시길 바랍니다.",danger);
+            return comModal.redirect("board/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",danger);
         }
         if(tfb_seq != null){
             model.addAttribute("info",boardService.info(tfb_seq));
@@ -100,7 +102,7 @@ public class BoardController {
             if(memberWriter.equals(boardWriter)){
                 boardService.update(boardDTO);
             }else{
-                return redirect(rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",danger);
+                return comModal.redirect("board/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",danger);
             }
             rttr.addFlashAttribute("result","success");
             rttr.addAttribute("pageNum",cri.getPageNum());
@@ -131,14 +133,14 @@ public class BoardController {
             memberWriter = memberSession.getTmt_memb_name();
             boardWriter = boardInfo.getTfb_input_nm();
         } catch (NullPointerException e) {
-            return redirect(rttr,"실패 메세지","로그인을 해주시길 바랍니다.",danger);
+            return comModal.redirect("board/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",danger);
         }
 
 
         if(memberWriter.equals(boardWriter)){
             boardService.delete(tfb_seq);
         }else{
-            return redirect(rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",danger);
+            return comModal.redirect("board/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",danger);
         }
 
         rttr.addFlashAttribute("result","success");
