@@ -1,8 +1,13 @@
 package com.example.todaysmenu.member.controller;
 
+import com.example.todaysmenu.board.common.modal.ComModal;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.member.repository.MemberRepository;
 import com.example.todaysmenu.member.service.MemberService;
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+
+
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +19,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.net.http.HttpRequest;
+
 @Controller
 @Log4j2
 public class MemberController {
 
     String danger = "btn btn-danger";
     String success = "btn btn-success";
+
+    ComModal comModal = new ComModal();
 
     @Autowired
     MemberRepository memberRepository;
@@ -72,5 +81,21 @@ public class MemberController {
     public String imageForm() {
         return "member/imageForm";
     }
+
+
+//    @RequestMapping("/imageUpdate.do")
+//    public String imageUpdate(HttpServletRequest request, RedirectAttributes rttr) {
+//        MultipartRequest multi = null;
+//        int fileMaxSize = 10*1024*1024;
+//        String savePath = request.getServletContext().getRealPath("resources/upload");
+//        try {
+//            multi = new MultipartRequest(request,savePath, fileMaxSize, "UTF-8", new DefaultFileRenamePolicy());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            comModal.redirect("",rttr,"실패 메세지","파일의 크기는 10MB를 넘을 수 없습니다.",danger);
+//
+//        }
+//        return "";
+//    }
 
 }

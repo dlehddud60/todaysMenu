@@ -1,2 +1,21 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<div class="container mt-3">
+    <form id="frm" method="post" action="/imageUpdate.do" enctype="multipart/form-data">
+        <input type="hidden" id="tmt_seq" name="tmt_seq"
+               th:value="${session.memberDTO != null ? session.memberDTO.tmt_seq : ''}">
+        <table class="table table-bordered" style="text-align: center; border: 1px solid #dddddd;">
+            <tr>
+                <td style="width: 120px; vertical-align: middle;">이미지 등록</td>
+                <td colspan="2">
+                    <div class="form-group">
+                        <label for="formFile" class="form-label mt-4">프로필 사진을 선택해주시길 바랍니다.</label>
+                        <input class="form-control" type="file" id="formFile" name="tmt_memb_file">
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <button type="submit" class="btn btn-success" th:text="등록"></button>
+    </form>
+</div>
 <div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+

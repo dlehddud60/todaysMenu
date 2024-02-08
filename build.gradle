@@ -42,6 +42,9 @@ dependencies {
     // https://mvnrepository.com/artifact/com.servlets/cos
     implementation group: 'com.servlets', name: 'cos', version: '09May2002'
 
+    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
+    compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+
     // 스프링 시큐리티
 //    implementation 'org.springframework.boot:spring-boot-starter-security'	// spring security
 }

@@ -3,6 +3,7 @@ package com.example.todaysmenu.member.entity;
 import lombok.Data;
 
 @Data
+
 public class MemberDTO {
     private String  tmt_seq;
     private String tmt_login_id;
