@@ -153,14 +153,45 @@ public class BoardController {
     }
 
     @GetMapping("/delChk.do")
-    public String delChk(@RequestParam(value = "tfb_seq",required=false)List<Integer> tfb_seq,Criteria cri,RedirectAttributes rttr) {
-        log.info("tfb_seq{}",tfb_seq);
-        for (int i = 0; i < tfb_seq.size(); i++) {
-            boardService.delete(tfb_seq.get(i));
+    public String delChk(@RequestParam(value = "tfb_seq",required=false)List<Integer> tfb_seq,Criteria cri,RedirectAttributes rttr,HttpServletRequest request) {
+        log.info("=============================tfb_seq========================={}",tfb_seq);
+        HttpSession session = request.getSession();
+        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        BoardDTO boardInfo;
+        String userSessionName = "";
+        String statusMsg = "";
+        String userName;
+        try {
+            userSessionName = memberSession.getTmt_memb_name();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
+
+            for (int i = 0; i < tfb_seq.size(); i++) {
+                boardInfo = boardService.info(tfb_seq.get(i));
+                userName = boardInfo.getTfb_input_nm();
+                log.info("===========userName============={}",userName);
+                log.info("===========userSessionName============={}",userSessionName);
+                if(userName.equals(userSessionName) && memberSession != null) {
+                boardService.delete(tfb_seq.get(i));
+                } else {
+                    if(memberSession == null) {
+                        statusMsg = "로그인을 해주시길 바랍니다.";
+                    }else {
+                        statusMsg = "본인글만 수정 삭제 가능합니다.";
+
+                    }
+                    return redirect("board/index.do",rttr,"실패 메세지",statusMsg,DANGER);
+                }
+            }
+
+
         rttr.addFlashAttribute("result","success");
         rttr.addAttribute("pageNum",cri.getPageNum());
         rttr.addAttribute("amount",cri.getAmount());
         return "redirect:/board/index.do";
     }
+
+
+
 }

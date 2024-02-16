@@ -21,7 +21,7 @@ public class MainController {
     @GetMapping("/")
     public String home(HttpServletRequest request, HttpSession session) {
         String userIp = request.getRemoteAddr();
-        log.info("=================userIp{}",userIp);
+        log.info("USER_IP{}",userIp);
         session.getAttribute("memberDTO");
         return "home";
     }
