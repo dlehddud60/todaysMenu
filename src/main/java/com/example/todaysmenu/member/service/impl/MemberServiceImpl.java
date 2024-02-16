@@ -34,8 +34,10 @@ public class MemberServiceImpl implements MemberService {
         if(memberDTO != null || tmt_login_id.equals("")) {
                 duplChek = true;
             return 0;
+        }else{
+            duplChek = false;
+            return 1;
         }
-        return 1;
     }
 
     @Override
@@ -46,9 +48,6 @@ public class MemberServiceImpl implements MemberService {
             , HttpSession session
             , String tmt_seq
             ) {
-        if(duplChek) {
-           return redirect("join.do",rttr,"아이디 중복체크","중복된 아이디 입니다. 다른 아이디를 입력해주시길 바랍니다.", DANGER);
-        }
         String loginId = memberDTO.getTmt_login_id();
         Pattern idChk = Pattern.compile("^[a-z0-9]+$");
         Matcher idMatcher = idChk.matcher(loginId);
@@ -60,8 +59,6 @@ public class MemberServiceImpl implements MemberService {
         String email = memberDTO.getTmt_memb_email();
         Pattern emailChk = Pattern.compile("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$");
         Matcher emailMatcher = emailChk.matcher(email);
-
-
         if(memberDTO.getTmt_login_id() == null || memberDTO.getTmt_login_id().equals("")||
                 tmt_pass_word1 == null || tmt_pass_word1.equals("")||
                 tmt_pass_word2 == null || tmt_pass_word2.equals("")||
@@ -75,17 +72,17 @@ public class MemberServiceImpl implements MemberService {
         if(passMatcher.matches() || pass.length() < 8){
             return redirect("join.do",rttr,"실패 메세지","비밀번호는 영어 소문자,특수문자,숫자로 구성된 8글자 이상으로 조합하시오.", DANGER);
         }
-
         if(!tmt_pass_word1.equals(tmt_pass_word2)) {
             return redirect("join.do",rttr,"실패 메세지","비밀번호가 서로 다릅니다.", DANGER);
         }
         if(!idMatcher.matches() || loginId.length() < 6) {
             return redirect("join.do",rttr,"아이디 유효성 검사","아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.", DANGER);
         }
-
-
         if(!emailMatcher.matches()) {
             return redirect("join.do",rttr,"이메일 유효성 검사","이메일 형식에 맞게 입력해주세요.", DANGER);
+        }
+        if(duplChek) {
+            return redirect("join.do",rttr,"아이디 중복체크","중복된 아이디 입니다. 다른 아이디를 입력해주시길 바랍니다.", DANGER);
         }
 
         memberDTO.setTmt_memb_file("");//사진 이미지는 없다는 의미로 ""
@@ -93,7 +90,6 @@ public class MemberServiceImpl implements MemberService {
         int result = 0;
         try {
             String msg = "";
-
             if(tmt_seq != null && !tmt_seq.equals("")){
                 result = memberRepository.memberUpdate(memberDTO);
                 msg = "회원정보 수정";
@@ -106,7 +102,7 @@ public class MemberServiceImpl implements MemberService {
                 // 회원가입이 성공하면-> 로그인처리하기
                 session.setAttribute("memberDTO", memberDTO); // ${empty m}
                 log.info("session{}", session);
-                return redirect("join.do",rttr,msg + " 성공메시지",msg+ "에 성공했습니다.", SUCCESS);
+                return redirect("",rttr,msg + " 성공메시지",msg+ "에 성공했습니다.", SUCCESS);
             }
         } catch (Exception e) {
             log.info("result{}",result);
@@ -118,7 +114,6 @@ public class MemberServiceImpl implements MemberService {
         }
         return "redirect:/";
     }
-
 
     @Override
     public String login(MemberDTO memberDTO, RedirectAttributes rttr, HttpSession session) {
@@ -141,9 +136,5 @@ public class MemberServiceImpl implements MemberService {
             return redirect("loginForm.do",rttr,"실패 메시지",duplLoginErrorMsg, DANGER);
         }
     }
-
-//    public static void duplChkMethod() throws Exception {
-//        throw new Exception("아이디 중복이 발생하였습니다.");
-//    }
 }
 

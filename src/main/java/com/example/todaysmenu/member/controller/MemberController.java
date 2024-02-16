@@ -8,6 +8,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +29,6 @@ import java.net.http.HttpRequest;
 @Log4j2
 public class MemberController {
 
-    String danger = "btn btn-danger";
-    String success = "btn btn-success";
 
 
     @Autowired
@@ -40,10 +39,28 @@ public class MemberController {
 
 
 
-    @RequestMapping(value = {"/join.do","/updateLogin.do"})
-    public String join() {
+    @RequestMapping("/join.do")
+    public String join(HttpServletRequest request,RedirectAttributes rttr) {
+        HttpSession session = request.getSession();
+        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        log.info("============memberSession================{}",memberSession);
         log.info("회원가입 접속");
-        return "member/join";
+        if(memberSession != null) {
+            return redirect("",rttr,"실패 메세지","로그인 유저는 진입하실 수 없습니다.",DANGER);
+        }else{
+            return "member/join";
+        }
+    }
+    @RequestMapping("/updateLogin.do")
+    public String updateLogin(HttpServletRequest request,RedirectAttributes rttr) {
+        HttpSession session = request.getSession();
+        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        log.info("============memberSession================{}",memberSession);
+        if(memberSession == null) {
+            return redirect("",rttr,"실패 메세지","비로그인 유저는 진입하실 수 없습니다.",DANGER);
+        }else{
+            return "member/join";
+        }
     }
     @RequestMapping("/registerCheck.do")
     public @ResponseBody int registerCheck(@RequestParam("tmt_login_id") String tmt_login_id) {
@@ -64,7 +81,7 @@ public class MemberController {
         session.invalidate();
         rttr.addFlashAttribute("msgType","로그아웃 메시지");
         rttr.addFlashAttribute("msg","로그아웃을 하였습니다.");
-        rttr.addFlashAttribute("result",danger);
+        rttr.addFlashAttribute("result",DANGER);
         return "redirect:/";
     }
     @RequestMapping("loginForm.do")

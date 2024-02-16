@@ -1,5 +1,6 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
 <script th:inline="javascript">
+    let duplicateCheckResult = 0;
     /*<![CDATA[*/
     $(document).ready(function () {
         if ([[${msgType != null}]]) {
@@ -20,8 +21,10 @@
                 data: {"tmt_login_id": tmt_login_id}, //서버로 전송할 데이터
                 success: function (result) {
                     if (result == 1) {
+                        duplicateCheckResult = result;
                         modalMess("중복체크", "사용할 수 있는 아이디입니다.", "success");
                     } else {
+                        duplicateCheckResult = result;
                         modalMess("중복체크", "사용할 수 없는 아이디입니다.", "danger");
                     }
                     $("#commonModal").modal("show");
@@ -62,7 +65,9 @@
         var tmt_memb_age = $("#tmt_memb_age").val();
         if (tmt_memb_age == null || tmt_memb_age == "") {
             modalMess("나이체크", "나이를 입력해주세요", "danger");
-        } else {
+        }else if(duplicateCheckResult == 0) {
+            modalMess("중복 확인 버튼", "중복 확인을 해주세요", "danger");
+        }else {
             $("#frm").submit();
         }
     }
