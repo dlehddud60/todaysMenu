@@ -2,6 +2,7 @@ package com.example.todaysmenu.main.controller;
 
 import com.example.todaysmenu.board.entity.BoardDTO;
 import com.example.todaysmenu.board.service.BoardService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,9 @@ import java.util.List;
 @Controller
 public class MainController {
     @GetMapping("/")
-    public String home(HttpSession session) {
+    public String home(HttpServletRequest request, HttpSession session) {
+        String userIp = request.getRemoteAddr();
+        log.info("=================userIp{}",userIp);
         session.getAttribute("memberDTO");
         return "home";
     }

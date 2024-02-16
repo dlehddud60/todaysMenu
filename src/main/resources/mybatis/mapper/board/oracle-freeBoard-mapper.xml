@@ -96,7 +96,7 @@
         ,   NULL
         ,   #{tfb_input_nm}
         ,   SYSDATE
-        ,   NULL
+        ,   #{tfb_input_ip}
         ,   NULL
         ,   #{tfb_moder_nm}
         ,   SYSDATE
@@ -110,7 +110,7 @@
         SET		TFB_MODER_TY 	= null
         ,		TFB_MODER_NM 	= #{tfb_moder_nm}
         ,		TFB_MODER_DT 	= null
-        ,		TFB_MODER_IP	= null
+        ,		TFB_MODER_IP	= #{tfb_moder_ip}
         ,       TFB_TITLE_NM    = #{tfb_title_nm}
         ,       TFB_TEXT        = #{tfb_text}
         WHERE	TFB_SEQ			= #{tfb_seq}

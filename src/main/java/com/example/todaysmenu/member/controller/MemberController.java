@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
+import static com.example.todaysmenu.board.common.modal.ComModal.SUCCESS;
+import static com.example.todaysmenu.board.common.modal.ComModal.redirect;
 import java.net.http.HttpRequest;
 
 @Controller
@@ -28,7 +31,6 @@ public class MemberController {
     String danger = "btn btn-danger";
     String success = "btn btn-success";
 
-    ComModal comModal = new ComModal();
 
     @Autowired
     MemberRepository memberRepository;

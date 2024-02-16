@@ -87,7 +87,7 @@ CREATE TABLE TM_MEMBER_TBL
 ,   TMT_MEMB_NAME               VARCHAR2(20) NOT NULL
 ,   TMT_MEMB_AGE                NUMBER(20)
 ,   TMT_MEMB_GENDER             VARCHAR2(20)
-,   TMT_MEMB_EMAIL              VARCHAR2(20)
+,   TMT_MEMB_EMAIL              VARCHAR2(200)
 ,   TMT_MEMB_BIRTH_DAY          DATE
 ,   TMT_MEMB_FILE               VARCHAR2(20)
 ,   TMT_INPUT_DATE              DATE NOT NULL
