@@ -7,6 +7,7 @@ import com.example.todaysmenu.member.service.MemberService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -25,7 +26,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     MemberRepository memberRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     private boolean duplChek;
+
+
 
     @Override
     public int registerCheck(String tmt_login_id) {
@@ -94,9 +101,13 @@ public class MemberServiceImpl implements MemberService {
                 result = memberRepository.memberUpdate(memberDTO);
                 msg = "회원정보 수정";
             }else{
+                String encodePassWord = passwordEncoder.encode(memberDTO.getTmt_pass_word());
+                memberDTO.setTmt_pass_word(encodePassWord);
                 result = memberRepository.register(memberDTO);
+                log.info("============encodePassWord================={}",encodePassWord);
                 msg = "회원가입";
             }
+
             // 성공적으로 등록된 경우 처리할 로직
             if (result == 1) {
                 // 회원가입이 성공하면-> 로그인처리하기
@@ -129,7 +140,8 @@ public class MemberServiceImpl implements MemberService {
         }catch (Exception e) {
             duplLoginErrorMsg = "중복 로그인이 발생하였습니다.";
         }
-        if(mvo != null) { //로그인 성공
+        //비밀번호 일치 여부 체크
+        if(mvo != null && passwordEncoder.matches(memberDTO.getTmt_pass_word(), mvo.getTmt_pass_word())) { //로그인 성공
             session.setAttribute("memberDTO",mvo); // ${empty mvo} 헤더에서 체크하고 있음
             return redirect("",rttr,"성공 메세지","로그인에 성공했습니다.", SUCCESS);
         }else{ //로그인 실패

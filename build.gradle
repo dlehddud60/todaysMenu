@@ -47,6 +47,9 @@ dependencies {
 
     // 스프링 시큐리티
 //    implementation 'org.springframework.boot:spring-boot-starter-security'	// spring security
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.6.7'
+
 }
 
 tasks.named('test') {

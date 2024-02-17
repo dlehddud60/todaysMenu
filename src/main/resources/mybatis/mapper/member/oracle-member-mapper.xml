@@ -84,7 +84,6 @@
         SELECT  TMT.*
         FROM    TM_MEMBER_TBL TMT
         WHERE   TMT_LOGIN_ID = #{tmt_login_id}
-        AND     TMT_PASS_WORD = #{tmt_pass_word}
     </select>
 
 
