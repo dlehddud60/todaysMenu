@@ -55,7 +55,14 @@ public class MemberServiceImpl implements MemberService {
             , HttpSession session
             , String tmt_seq
             ) {
+
         String loginId = memberDTO.getTmt_login_id();
+        if(loginId == null || loginId.equals("")) {
+            MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+            memberDTO.setTmt_login_id(memberSession.getTmt_login_id());
+            loginId = memberSession.getTmt_login_id();
+
+        }
         Pattern idChk = Pattern.compile("^[a-z0-9]+$");
         Matcher idMatcher = idChk.matcher(loginId);
 
@@ -66,6 +73,7 @@ public class MemberServiceImpl implements MemberService {
         String email = memberDTO.getTmt_memb_email();
         Pattern emailChk = Pattern.compile("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$");
         Matcher emailMatcher = emailChk.matcher(email);
+
         if(memberDTO.getTmt_login_id() == null || memberDTO.getTmt_login_id().equals("")||
                 tmt_pass_word1 == null || tmt_pass_word1.equals("")||
                 tmt_pass_word2 == null || tmt_pass_word2.equals("")||
@@ -77,6 +85,7 @@ public class MemberServiceImpl implements MemberService {
             return redirect("join.do",rttr,"실패 메세지","모든 내용을 입력하세요 ", DANGER);
         }
         if(passMatcher.matches() || pass.length() < 8){
+
             return redirect("join.do",rttr,"실패 메세지","비밀번호는 영어 소문자,특수문자,숫자로 구성된 8글자 이상으로 조합하시오.", DANGER);
         }
         if(!tmt_pass_word1.equals(tmt_pass_word2)) {
@@ -97,14 +106,14 @@ public class MemberServiceImpl implements MemberService {
         int result = 0;
         try {
             String msg = "";
+            String encodePassWord = passwordEncoder.encode(memberDTO.getTmt_pass_word());
+            memberDTO.setTmt_pass_word(encodePassWord);
             if(tmt_seq != null && !tmt_seq.equals("")){
+
                 result = memberRepository.memberUpdate(memberDTO);
                 msg = "회원정보 수정";
             }else{
-                String encodePassWord = passwordEncoder.encode(memberDTO.getTmt_pass_word());
-                memberDTO.setTmt_pass_word(encodePassWord);
                 result = memberRepository.register(memberDTO);
-                log.info("============encodePassWord================={}",encodePassWord);
                 msg = "회원가입";
             }
 

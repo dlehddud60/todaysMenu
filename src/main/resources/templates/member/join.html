@@ -1,8 +1,14 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
 <script th:inline="javascript">
     let duplicateCheckResult = 0;
-    /*<![CDATA[*/
     $(document).ready(function () {
+        // if([[${session.memberDTO}]])
+        let sessionVal = [[${session.memberDTO}]];
+        if(sessionVal != null) {
+            console.log("==========sessionVal11===========",sessionVal)
+            duplicateCheckResult = 1;
+        }
+        console.log(sessionVal);
         if ([[${msgType != null}]]) {
             $("#commonModal").modal("show");
         }
@@ -91,20 +97,24 @@
     }
 
 
-    /*]]>*/
 </script>
 <div class="container mt-3">
     <form id="frm" method="post" action="/register.do">
         <input type="hidden" id="passawordResult" name="tmt_pass_word" value="">
-        <input type="hidden" id="tmt_seq" name="tmt_seq"
+        <input type="text" id="tmt_seq" name="tmt_seq"
                th:value="${session.memberDTO != null ? session.memberDTO.tmt_seq : ''}">
+
         <table class="table table-bordered" style="text-align: center; border: 1px solid #dddddd;">
             <tr>
-                <td style="width: 120px; vertical-align: middle;">아이디</td>
-                <td><input id="tmt_login_id" name="tmt_login_id" class="form-control" type="text" maxlength="20"
-                           placeholder="아이디를 입력하세요."
-                           th:value="${session.memberDTO != null ? session.memberDTO.tmt_login_id : ''}"></td>
-                <td style="width: 120px;">
+                <td  style="width: 120px; vertical-align: middle;">아이디</td>
+                <td th:if="${session.memberDTO == null}">
+                    <input id="tmt_login_id" name="tmt_login_id" class="form-control" type="text" maxlength="20" placeholder="아이디를 입력하세요.">
+                </td>
+                <td th:unless="${session.memberDTO == null}">
+                    <input id="tmt_login_id" name="tmt_login_id" class="form-control" type="text" maxlength="20" placeholder="아이디를 입력하세요."
+                          disabled th:value="${session.memberDTO != null ? session.memberDTO.tmt_login_id : ''}">
+                </td>
+                <td th:if="${session.memberDTO} == null" style="width: 120px;">
                     <button type="button" class="btn btn-primary btn-sm" onclick="registerCheck();">중복확인</button>
                 </td>
             </tr>
@@ -172,7 +182,8 @@
                 </td>
             </tr>
         </table>
-        <button type="button" class="btn btn-success" th:text="등록" onclick="ageChk();"></button>
+<!--        <button type="submit" class="btn btn btn-success" th:text="${param.tfb_seq} == null ? '등록' : '수정'"></button>-->
+        <button type="button" class="btn btn-success"  onclick="ageChk();" th:text="${session.memberDTO == null} ? '회원가입' : '정보수정' "></button>
     </form>
 </div>
 <div th:insert="~{/include/footter.html}" th:remove="tag"></div>

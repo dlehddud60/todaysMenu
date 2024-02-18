@@ -70,6 +70,7 @@ public class MemberController {
     @RequestMapping("/register.do")
     public String register(MemberDTO memberDTO, String tmt_pass_word1, String tmt_pass_word2,
                            RedirectAttributes rttr, HttpSession session, @RequestParam(value = "tmt_seq",required = false)String tmt_seq) {
+        log.info("==========tmt_seq123========{}",tmt_seq);
         String register = memberService.register(memberDTO,tmt_pass_word1,tmt_pass_word2,rttr,session,tmt_seq);
 
       return register;
