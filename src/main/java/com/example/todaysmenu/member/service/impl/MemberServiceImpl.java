@@ -1,6 +1,7 @@
 package com.example.todaysmenu.member.service.impl;
 
 import com.example.todaysmenu.board.common.modal.ComModal;
+import com.example.todaysmenu.board.entity.Criteria;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.member.repository.MemberRepository;
 import com.example.todaysmenu.member.service.MemberService;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
 import java.util.regex.*;
 
 import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
@@ -156,6 +158,16 @@ public class MemberServiceImpl implements MemberService {
         }else{ //로그인 실패
             return redirect("loginForm.do",rttr,"실패 메시지",duplLoginErrorMsg, DANGER);
         }
+    }
+
+    @Override
+    public List<MemberDTO> memberList(Criteria cri) {
+        return memberRepository.memberList(cri);
+    }
+
+    @Override
+    public int count(Criteria cri) {
+        return memberRepository.count(cri);
     }
 }
 

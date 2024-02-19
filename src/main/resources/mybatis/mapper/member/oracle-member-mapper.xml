@@ -3,6 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.todaysmenu.member.repository.MemberRepository">
+    <sql id="where">
+        WHERE 1 = 1
+    </sql>
+
+
+    <select id="count" resultType="int">
+        /*com.example.todaysmenu.member.repository.MemberRepository.count[회원수]*/
+        SELECT	COUNT(1)
+        FROM	TM_MEMBER_TBL TMT
+    </select>
 
     <select id="registerCheck" resultType="com.example.todaysmenu.member.entity.MemberDTO">
         /*com.example.todaysmenu.member.repository.MemberRepository.registerCheck[중복확인]*/
@@ -20,8 +30,9 @@
         WHERE   TMT_LOGIN_ID = #{tmt_login_id}
     </select>
 
-    <select id="memberInfo" resultType="com.example.todaysmenu.member.entity.MemberDTO">
-        /*com.example.todaysmenu.member.repository.MemberRepository.memberInfo[멤버정보]*/
+    <select id="memberList" resultType="com.example.todaysmenu.member.entity.MemberDTO">
+        /*com.example.todaysmenu.member.repository.MemberRepository.memberList[멤버정보]*/
+        <include refid="pagination.header"/>
         SELECT  TMT_SEQ
         ,       TMT_LOGIN_ID
         ,       TMT_PASS_WORD
@@ -31,9 +42,11 @@
         ,       TMT_MEMB_EMAIL
         ,       TMT_MEMB_BIRTH_DAY
         ,       TMT_MEMB_FILE
-        ,       TMT_INPUT_DATE
+        ,       TO_CHAR(TMT.TMT_INPUT_DATE,'YYYY-MM-dd') AS TMT_INPUT_DATE
         FROM    TM_MEMBER_TBL TMT
-        WHERE   TMT_SEQ = #{tmt_seq}
+        <include refid="where"/>
+        ORDER BY TMT_SEQ DESC
+        <include refid="pagination.footer"/>
     </select>
 
 

@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 
 public class MemberDTO {
+    private String row_num;
     private String  tmt_seq;
     private String tmt_login_id;
     private String tmt_pass_word;

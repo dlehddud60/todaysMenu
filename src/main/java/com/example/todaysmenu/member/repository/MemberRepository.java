@@ -14,4 +14,8 @@ public interface MemberRepository {
     public MemberDTO login(MemberDTO memberDTO);
     public String memberInfo(String tmt_seq);
     public int memberUpdate(MemberDTO memberDTO);
+    public List<MemberDTO> memberList(Criteria cri);
+    public int count(Criteria cri);
+
+
 }

@@ -101,7 +101,7 @@
 <div class="container mt-3">
     <form id="frm" method="post" action="/register.do">
         <input type="hidden" id="passawordResult" name="tmt_pass_word" value="">
-        <input type="text" id="tmt_seq" name="tmt_seq"
+        <input type="hidden" id="tmt_seq" name="tmt_seq"
                th:value="${session.memberDTO != null ? session.memberDTO.tmt_seq : ''}">
 
         <table class="table table-bordered" style="text-align: center; border: 1px solid #dddddd;">

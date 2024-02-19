@@ -1,6 +1,8 @@
 package com.example.todaysmenu.member.controller;
 
 import com.example.todaysmenu.board.common.modal.ComModal;
+import com.example.todaysmenu.board.entity.Criteria;
+import com.example.todaysmenu.board.entity.PageDTO;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.member.repository.MemberRepository;
 import com.example.todaysmenu.member.service.MemberService;
@@ -24,6 +26,7 @@ import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
 import static com.example.todaysmenu.board.common.modal.ComModal.SUCCESS;
 import static com.example.todaysmenu.board.common.modal.ComModal.redirect;
 import java.net.http.HttpRequest;
+import java.util.List;
 
 @Controller
 @Log4j2
@@ -103,19 +106,14 @@ public class MemberController {
     }
 
 
-//    @RequestMapping("/imageUpdate.do")
-//    public String imageUpdate(HttpServletRequest request, RedirectAttributes rttr) {
-//        MultipartRequest multi = null;
-//        int fileMaxSize = 10*1024*1024;
-//        String savePath = request.getServletContext().getRealPath("resources/upload");
-//        try {
-//            multi = new MultipartRequest(request,savePath, fileMaxSize, "UTF-8", new DefaultFileRenamePolicy());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            comModal.redirect("",rttr,"실패 메세지","파일의 크기는 10MB를 넘을 수 없습니다.",danger);
-//
-//        }
-//        return "";
-//    }
+    @RequestMapping("/memberList.do")
+    public String memberList(Criteria cri, Model model) {
+        int total = memberService.count(cri);
+        model.addAttribute("memberList", memberService.memberList(cri));
+        model.addAttribute("pageMaker",new PageDTO(total,cri));
+
+        return "member/memberList";
+    }
+
 
 }
