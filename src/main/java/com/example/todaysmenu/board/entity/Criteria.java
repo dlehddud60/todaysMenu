@@ -11,6 +11,9 @@ public class Criteria {
     private int pageNum;
     private int amount;
     private String search;
+    private String gender;
+    private String startDate;
+    private String endDate;
 
     public Criteria() {
         this(1,10);

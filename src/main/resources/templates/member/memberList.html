@@ -1,4 +1,5 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+
 <script>
     $(document).ready(function () {
         $("#frmList").attr("action", "");
@@ -12,32 +13,43 @@
         });
         $("#reset").on("click", function (e) {
             $("input[name='search']").val("");
-            paramReset();
+            $("input[name='startDate']").val("");
+            $("input[name='endDate']").val("");
+            $("select[name='gender']").val("");
+            pageParamReset();
             frmList.submit();
         });
         $("#searchButton").on("click", function (e) {
-            paramReset();
+            pageParamReset();
             frmList.submit();
         });
         $("#searchInput").on("keyup", function (key) {
             if (key.keyCode == 13) {
-                paramReset();
+                pageParamReset();
                 frmList.submit();
             }
         });
+
+
+
+
     });
     function selectAll(selectAll) {
         $('input[name="tfb_seq"]').prop('checked', selectAll.checked);
     }
     function setPageAmount() {
-        // paramReset();
+        // pageParamReset();
         $("[name='amount']").val($("#pageAmount").val());
         $("#frmList").submit();
     }
-    function paramReset() {
+    function pageParamReset() {
         $("input[name='pageNum']").val("1");
         $("input[name='amount']").val("10");
+
     }
+
+
+
 </script>
 <style>
     ul {
@@ -53,15 +65,22 @@
             <p>오늘의 메뉴 회원</p>
 
             <div class="container p-5 my-5 bg-secondary text-white">
-                <h1>검색</h1>
-                <span style="font-size: 1.2rem; background: white; border-radius: 10px; color: black;">성별 </span>
-                <select name="gender" class="form-select" aria-label="Small select example" style="width: 100px;  margin-bottom: 20px; display: inline; ">
+                <h1 style=" width: 100px ;height: 50px; text-align: center; line-height: 50px; border-radius: 10px; margin : 0 0 50px 0;">검색</h1>
+                <span style="font-size: 1.2rem; color: white;  margin-right: 10px;">성별 </span>
+
+                <select name="gender" class="form-select" aria-label="Small select example" style="width: 100px;  margin-bottom: 20px; margin-right: 10px; display: inline; ">
 <!--                    <option selected>Open this select menu</option>-->
-                    <option value="">남/녀</option>
-                    <option value="남자">남자</option>
-                    <option value="여자">여자</option>
+                    <option th:text="남녀" value=""></option>
+                    <option th:text="남자" value="남자" th:selected="${#strings.toString(param.gender)} == '남자'"></option>
+                    <option th:text="여자" value="여자" th:selected="${#strings.toString(param.gender)} == '여자'"></option>
                 </select>
-                <input class="form-control me-2" type="search" placeholder="제목 + 작성자를 입력해주시길 바랍니다." aria-label="Search"
+                <span style="font-size: 1.2rem; color: white;  margin-right: 10px;">가입일 시작 </span>
+                <input type="text" id="datepicker1" name="startDate" th:value="${param.startDate}">
+                <span style="margin: 0 10px 0 10px">~</span>
+                <input type="text" id="datepicker2" name="endDate" th:value="${param.endDate}">
+
+
+                <input class="form-control me-2" type="search" placeholder="아이디 + 이름를 입력해주시길 바랍니다." aria-label="Search"
                        name="search" id="searchInput" th:value="${param.search}">
                 <br>
                 <button class="btn btn-warning" type="button" style="float:right;" id="reset">초기화</button>

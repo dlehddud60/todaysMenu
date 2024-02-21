@@ -123,7 +123,6 @@ public class BoardController {
 
     @GetMapping("/delete.do")
     public String  delete(BoardDTO boardDTO, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr, HttpServletRequest request){
-        log.info("=======boardDTO========{}",boardDTO);
         int tfb_seq = Integer.parseInt(boardDTO.getTfb_seq());
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
@@ -154,7 +153,6 @@ public class BoardController {
 
     @GetMapping("/delChk.do")
     public String delChk(@RequestParam(value = "tfb_seq",required=false)List<Integer> tfb_seq,Criteria cri,RedirectAttributes rttr,HttpServletRequest request) {
-        log.info("=============================tfb_seq========================={}",tfb_seq);
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         BoardDTO boardInfo;
@@ -170,8 +168,6 @@ public class BoardController {
             for (int i = 0; i < tfb_seq.size(); i++) {
                 boardInfo = boardService.info(tfb_seq.get(i));
                 userName = boardInfo.getTfb_input_nm();
-                log.info("===========userName============={}",userName);
-                log.info("===========userSessionName============={}",userSessionName);
                 if(userName.equals(userSessionName) && memberSession != null) {
                 boardService.delete(tfb_seq.get(i));
                 } else {

@@ -16,10 +16,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
@@ -46,8 +43,6 @@ public class MemberController {
     public String join(HttpServletRequest request,RedirectAttributes rttr) {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-        log.info("============memberSession================{}",memberSession);
-        log.info("회원가입 접속");
         if(memberSession != null) {
             return redirect("",rttr,"실패 메세지","로그인 유저는 진입하실 수 없습니다.",DANGER);
         }else{
@@ -58,7 +53,6 @@ public class MemberController {
     public String updateLogin(HttpServletRequest request,RedirectAttributes rttr) {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-        log.info("============memberSession================{}",memberSession);
         if(memberSession == null) {
             return redirect("",rttr,"실패 메세지","비로그인 유저는 진입하실 수 없습니다.",DANGER);
         }else{
@@ -67,13 +61,11 @@ public class MemberController {
     }
     @RequestMapping("/registerCheck.do")
     public @ResponseBody int registerCheck(@RequestParam("tmt_login_id") String tmt_login_id) {
-        log.info("-------registerCheckMemberController-------");
         return memberService.registerCheck(tmt_login_id);
     }
     @RequestMapping("/register.do")
     public String register(MemberDTO memberDTO, String tmt_pass_word1, String tmt_pass_word2,
                            RedirectAttributes rttr, HttpSession session, @RequestParam(value = "tmt_seq",required = false)String tmt_seq) {
-        log.info("==========tmt_seq123========{}",tmt_seq);
         String register = memberService.register(memberDTO,tmt_pass_word1,tmt_pass_word2,rttr,session,tmt_seq);
 
       return register;
@@ -83,10 +75,8 @@ public class MemberController {
     public String logout(RedirectAttributes rttr,HttpSession session) {
 
         session.invalidate();
-        rttr.addFlashAttribute("msgType","로그아웃 메시지");
-        rttr.addFlashAttribute("msg","로그아웃을 하였습니다.");
-        rttr.addFlashAttribute("result",DANGER);
-        return "redirect:/";
+
+        return redirect("",rttr,"로그아웃 메세지","로그아웃을 하였습니다.",DANGER);
     }
     @RequestMapping("loginForm.do")
     public String loginForm() {
@@ -107,7 +97,21 @@ public class MemberController {
 
 
     @RequestMapping("/memberList.do")
-    public String memberList(Criteria cri, Model model) {
+    public String memberList(HttpServletRequest request,Criteria cri, Model model,RedirectAttributes rttr) {
+        HttpSession session = request.getSession();
+        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        String userType = "";
+        try {
+            userType = memberSession.getTmt_user_type();
+        }catch (NullPointerException e) {
+            e.printStackTrace();
+        }finally {
+            if(!userType.equals("master") || userType.equals("user") || userType == null){
+                return redirect("",rttr,"실패 메세지","관리자 등급만 진입하실 수 있습니다.",DANGER);
+            }
+        }
+
+            log.info("=============memberSession==========={}",memberSession);
         int total = memberService.count(cri);
         model.addAttribute("memberList", memberService.memberList(cri));
         model.addAttribute("pageMaker",new PageDTO(total,cri));
