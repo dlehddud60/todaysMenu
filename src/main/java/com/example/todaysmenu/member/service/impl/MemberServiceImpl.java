@@ -169,5 +169,10 @@ public class MemberServiceImpl implements MemberService {
     public int count(Criteria cri) {
         return memberRepository.count(cri);
     }
+
+    @Override
+    public void userTypeUpdate(MemberDTO memberDTO) {
+        memberRepository.userTypeUpdate(memberDTO);
+    }
 }
 

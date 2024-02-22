@@ -6,21 +6,21 @@
     <sql id="where">
         WHERE 1 = 1
         <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(search)">
-            AND	UPPER(T1.TMT_LOGIN_ID) || UPPER(T1.TMT_MEMB_NAME) LIKE '%' || UPPER(#{search}) || '%'
+            AND     UPPER(T1.TMT_LOGIN_ID) || UPPER(T1.TMT_MEMB_NAME) LIKE '%' || UPPER(#{search}) || '%'
         </if>
         <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(gender)">
-            AND T1.TMT_MEMB_GENDER = #{gender}
+            AND     T1.TMT_MEMB_GENDER = #{gender}
         </if>
          <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(startDate)">
-            AND T1.TMT_INPUT_DATE <![CDATA[>=]]> #{startDate}
+            AND     T1.TMT_INPUT_DATE <![CDATA[>=]]> #{startDate}
         </if>
         <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(endDate)">
-            AND T1.TMT_INPUT_DATE <![CDATA[<=]]> #{endDate}
+            AND     T1.TMT_INPUT_DATE <![CDATA[<=]]> #{endDate}
         </if>
-
-
+        <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(userType)">
+            AND     T1.TMT_USER_TYPE = #{userType}
+        </if>
     </sql>
-
 
     <select id="count" resultType="int">
         /*com.example.todaysmenu.member.repository.MemberRepository.count[회원수]*/
@@ -57,9 +57,14 @@
                     ,       TMT_MEMB_AGE
                     ,       TMT_MEMB_GENDER
                     ,       TMT_MEMB_EMAIL
+                    ,       TMT_USER_TYPE
                     ,       TMT_MEMB_BIRTH_DAY
                     ,       TMT_MEMB_FILE
                     ,       TO_CHAR(TMT.TMT_INPUT_DATE,'YYYY-MM-dd') AS TMT_INPUT_DATE
+                    ,       CASE WHEN TMT_USER_TYPE = 'master' THEN '관리자'
+                                 WHEN TMT_USER_TYPE = 'manager' THEN '매니저'
+                                 WHEN TMT_USER_TYPE = 'user' THEN '사용자'
+                            END AS TMT_USER_TYPE_CUSTOM
                     FROM    TM_MEMBER_TBL TMT
                  ) T1
         <include refid="where"/>
@@ -118,6 +123,20 @@
         FROM    TM_MEMBER_TBL TMT
         WHERE   TMT_LOGIN_ID = #{tmt_login_id}
     </select>
+
+    <update id="userTypeUpdate"  parameterType="com.example.todaysmenu.member.entity.MemberDTO">
+        /*com.example.todaysmenu.member.repository.MemberRepository.userTypeUpdate[회원권한정보수정]*/
+        UPDATE	TM_MEMBER_TBL
+        SET		TMT_USER_TYPE 	        = #{tmt_user_type}
+        WHERE	TMT_SEQ			        IN(#{tmt_seq})
+    </update>
+
+<!--    <update id="userTypeUpdateChk"  parameterType="com.example.todaysmenu.member.entity.MemberDTO">-->
+<!--        /*com.example.todaysmenu.member.repository.MemberRepository.userTypeUpdate[회원권한정보수정체크박스]*/-->
+<!--        UPDATE	TM_MEMBER_TBL-->
+<!--        SET		TMT_USER_TYPE 	        = #{tmt_user_type}-->
+<!--        WHERE	TMT_SEQ			        IN(#{tmt_user_type})-->
+<!--    </update>-->
 
 
 </mapper>

@@ -14,6 +14,7 @@ public class Criteria {
     private String gender;
     private String startDate;
     private String endDate;
+    private String userType;
 
     public Criteria() {
         this(1,10);

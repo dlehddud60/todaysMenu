@@ -16,5 +16,5 @@ public interface MemberService {
     public String login(MemberDTO memberDTO, RedirectAttributes rttr, HttpSession session);
     public List<MemberDTO> memberList(Criteria cri);
     public int count(Criteria cri);
-
+    public void userTypeUpdate(MemberDTO memberDTO);
 }

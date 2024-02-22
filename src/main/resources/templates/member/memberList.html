@@ -16,6 +16,7 @@
             $("input[name='startDate']").val("");
             $("input[name='endDate']").val("");
             $("select[name='gender']").val("");
+            $("select[name='userType']").val("");
             pageParamReset();
             frmList.submit();
         });
@@ -29,10 +30,6 @@
                 frmList.submit();
             }
         });
-
-
-
-
     });
     function selectAll(selectAll) {
         $('input[name="tfb_seq"]').prop('checked', selectAll.checked);
@@ -47,6 +44,13 @@
         $("input[name='amount']").val("10");
 
     }
+    function userTypeUpdate(seq,obj) {
+        let userTypeVal = $(obj).val();
+        $("input[name='tmt_user_type']").val(userTypeVal)
+        $("input[name='tmt_seq']").val(seq)
+        $("#frmList").attr("action", "/userTypeUpdate.do").submit();
+
+    }
 
 
 
@@ -59,6 +63,8 @@
 <form method="get" id="frmList">
     <input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}">
     <input type="hidden" name="amount" th:value="${pageMaker.cri.amount}">
+    <input type="hidden" name="tmt_seq">
+   <input type="hidden" name="tmt_user_type">
     <div class="form-group">
         <div class="container pt-5">
             <h1>회원 목록</h1>
@@ -67,13 +73,20 @@
             <div class="container p-5 my-5 bg-secondary text-white">
                 <h1 style=" width: 100px ;height: 50px; text-align: center; line-height: 50px; border-radius: 10px; margin : 0 0 50px 0;">검색</h1>
                 <span style="font-size: 1.2rem; color: white;  margin-right: 10px;">성별 </span>
-
                 <select name="gender" class="form-select" aria-label="Small select example" style="width: 100px;  margin-bottom: 20px; margin-right: 10px; display: inline; ">
-<!--                    <option selected>Open this select menu</option>-->
-                    <option th:text="남녀" value=""></option>
+                    <option th:text="ALL" value=""></option>
                     <option th:text="남자" value="남자" th:selected="${#strings.toString(param.gender)} == '남자'"></option>
                     <option th:text="여자" value="여자" th:selected="${#strings.toString(param.gender)} == '여자'"></option>
                 </select>
+
+                <span style="font-size: 1.2rem; color: white;  margin-right: 10px;">회원 권한</span>
+                <select name="userType" class="form-select" aria-label="Small select example" style="width: 100px;  margin-bottom: 20px; margin-right: 10px; display: inline; ">
+                    <option th:text="ALL" value=""></option>
+                    <option th:text="관리자" value="master" th:selected="${#strings.toString(param.userType)} == 'master'"></option>
+                    <option th:text="부매니저" value="manager" th:selected="${#strings.toString(param.userType)} == 'manager'"></option>
+                    <option th:text="사용자" value="user" th:selected="${#strings.toString(param.userType)} == 'user'"></option>
+                </select>
+
                 <span style="font-size: 1.2rem; color: white;  margin-right: 10px;">가입일 시작 </span>
                 <input type="text" id="datepicker1" name="startDate" th:value="${param.startDate}">
                 <span style="margin: 0 10px 0 10px">~</span>
@@ -101,21 +114,30 @@
                     <th scope="col">아이디</th>
                     <th scope="col">이름</th>
                     <th scope="col">나이</th>
-                    <th scope="col">성별</th>
-                    <th scope="col">이메일</th>
+                    <th scope="col" style="width: 130px;">성별</th>
+                    <th scope="col"> 이메일</th>
                     <th scope="col">가입일</th>
+                    <th scope="col"  style="width: 130px;">권한</th>
                 </tr>
                 </thead>
                 <tbody>
                 <div th:each="list : ${memberList}">
                     <tr class="table-light">
-                        <td  th:text="${list.row_num}"></td>
+                        <td th:text="${list.row_num}"></td>
                         <td th:text="${list.tmt_login_id}"></td>
                         <td th:text="${list.tmt_memb_name}"></td>
                         <td th:text="${list.tmt_memb_age + '살'}"></td>
                         <td th:text="${list.tmt_memb_gender}"></td>
                         <td th:text="${list.tmt_memb_email}"></td>
                         <td th:text="${list.tmt_input_date}"></td>
+                        <td>
+
+                            <select class="form-select" aria-label="Small select example" th:onchange="userTypeUpdate([[${list.tmt_seq}]],this)">
+                                <option th:text="관리자" value="master" th:selected="${list.tmt_user_type_custom} == '마스터'"></option>
+                                <option th:text="부매니저" value="manager" th:selected="${list.tmt_user_type_custom} == '매니저'"></option>
+                                <option th:text="사용자" value="user" th:selected="${list.tmt_user_type_custom} == '사용자'"></option>
+                            </select>
+                        </td>
                     </tr>
                 </div>
                 </tbody>
@@ -145,8 +167,6 @@
             </th:block>
 
 
-<!--            <a class="btn btnbtn-success" href="/board/write.do" role="button" style="float:right;">등록</a>-->
-<!--            <div th:insert="~{/include/modal/delChkModal.html}" th:remove="tag"></div>-->
         </div>
     </div>
 </form>

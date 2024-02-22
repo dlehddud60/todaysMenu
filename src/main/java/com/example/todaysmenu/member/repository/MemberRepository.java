@@ -16,6 +16,6 @@ public interface MemberRepository {
     public int memberUpdate(MemberDTO memberDTO);
     public List<MemberDTO> memberList(Criteria cri);
     public int count(Criteria cri);
-
+    public void userTypeUpdate(MemberDTO memberDTO);
 
 }

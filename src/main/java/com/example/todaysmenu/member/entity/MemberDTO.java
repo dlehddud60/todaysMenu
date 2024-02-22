@@ -17,4 +17,5 @@ public class MemberDTO {
     private String tmt_memb_file;
     private String tmt_input_date;
     private String tmt_user_type;
+    private String tmt_user_type_custom;
 }

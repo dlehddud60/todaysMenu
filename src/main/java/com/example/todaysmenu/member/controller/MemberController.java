@@ -119,5 +119,12 @@ public class MemberController {
         return "member/memberList";
     }
 
+    @RequestMapping("/userTypeUpdate.do")
+    public String userTypeUpdate(MemberDTO memberDTO,RedirectAttributes rttr) {
+        log.info("=============userTypeUpdate===========");
+        memberService.userTypeUpdate(memberDTO);
+        return redirect("memberList.do",rttr,"성공 메세지","등급 변경에 성공 하셨습니다.",SUCCESS);
+    }
+
 
 }
