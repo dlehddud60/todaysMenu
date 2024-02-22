@@ -5,14 +5,16 @@ import com.example.todaysmenu.board.entity.Criteria;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.member.repository.MemberRepository;
 import com.example.todaysmenu.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import java.util.*;
 import java.util.regex.*;
 
 import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
@@ -171,8 +173,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void userTypeUpdate(MemberDTO memberDTO) {
-        memberRepository.userTypeUpdate(memberDTO);
-    }
+    public void userTypeUpdate(MemberDTO memberDTO, HttpServletRequest request) {
+        Map<String, String[]> paramMap = request.getParameterMap();
+        String[] tmtSeqArr = paramMap.get("tmt_seq");
+        for (int i = 0; i < tmtSeqArr.length; i++) {
+            memberDTO.setTmt_seq(tmtSeqArr[i]);
+            memberRepository.userTypeUpdate(memberDTO);
+            }
+        }
 }
 

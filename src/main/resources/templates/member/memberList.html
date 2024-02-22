@@ -32,7 +32,7 @@
         });
     });
     function selectAll(selectAll) {
-        $('input[name="tfb_seq"]').prop('checked', selectAll.checked);
+        $('input[name="tmt_seq"]').prop('checked', selectAll.checked);
     }
     function setPageAmount() {
         // pageParamReset();
@@ -45,13 +45,33 @@
 
     }
     function userTypeUpdate(seq,obj) {
+
         let userTypeVal = $(obj).val();
         $("input[name='tmt_user_type']").val(userTypeVal)
         $("input[name='tmt_seq']").val(seq)
         $("#frmList").attr("action", "/userTypeUpdate.do").submit();
 
     }
+    function userTypeUpdateChk(obj) {
+        let checked =  $('input[name="tmt_seq"]').is(':checked');
+        if(checked == true) {
+            let userTypeVal = $(obj).val();
+            $("input[name='tmt_user_type']").val(userTypeVal)
+            $("#frmList").attr("action", "/userTypeUpdate.do").submit();
+        }else {
+            var idx = $("#userTypeChk option").index( $("#userTypeChk option:selected") );
+            if(idx != 0) {
+                modalMess("권한 등록 실패","체크박스를 선택해주시길 바랍니다.","danger")
+            }
+        }
+    }
 
+    function modalMess(head, body, footter) {
+        $("#modalHead").html(head);
+        $("#ModalMessage").html(body);
+        $("#ModalType").attr("class", "btn btn-" + footter);
+        $("#commonModal").modal("show");
+    }
 
 
 </script>
@@ -69,7 +89,6 @@
         <div class="container pt-5">
             <h1>회원 목록</h1>
             <p>오늘의 메뉴 회원</p>
-
             <div class="container p-5 my-5 bg-secondary text-white">
                 <h1 style=" width: 100px ;height: 50px; text-align: center; line-height: 50px; border-radius: 10px; margin : 0 0 50px 0;">검색</h1>
                 <span style="font-size: 1.2rem; color: white;  margin-right: 10px;">성별 </span>
@@ -91,8 +110,6 @@
                 <input type="text" id="datepicker1" name="startDate" th:value="${param.startDate}">
                 <span style="margin: 0 10px 0 10px">~</span>
                 <input type="text" id="datepicker2" name="endDate" th:value="${param.endDate}">
-
-
                 <input class="form-control me-2" type="search" placeholder="아이디 + 이름를 입력해주시길 바랍니다." aria-label="Search"
                        name="search" id="searchInput" th:value="${param.search}">
                 <br>
@@ -100,16 +117,26 @@
                 <button class="btn btn-success" type="button" style="float:right;" id="searchButton">검색</button>
             </div>
 
-            <select class="form-select" id="pageAmount" style="width: 100px;float:right;" onchange="setPageAmount()">
+            <select class="form-select" id="pageAmount" style="width: 100px;float:right;margin-left: 10px;" onchange="setPageAmount()">
                 <option th:text="10" th:value="10" th:selected="${#strings.toString(param.amount)} == '10'"></option>
                 <option th:text="30" th:value="30" th:selected="${#strings.toString(param.amount)} == '30'"></option>
                 <option th:text="50" th:value="50" th:selected="${#strings.toString(param.amount)} == '50'"></option>
                 <option th:text="100" th:value="100" th:selected="${#strings.toString(param.amount)} == '100'"></option>
             </select>
+
+            <select class="form-select" id="userTypeChk"  style="width: 150px;float:right; " th:onchange="userTypeUpdateChk(this)">
+                <option th:text="'===선택==='" value=""></option>
+                <option th:text="관리자" value="master"></option>
+                <option th:text="부매니저" value="manager"></option>
+                <option th:text="사용자" value="user"></option>
+            </select>
+
             <table class="table table-hover">
                 <thead>
-
                 <tr class="table-active">
+                    <th scope="col">
+                        <input class="form-check-input" type="checkbox" onclick="selectAll(this);">
+                    </th>
                     <th scope="col">번호</th>
                     <th scope="col">아이디</th>
                     <th scope="col">이름</th>
@@ -123,6 +150,9 @@
                 <tbody>
                 <div th:each="list : ${memberList}">
                     <tr class="table-light">
+                        <th scope="row">
+                            <input class="form-check-input" type="checkbox" name="tmt_seq" th:value="${list.tmt_seq}">
+                        </th>
                         <td th:text="${list.row_num}"></td>
                         <td th:text="${list.tmt_login_id}"></td>
                         <td th:text="${list.tmt_memb_name}"></td>
@@ -165,8 +195,6 @@
                     </ul>
                 </div>
             </th:block>
-
-
         </div>
     </div>
 </form>

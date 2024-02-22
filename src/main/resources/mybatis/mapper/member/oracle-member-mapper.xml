@@ -128,15 +128,8 @@
         /*com.example.todaysmenu.member.repository.MemberRepository.userTypeUpdate[회원권한정보수정]*/
         UPDATE	TM_MEMBER_TBL
         SET		TMT_USER_TYPE 	        = #{tmt_user_type}
-        WHERE	TMT_SEQ			        IN(#{tmt_seq})
+        WHERE	TMT_SEQ			        = #{tmt_seq}
     </update>
-
-<!--    <update id="userTypeUpdateChk"  parameterType="com.example.todaysmenu.member.entity.MemberDTO">-->
-<!--        /*com.example.todaysmenu.member.repository.MemberRepository.userTypeUpdate[회원권한정보수정체크박스]*/-->
-<!--        UPDATE	TM_MEMBER_TBL-->
-<!--        SET		TMT_USER_TYPE 	        = #{tmt_user_type}-->
-<!--        WHERE	TMT_SEQ			        IN(#{tmt_user_type})-->
-<!--    </update>-->
 
 
 </mapper>

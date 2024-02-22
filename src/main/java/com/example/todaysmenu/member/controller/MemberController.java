@@ -89,7 +89,6 @@ public class MemberController {
         String login = memberService.login(memberDTO,rttr,session);
         return login;
     }
-
     @RequestMapping("/imageForm.do")
     public String imageForm() {
         return "member/imageForm";
@@ -110,8 +109,6 @@ public class MemberController {
                 return redirect("",rttr,"실패 메세지","관리자 등급만 진입하실 수 있습니다.",DANGER);
             }
         }
-
-            log.info("=============memberSession==========={}",memberSession);
         int total = memberService.count(cri);
         model.addAttribute("memberList", memberService.memberList(cri));
         model.addAttribute("pageMaker",new PageDTO(total,cri));
@@ -120,9 +117,8 @@ public class MemberController {
     }
 
     @RequestMapping("/userTypeUpdate.do")
-    public String userTypeUpdate(MemberDTO memberDTO,RedirectAttributes rttr) {
-        log.info("=============userTypeUpdate===========");
-        memberService.userTypeUpdate(memberDTO);
+    public String userTypeUpdate(MemberDTO memberDTO,RedirectAttributes rttr,HttpServletRequest request) {
+        memberService.userTypeUpdate(memberDTO,request);
         return redirect("memberList.do",rttr,"성공 메세지","등급 변경에 성공 하셨습니다.",SUCCESS);
     }
 
