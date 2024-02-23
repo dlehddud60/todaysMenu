@@ -96,21 +96,12 @@
                     <option th:text="양식" value="양식" th:selected="${#strings.toString(param.trt_food_typeSh)} == '양식'"></option>
                     <option th:text="기타" value="기타" th:selected="${#strings.toString(param.trt_food_typeSh)} == '기타'"></option>
                 </select>
-                <input class="form-control me-2" type="search" placeholder="식당명을 입력해주시길 바랍니다." aria-label="Search"
-                       name="search" id="searchInput" th:value="${param.search}">
+                <div th:replace="~{include/pagination/pageMain::globalSearchBox('식당명으로 검색해주시길 바랍니다.')}"></div>
 
-
-                <br>
-                <button class="btn btn-warning" type="button" style="float:right;" id="reset">초기화</button>
-                <button class="btn btn-success" type="button" style="float:right;" id="searchButton">검색</button>
             </div>
 
-            <select class="form-select" id="pageAmount" style="width: 100px;float:right;" onchange="setPageAmount()">
-                <option th:text="10" th:value="10" th:selected="${#strings.toString(param.amount)} == '10'"></option>
-                <option th:text="30" th:value="30" th:selected="${#strings.toString(param.amount)} == '30'"></option>
-                <option th:text="50" th:value="50" th:selected="${#strings.toString(param.amount)} == '50'"></option>
-                <option th:text="100" th:value="100" th:selected="${#strings.toString(param.amount)} == '100'"></option>
-            </select>
+            <div th:replace="~{include/pagination/pageMain::globalPagingEaSelect2}"></div>
+
             <table class="table table-hover">
                 <thead>
 
@@ -149,28 +140,7 @@
                 </tbody>
             </table>
             <br>
-            <th:block th:if="${#lists.size(list) > 0}">
-                <div class="pull-right">
-                    <ul class="pagination">
-                        <th:block th:if="${pageMaker.prev}">
-                            <li class="page-item">
-                                <a class="page-link" th:href="${pageMaker.startPage - 1}">&laquo;</a>
-                            </li>
-                        </th:block>
-                        <th:block th:each="num : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}"
-                                  th:with="currentPageNum=${param.pageNum }">
-                            <li th:class="'page-item' + (${#strings.toString(num) == #strings.toString(currentPageNum)} ? ' active' : '') + (${currentPageNum == null &&  numStat.index == 0} ?  ' active' : '')">
-                                <a class="page-link" th:href="${num}" th:text="${num}"></a>
-                            </li>
-                        </th:block>
-                        <th:block th:if="${pageMaker.next}">
-                            <li class="page-item">
-                                <a class="page-link" th:href="${pageMaker.startPage} + 10">&raquo;</a>
-                            </li>
-                        </th:block>
-                    </ul>
-                </div>
-            </th:block>
+            <div th:replace="~{/include/pagination/pageMain::globalPagingSet(list)}"></div>
             <a class="btn btn-success" href="/restaurant/write.do" role="button" style="float:right;">등록</a>
             <div th:replace="~{/include/modal/delChkModal::globalChkBtn(restaurant)}" th:remove="tag"></div>
         </div>

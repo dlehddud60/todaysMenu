@@ -1,20 +1,57 @@
-<div class="pull-right">
-  <ul class="pagination">
-    <th:block th:if="${pageMaker.prev}">
-      <li class="page-item disabled">
-        <a class="page-link" th:href="${pageMaker.startPage - 1}">&laquo;</a>
-      </li>
-    </th:block>
-    <th:block th:each="num : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}"
-              th:with="currentPageNum=${param.pageNum }">
-      <li th:class="'page-item' + (${#strings.toString(num) == #strings.toString(currentPageNum)} ? ' active' : '') + (${currentPageNum == null &&  numStat.index == 0} ?  ' active' : '')">
-        <a class="page-link" th:href="${num}" th:text="${num}"></a>
-      </li>
-    </th:block>
-    <th:block th:if="${pageMaker.next}">
-      <li class="page-item">
-        <a class="page-link" th:href="${pageMaker.startPage + 1}">&raquo;</a>
-      </li>
-    </th:block>
-  </ul>
+<div th:fragment="globalPagingEaSelect1">
+  <select class="form-select" id="pageAmount" style="width: 100px;float:right;" onchange="setPageAmount()">
+    <option th:text="10" th:value="10" th:selected="${#strings.toString(param.amount)} == '10'"></option>
+    <option th:text="30" th:value="30" th:selected="${#strings.toString(param.amount)} == '30'"></option>
+    <option th:text="50" th:value="50" th:selected="${#strings.toString(param.amount)} == '50'"></option>
+    <option th:text="100" th:value="100" th:selected="${#strings.toString(param.amount)} == '100'"></option>
+  </select>
 </div>
+
+<div th:fragment="globalPagingEaSelect2">
+  <select class="form-select" id="pageAmount" style="width: 100px;float:right;" onchange="setPageAmount()">
+    <option th:text="5" th:value="5" th:selected="${#strings.toString(param.amount)} == '5'"></option>
+    <option th:text="10" th:value="10" th:selected="${#strings.toString(param.amount)} == '10'"></option>
+    <option th:text="30" th:value="30" th:selected="${#strings.toString(param.amount)} == '30'"></option>
+    <option th:text="50" th:value="50" th:selected="${#strings.toString(param.amount)} == '50'"></option>
+    <option th:text="100" th:value="100" th:selected="${#strings.toString(param.amount)} == '100'"></option>
+    <option th:text="200" th:value="200" th:selected="${#strings.toString(param.amount)} == '200'"></option>
+  </select>
+
+
+
+</div>
+<div th:fragment="globalSearchBox(p1)">
+    <input class="form-control me-2" type="search" th:placeholder="${p1}" aria-label="Search"
+    name="search" id="searchInput" th:value="${param.search}">
+    <br>
+    <button class="btn btn-warning" type="button" style="float:right;" id="reset">초기화</button>
+    <button class="btn btn-success" type="button" style="float:right;" id="searchButton">검색</button>
+</div>
+
+<div th:fragment="globalPagingSet(p1)">
+    <th:block th:if="${#lists.size(p1) > 0}">
+        <div class="pull-right">
+            <ul class="pagination">
+                <th:block th:if="${pageMaker.prev}">
+                    <li class="page-item">
+                        <a class="page-link" th:href="${pageMaker.startPage - 1}">&laquo;</a>
+                    </li>
+                </th:block>
+                <th:block th:each="num : ${#numbers.sequence(pageMaker.startPage, pageMaker.endPage)}"
+                          th:with="currentPageNum=${param.pageNum }">
+                    <li th:class="'page-item' + (${#strings.toString(num) == #strings.toString(currentPageNum)} ? ' active' : '') + (${currentPageNum == null &&  numStat.index == 0} ?  ' active' : '')">
+                        <a class="page-link" th:href="${num}" th:text="${num}"></a>
+                    </li>
+                </th:block>
+                <th:block th:if="${pageMaker.next}">
+                    <li class="page-item">
+                        <a class="page-link" th:href="${pageMaker.startPage} + 10">&raquo;</a>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+    </th:block>
+
+
+</div>
+
