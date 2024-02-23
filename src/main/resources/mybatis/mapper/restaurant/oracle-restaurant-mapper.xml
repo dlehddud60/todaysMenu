@@ -4,13 +4,22 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.todaysmenu.restaurant.repository.RestaurantRepository">
     <sql id="where">
-      WHERE 1 = 1
+        WHERE 1 = 1
+        <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(search)">
+            AND     UPPER(T1.TRT_REST_NAME) LIKE '%' || UPPER(#{search}) || '%'
+        </if>
+        <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(trt_regiSh)">
+            AND     T1.TRT_REGI = #{trt_regiSh}
+        </if>
+        <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(trt_food_typeSh)">
+            AND     T1.TRT_FOOD_TYPE = #{trt_food_typeSh}
+        </if>
     </sql>
 
     <select id="count" resultType="int">
         /*com.example.todaysmenu.restaurant.repository.RestaurantRepository.count[목록]*/
         SELECT	COUNT(1)
-        FROM	TM_REST_TBL TRT
+        FROM	TM_REST_TBL T1
         <include refid="where"/>
     </select>
 

@@ -11,6 +11,8 @@
             frmList.submit();
         });
         $("#reset").on("click", function (e) {
+            $("select[name='trt_food_typeSh']").val("");
+            $("select[name='trt_regiSh']").val("");
             $("input[name='search']").val("");
             paramReset();
             frmList.submit();
@@ -56,6 +58,14 @@
         background: dodgerblue;
         color: white;
     }
+    .searchBox {
+        transition: all 0.5s;
+    }
+    .searchBox:hover {
+        border-radius: 40px;
+        border: 5px solid blue;
+
+    }
 </style>
 <form method="get" id="frmList">
     <input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}">
@@ -64,13 +74,35 @@
         <div class="container pt-5">
             <p id="title">식당 리스트</p>
             <p>점심시간 무엇을 먹을지 고민하는 분들에게 오늘의 메뉴를 추천해드립니다.</p>
-            <div class="container p-5 my-5 bg-secondary text-white">
-                <h1>검색</h1>
-                <input class="form-control me-2" type="search" placeholder="제목 + 작성자를 입력해주시길 바랍니다." aria-label="Search"
+            <div class="container p-5 my-5 bg-secondary text-white searchBox">
+                <h1 style=" width: 100px ;height: 50px; text-align: center; line-height: 50px; border-radius: 10px; margin : 0 0 50px 0;">검색</h1>
+
+
+
+                <span style="font-size: 1.2rem; color: white;  margin-right: 10px;">지역</span>
+                <select name="trt_regiSh" class="form-select" aria-label="Small select example" style="width: 100px;  margin-bottom: 20px; margin-right: 10px; display: inline; ">
+                    <option th:text="ALL" value=""></option>
+                    <option th:text="서울" value="서울" th:selected="${#strings.toString(param.trt_regiSh)} == '서울'"></option>
+                    <option th:text="경기" value="경기" th:selected="${#strings.toString(param.trt_regiSh)} == '경기'"></option>
+                    <option th:text="인천" value="인천" th:selected="${#strings.toString(param.trt_regiSh)} == '인천'"></option>
+                </select>
+
+                <span style="font-size: 1.2rem; color: white;  margin-right: 10px;">식당타입</span>
+                <select name="trt_food_typeSh" class="form-select" aria-label="Small select example" style="width: 100px;  margin-bottom: 20px; margin-right: 10px; display: inline; ">
+                    <option th:text="ALL" value=""></option>
+                    <option th:text="한식" value="한식" th:selected="${#strings.toString(param.trt_food_typeSh)} == '한식'"></option>
+                    <option th:text="중식" value="중식" th:selected="${#strings.toString(param.trt_food_typeSh)} == '중식'"></option>
+                    <option th:text="일식" value="일식" th:selected="${#strings.toString(param.trt_food_typeSh)} == '일식'"></option>
+                    <option th:text="양식" value="양식" th:selected="${#strings.toString(param.trt_food_typeSh)} == '양식'"></option>
+                    <option th:text="기타" value="기타" th:selected="${#strings.toString(param.trt_food_typeSh)} == '기타'"></option>
+                </select>
+                <input class="form-control me-2" type="search" placeholder="식당명을 입력해주시길 바랍니다." aria-label="Search"
                        name="search" id="searchInput" th:value="${param.search}">
+
+
                 <br>
                 <button class="btn btn-warning" type="button" style="float:right;" id="reset">초기화</button>
-                <button class="btn btn-success" type="button" style="float:right;" id="searchButton">검색</button>식
+                <button class="btn btn-success" type="button" style="float:right;" id="searchButton">검색</button>
             </div>
 
             <select class="form-select" id="pageAmount" style="width: 100px;float:right;" onchange="setPageAmount()">

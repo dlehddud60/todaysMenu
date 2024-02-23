@@ -15,6 +15,8 @@ public class Criteria {
     private String startDate;
     private String endDate;
     private String userType;
+    private String trt_regiSh;
+    private String trt_food_typeSh;
 
     public Criteria() {
         this(1,10);
