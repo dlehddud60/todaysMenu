@@ -84,32 +84,24 @@
         ,   TFB_INPUT_NM
         ,   TFB_INPUT_DT
         ,   TFB_INPUT_IP
-        ,   TFB_MODER_TY
-        ,   TFB_MODER_NM
-        ,   TFB_MODER_DT
-        ,   TFB_MODER_IP
         )
         VALUES
         (   TM_TFB_SEQ.nextval
         ,   #{tfb_title_nm}
         ,   #{tfb_text}
-        ,   NULL
+        ,   #{tfb_input_ty}
         ,   #{tfb_input_nm}
         ,   SYSDATE
         ,   #{tfb_input_ip}
-        ,   NULL
-        ,   #{tfb_moder_nm}
-        ,   SYSDATE
-        ,   NULL
         )
     </insert>
 
     <update id="update">
         /*com.example.todaysmenu.board.repository.BoardRepository.update[수정]*/
         UPDATE	TM_FREE_BOARD
-        SET		TFB_MODER_TY 	= null
+        SET		TFB_MODER_TY 	= #{tfb_moder_ty}
         ,		TFB_MODER_NM 	= #{tfb_moder_nm}
-        ,		TFB_MODER_DT 	= null
+        ,		TFB_MODER_DT 	= SYSDATE
         ,		TFB_MODER_IP	= #{tfb_moder_ip}
         ,       TFB_TITLE_NM    = #{tfb_title_nm}
         ,       TFB_TEXT        = #{tfb_text}

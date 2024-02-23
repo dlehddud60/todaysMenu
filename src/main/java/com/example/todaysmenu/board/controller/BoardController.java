@@ -83,9 +83,12 @@ public class BoardController {
         String  tfb_seq = boardDTO.getTfb_seq();
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        boardDTO.setTfb_input_ty(memberSession.getTmt_user_type());
         boardDTO.setTfb_input_nm(memberSession.getTmt_memb_name());
-        boardDTO.setTfb_moder_nm(memberSession.getTmt_memb_name());
         boardDTO.setTfb_input_ip(request.getRemoteAddr());
+
+        boardDTO.setTfb_moder_ty(memberSession.getTmt_user_type());
+        boardDTO.setTfb_moder_nm(memberSession.getTmt_memb_name());
         boardDTO.setTfb_moder_ip(request.getRemoteAddr());
         if(tfb_seq == null){
             boardService.insert(boardDTO);
@@ -142,7 +145,7 @@ public class BoardController {
         rttr.addFlashAttribute("result","success");
         rttr.addAttribute("pageNum",cri.getPageNum());
         rttr.addAttribute("amount",cri.getAmount());
-        return "redirect:/board/index.do";
+        return redirect("board/index.do",rttr,"성공 메세지","게시물을 삭제하였습니다.",SUCCESS);
     }
 
     @GetMapping("/delChk.do")

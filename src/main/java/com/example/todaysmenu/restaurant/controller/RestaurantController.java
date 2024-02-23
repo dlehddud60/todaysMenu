@@ -86,6 +86,8 @@ public class RestaurantController {
 
         restaurantDTO.setTrt_input_nm(memberSession.getTmt_memb_name());
         restaurantDTO.setTrt_input_ip(request.getRemoteAddr());
+
+
         restaurantDTO.setTrt_moder_ty(memberSession.getTmt_user_type());
         restaurantDTO.setTrt_moder_nm(memberSession.getTmt_memb_name());
         restaurantDTO.setTrt_moder_id(memberSession.getTmt_login_id());
