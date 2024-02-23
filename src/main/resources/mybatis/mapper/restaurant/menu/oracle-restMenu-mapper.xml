@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository">
+    <sql id="where">
+        WHERE 1 = 1
+    </sql>
+
+    <select id="count" resultType="int">
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.count[목록]*/
+        SELECT	COUNT(1)
+        FROM	TM_REST_MENU_TBL T1
+        <include refid="where"/>
+    </select>
+
+    <select id="list" resultType="com.example.todaysmenu.restaurant.entity.RestaurantDTO">
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.list[목록]*/
+        SELECT  ROWNUM AS data_seq,T1.*
+        FROM (
+        SELECT  TRMT.TRMT_SEQ
+        ,       TRMT.TRT_SEQ
+        ,       TRMT.TRMT_MENU_NAME
+        ,       TRMT.TRMT_PRICE
+        ,       TRMT.TRMT_MENU_TEXT
+        ,       TRMT.TRMT_INPUT_TY
+        ,       TRMT.TRMT_INPUT_NM
+        ,       TRMT.TRMT_INPUT_ID
+        ,       TRMT.TRMT_INPUT_IP
+        ,       TO_CHAR(TRMT.TRMT_INPUT_DT,'YYYY-MM-dd') AS TRMT_INPUT_DT
+        ,       TRMT.TRMT_MODER_TY
+        ,       TRMT.TRMT_MODER_NM
+        ,       TRMT.TRMT_MODER_ID
+        ,       TRMT.TRMT_MODER_IP
+        ,       TO_CHAR(TRMT.TRMT_MODER_DT,'YYYY-MM-dd') AS TRMT_MODER_DT
+        FROM    TM_REST_MENU_TBL TRMT
+        ORDER BY TRMT_SEQ DESC
+        ) T1
+    </select>
+
+    <select id="info" resultType="com.example.todaysmenu.restaurant.entity.RestaurantDTO">
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.info[상세]*/
+        SELECT  TRMT.TRMT_SEQ
+        ,       TRMT.TRT_SEQ
+        ,       TRMT.TRMT_MENU_NAME
+        ,       TRMT.TRMT_PRICE
+        ,       TRMT.TRMT_MENU_TEXT
+        ,       TRMT.TRMT_INPUT_TY
+        ,       TRMT.TRMT_INPUT_NM
+        ,       TRMT.TRMT_INPUT_ID
+        ,       TRMT.TRMT_INPUT_IP
+        ,       TO_CHAR(TRMT.TRMT_INPUT_DT,'YYYY-MM-dd') AS TRMT_INPUT_DT
+        ,       TRMT.TRMT_MODER_TY
+        ,       TRMT.TRMT_MODER_NM
+        ,       TRMT.TRMT_MODER_ID
+        ,       TRMT.TRMT_MODER_IP
+        ,       TO_CHAR(TRMT.TRMT_MODER_DT,'YYYY-MM-dd') AS TRMT_MODER_DT
+        FROM    TM_REST_MENU_TBL TRMT
+        WHERE   TRMT_SEQ = #{trmt_seq}
+    </select>
+
+    <select id="listPaging" resultType="com.example.todaysmenu.restaurant.entity.RestaurantDTO">
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.listPaging[목록페이징]*/
+        <include refid="pagination.header"/>
+        SELECT  T1.*
+        FROM(
+        SELECT  TRMT.TRMT_SEQ
+        ,       TRMT.TRT_SEQ
+        ,       TRMT.TRMT_MENU_NAME
+        ,       TRMT.TRMT_PRICE
+        ,       TRMT.TRMT_MENU_TEXT
+        ,       TRMT.TRMT_INPUT_TY
+        ,       TRMT.TRMT_INPUT_NM
+        ,       TRMT.TRMT_INPUT_ID
+        ,       TRMT.TRMT_INPUT_IP
+        ,       TO_CHAR(TRMT.TRMT_INPUT_DT,'YYYY-MM-dd') AS TRMT_INPUT_DT
+        ,       TRMT.TRMT_MODER_TY
+        ,       TRMT.TRMT_MODER_NM
+        ,       TRMT.TRMT_MODER_ID
+        ,       TRMT.TRMT_MODER_IP
+        ,       TO_CHAR(TRMT.TRMT_MODER_DT,'YYYY-MM-dd') AS TRMT_MODER_DT
+        FROM    TM_REST_MENU_TBL TRMT
+        ) T1
+        <include refid="where"/>
+        ORDER BY TRMT_SEQ DESC
+        <include refid="pagination.footer"/>
+    </select>
+
+    <insert id="insert" parameterType="com.example.todaysmenu.restaurant.entity.RestaurantDTO">
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.insert[등록]*/
+        INSERT INTO TM_REST_MENU_TBL
+        (   TRMT_SEQ
+        ,   TRT_SEQ
+        ,   TRMT_MENU_NAME
+        ,   TRMT_PRICE
+        ,   TRMT_MENU_TEXT
+        ,   TRMT_INPUT_TY
+        ,   TRMT_INPUT_NM
+        ,   TRMT_INPUT_ID
+        ,   TRMT_INPUT_IP
+        ,   TRMT_INPUT_DT
+        )
+        VALUES
+        (   TM_TRMT_SEQ.nextval
+        ,   #{trt_seq}
+        ,   #{trmt_menu_name}
+        ,   #{trmt_price}
+        ,   #{trmt_menu_text}
+        ,   #{trmt_input_ty}
+        ,   #{trmt_input_nm}
+        ,   #{trmt_input_id}
+        ,   #{trmt_input_ip}
+        ,   SYSDATE
+        )
+        <selectKey keyProperty="trmt_seq" resultType="int" order="AFTER">SELECT TM_TRMT_SEQ.CURRVAL FROM DUAL</selectKey>
+    </insert>
+
+    <update id="update">
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.update[수정]*/
+        UPDATE	TM_REST_MENU_TBL
+        SET		TRMT_MODER_TY 	    =         #{trmt_moder_ty}
+        ,		TRMT_MODER_NM 	    =         #{trmt_moder_nm}
+        ,		TRMT_MODER_ID 	    =         #{trmt_moder_id}
+        ,		TRMT_MODER_IP	    =         #{trmt_moder_ip}
+        ,		TRMT_MODER_DT	    =         SYSDATE
+        ,       TRMT_MENU_NAME      =         #{trmt_menu_name}
+        ,       TRMT_PRICE          =         #{trmt_price}
+        ,       TRMT_MENU_TEXT      =         #{trmt_menu_text}
+        WHERE	TRMT_SEQ			=         #{trmt_seq}
+    </update>
+
+
+
+    <delete id="delete">
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.delete[삭제]*/
+        DELETE FROM	TM_REST_MENU_TBL
+        WHERE	1 = 1
+        AND		TRMT_SEQ = #{trmt_seq}
+    </delete>
+
+</mapper>

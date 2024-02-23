@@ -4,6 +4,8 @@ import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.pagination.entity.PageDTO;
 import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
+import com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO;
+import com.example.todaysmenu.restaurant.menu.service.impl.RestMenuServiceImpl;
 import com.example.todaysmenu.restaurant.service.RestaurantService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -28,6 +30,8 @@ public class RestaurantController {
 
     @Autowired
     RestaurantService restaurantService;
+    @Autowired
+    RestMenuServiceImpl restMenuService;
 
 
     @GetMapping("/index.do")
@@ -78,7 +82,26 @@ public class RestaurantController {
     }
 
     @PostMapping("/proc.do")
-    public String proc(RestaurantDTO restaurantDTO, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr, HttpServletRequest request) {
+    public String proc(RestaurantDTO restaurantDTO, Criteria cri, RedirectAttributes rttr, HttpServletRequest request
+    , @RequestParam("trmt_menu_name") String trmt_menu_name[]
+    , @RequestParam("trmt_price") int trmt_price[]
+    , @RequestParam("trmt_menu_text") String trmt_menu_text[]) {
+
+//        log.info("====trmt_menu_name===={}",trmt_menu_name.toString());
+//        log.info("====trmt_price===={}",trmt_price.toString());
+//        log.info("====trmt_menu_text===={}",trmt_menu_text.toString());
+
+        for (int i = 0; i < trmt_menu_name.length; i++) {
+            log.info("====trmt_menu_name===={}",trmt_menu_name[i]);
+            log.info("====trmt_price===={}",trmt_price[i]);
+            log.info("====trmt_menu_text===={}",trmt_menu_text[i]);
+        }
+
+
+
+
+
+
         int trt_seq = restaurantDTO.getTrt_seq();
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
@@ -96,8 +119,39 @@ public class RestaurantController {
         restaurantDTO.setTrt_moder_ip(request.getRemoteAddr());
 
 
+
+        RestMenuDTO restMenuDTO = new RestMenuDTO();
+
+
         if(trt_seq == 0){
            int dataSeq =  restaurantService.insert(restaurantDTO);
+            log.info("==========restaurantDTO.getTrt_seq()========{}",restaurantDTO.getTrt_seq());
+
+
+            for (int i = 0; i < trmt_menu_name.length; i++) {
+                log.info("=========================forLoopStart============================{}",i);
+                log.info("====trmt_menu_name===={}",trmt_menu_name[i]);
+                log.info("====trmt_price===={}",trmt_price[i]);
+                log.info("====trmt_menu_text===={}",trmt_menu_text[i]);
+
+                restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
+                restMenuDTO.setTrmt_menu_name(trmt_menu_name[i]);
+                restMenuDTO.setTrmt_price(trmt_price[i]);
+                restMenuDTO.setTrmt_menu_text(trmt_menu_text[i]);
+                restMenuDTO.setTrmt_input_ty(memberSession.getTmt_user_type());
+                restMenuDTO.setTrmt_input_nm(memberSession.getTmt_memb_name());
+                restMenuDTO.setTrmt_input_id(memberSession.getTmt_login_id());
+                restMenuDTO.setTrmt_input_ip(request.getRemoteAddr());
+                log.info("=============restMenuDTOrestMenuDTO==========={}",restMenuDTO);
+                restMenuService.insert(restMenuDTO);
+                log.info("=========================forLoopEnd============================{}",i);
+
+            }
+
+
+
+
+
             return redirect("restaurant/index.do",rttr,"성공 메세지","게시글 작성을 완료하였습니다.",SUCCESS);
         }else{
             int dataSeq = restaurantDTO.getTrt_seq();

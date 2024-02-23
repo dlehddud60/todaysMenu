@@ -1,10 +1,123 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<style>
+    body{
+        height: 100%;
+    }
+
+    .restArea {
+        width: 60%; height: 950px;
+        background: #88b275;
+        margin: 50px auto;
+        border-radius: 20px;
+        border: 1px solid black;
+    }
+    .restAreaTitle{
+        font-size: 3.5rem;
+        text-align: center;
+        font-family: D2Coding;
+
+    }
+    #menuArea {
+        margin: auto;
+        padding-top: 50px;
+        width: 60%; height: 300px;
+        background: #fff1c1;
+        border-radius: 20px;
+        transition: all 0.5s;
+
+
+    }
+    /*.menuArea:hover {*/
+    /*    -webkit-box-shadow: 5px 5px 15px 5px #FF8080, -9px 5px 15px 5px #FFE488, -7px -5px 15px 5px #8CFF85, 12px -5px 15px 5px #80C7FF, 12px 10px 15px 7px #E488FF, -10px 10px 15px 7px #FF616B, -10px -7px 27px 1px #8E5CFF, 5px 5px 15px 5px rgba(0,0,0,0);*/
+    /*    box-shadow: 5px 5px 15px 5px #FF8080, -9px 5px 15px 5px #FFE488, -7px -5px 15px 5px #8CFF85, 12px -5px 15px 5px #80C7FF, 12px 10px 15px 7px #E488FF, -10px 10px 15px 7px #FF616B, -10px -7px 27px 1px #8E5CFF, 5px 5px 15px 5px rgba(0,0,0,0);*/
+    /*}*/
+    .menuText {
+        font-size: 3rem;
+        font-family: "Apple Braille";
+        text-align: center;
+    }
+    .menuTable {
+        border: 1px solid black;
+        width: 80%; height: 60px;
+        margin: auto;
+        border-radius: 20px;
+
+    }
+    .menuTable tr{
+        border-radius: 20px;
+        border: 1px solid black;
+        height: 40px;
+    }
+    .menuTable tr td{
+
+        text-align: center;
+
+        /*border: 1px solid black;*/
+    }
+    .menuBtnArea {
+        display: flex;
+        border: 0px solid black;
+
+    }
+    .menuTable tr td div{
+        border: 1px solid black;
+        width: 80px; height: 40px;
+        border-radius: 5px;
+        line-height: 40px;
+        cursor: pointer;
+    }
+    .menuTable tr td div:first-child {
+        background: #13ff00;
+        color: #000000;
+    }
+    .menuTable tr td div:first-child:hover {
+        transition: all 0.3s;
+        background: #8CFF85;
+        color: #000000;
+
+    }
+    .menuTable tr td div:last-child {
+        background: #ff0000;
+        color: #000000;
+    }
+    .menuTable tr td div:last-child:hover {
+        transition: all 0.3s;
+        background: #ff8585;
+        color: #000000;
+
+    }
+
+
+</style>
+<script>
+    let menuAreaHeight = 300;
+    $(function () {
+        menuAreaCopyFunc();
+        $(".menuRemoveBtn:eq(0)").remove();
+        $(".menuPlusBtn:eq(0)").css("background","#13ff00");
+
+
+        $(document).on("click",".menuPlusBtn",function () {
+            menuAreaCopyFunc();
+            menuAreaHeight += 100;
+            $("#menuArea").css("height",menuAreaHeight)
+        });
+         $(document).on("click",".menuRemoveBtn",function () {
+            $(this).closest(".menuCopyAreaShow").remove();
+             menuAreaHeight -= 100;
+             $("#menuArea").css("height",menuAreaHeight)
+         });
+
+
+    });
+    const menuAreaCopyFunc = () => {
+        $( ".menuCopyAreaHide" ).clone().appendTo("#menuArea").attr("class","menuCopyAreaShow");
+        $(".menuCopyAreaShow").show();
+    }
+</script>
 <form method="post" action="/restaurant/proc.do">
-    [[${info}]]
-<!--    <input type="hidden" name="trt_input_ty" th:value="${session.memberDTO.tmt_user_type}">-->
-<!--    <input type="hidden" name="trt_input_nm" th:value="${session.memberDTO.tmt_memb_name}">-->
-<!--    <input type="hidden" name="trt_input_id" th:value="${session.memberDTO.tmt_login_id}">-->
-    <div class="container pt-5">
+    <div class="container pt-5 restArea">
+        <p class="restAreaTitle">식당 등록</p>
         <div class="form-group">
             <label class="col-form-label mt-4" for="inputDefault">식당명</label>
             <input type="text" class="form-control" placeholder="식당명을 입력해주세요." id="inputDefault" name="trt_rest_name">
@@ -34,10 +147,45 @@
             <textarea class="form-control" id="" rows="10" placeholder="내용을 입력해주세요" name="trt_rest_text"></textarea>
         </div>
         <br>
-        <div th:replace="~{/include/modal/procModal::globalProcBtn(null,restaurant)}"></div>
 
     </div>
+    <div id="menuArea">
+        <p class="menuText">메뉴 등록</p>
+
+    </div>
+
+    <div th:replace="~{/include/modal/procModal::globalProcBtn(null,restaurant)}"></div>
+
+
+
 </form>
+<div class="menuCopyAreaHide" style="display: none">
+    <table class="menuTable">
+        <tr>
+            <td style="width: 150px">메뉴명</td>
+            <td style="width: 150px">가격</td>
+            <td>상세내용</td>
+            <td style="width: 150px">추가/제거</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" class="form-control" placeholder="메뉴" name="trmt_menu_name">
+
+            </td>
+            <td>
+                <input type="number" class="form-control" placeholder="가격" name="trmt_price">
+
+            </td>
+            <td>
+                <input type="text" class="form-control" placeholder="상세내용" name="trmt_menu_text">
+            </td>
+            <td class="menuBtnArea">
+                <div class="menuPlusBtn">추가</div>
+                <div class="menuRemoveBtn">제거</div>
+            </td>
+        </tr>
+    </table>
+</div>
 <div th:insert="~{/include/footter.html}" th:remove="tag"></div>
 
 
