@@ -1,4 +1,4 @@
-package com.example.todaysmenu.board.entity;
+package com.example.todaysmenu.pagination.entity;
 
 import lombok.Getter;
 import lombok.ToString;

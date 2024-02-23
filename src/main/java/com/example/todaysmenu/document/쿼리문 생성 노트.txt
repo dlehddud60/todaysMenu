@@ -89,5 +89,35 @@ html
 
 
 ------------------------------
-컨트롤러명 :RestaurantMenuController
+컨트롤러명 : RestaurantController
+서비스명  : 명Service
+리포지토리 : RestaurantRepository
+마이바티스 : oracle-restaurant-mapper
+컬럼
+시퀀스
 
+테이블명 : TM_REST_TBL
+
+식당명 REST_NAME
+지역  REGI
+주소  ADDR
+종류  FOOD_TYPE
+내용  TEXT
+
+
+식당리스트 게시판
+
+해야할 작업
+수정작업(해결)
+백엔드에서 insert로직 세션 처리하기
+조회수
+체크박스 삭제
+검색
+
+procModal 파라미터 추가하여 글로벌 모듈로 만들기 (해결)
+자유게시판 리다이렉트 모달 처리하기
+자유게시판 삭제 모듈 수정하기
+체크박스 관리자 전용 페이지 만들기
+페이징 모듈 만들기
+검색 모듈 만들기
+자유게시판 컨트롤러 proc.do 수정로직 식당 컨트롤러 로직과 맞쳐주기

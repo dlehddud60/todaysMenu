@@ -1,13 +1,10 @@
 package com.example.todaysmenu.member.controller;
 
-import com.example.todaysmenu.board.common.modal.ComModal;
-import com.example.todaysmenu.board.entity.Criteria;
-import com.example.todaysmenu.board.entity.PageDTO;
+import com.example.todaysmenu.pagination.entity.Criteria;
+import com.example.todaysmenu.pagination.entity.PageDTO;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.member.repository.MemberRepository;
 import com.example.todaysmenu.member.service.MemberService;
-import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,8 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
 import static com.example.todaysmenu.board.common.modal.ComModal.SUCCESS;
 import static com.example.todaysmenu.board.common.modal.ComModal.redirect;
-import java.net.http.HttpRequest;
-import java.util.List;
 
 @Controller
 @Log4j2

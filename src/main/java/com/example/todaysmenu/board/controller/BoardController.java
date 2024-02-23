@@ -1,30 +1,22 @@
 package com.example.todaysmenu.board.controller;
 
-import com.example.todaysmenu.board.common.modal.ComModal;
 import com.example.todaysmenu.board.entity.BoardDTO;
-import com.example.todaysmenu.board.entity.Criteria;
-import com.example.todaysmenu.board.entity.PageDTO;
-import com.example.todaysmenu.board.repository.BoardRepository;
+import com.example.todaysmenu.pagination.entity.Criteria;
+import com.example.todaysmenu.pagination.entity.PageDTO;
 import com.example.todaysmenu.board.service.BoardService;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
-import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
-import static com.example.todaysmenu.board.common.modal.ComModal.redirect;
+import static com.example.todaysmenu.board.common.modal.ComModal.*;
 
 
 @Log4j2
@@ -97,6 +89,8 @@ public class BoardController {
         boardDTO.setTfb_moder_ip(request.getRemoteAddr());
         if(tfb_seq == null){
             boardService.insert(boardDTO);
+            return redirect("board/index.do",rttr,"성공 메세지","게시물을 작성하였습니다.",SUCCESS);
+
         }else{
             int dataSeq = Integer.parseInt(boardDTO.getTfb_seq());
             String memberWriter = memberSession.getTmt_memb_name();
@@ -112,7 +106,7 @@ public class BoardController {
             rttr.addAttribute("amount",cri.getAmount());
 
         }
-        return "redirect:/board/index.do";
+        return redirect("board/index.do",rttr,"성공 메세지","게시물을 수정하였습니다.",SUCCESS);
     }
 
     @GetMapping("/view.do")

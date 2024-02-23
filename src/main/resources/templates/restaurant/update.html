@@ -1,0 +1,43 @@
+<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<form method="post" action="/restaurant/proc.do">
+    [[${param.trt_seq}]]
+    <input type="hidden" name="trt_seq" th:value="${param.trt_seq}">
+    <input type="hidden" name="pageNum" th:value="${param.pageNum}">
+    <input type="hidden" name="amount" th:value="${param.amount}">
+    <div class="container pt-5">
+        <div class="form-group">
+            <label class="col-form-label mt-4" for="inputDefault">식당명</label>
+            <input type="text" class="form-control" placeholder="식당명을 입력해주세요." id="inputDefault" name="trt_rest_name" th:value="${info.trt_rest_name}">
+        </div>
+        <div class="form-group">
+            <label class="col-form-label mt-4" for="inputDefault">식당 주소</label>
+            <input type="text" class="form-control" placeholder="주소를 입력해주세요." name="trt_addr" th:value="${info.trt_addr}">
+        </div>
+        <div class="form-group">
+            <label class="col-form-label mt-4" for="inputDefault">식당 타입</label>
+            <select class="form-select"  style=" width: 100px" name="trt_food_type">
+                <option th:text="한식" th:value="한식" th:selected="${info.trt_food_type} == '한식'"></option>
+                <option th:text="일식" th:value="일식" th:selected="${info.trt_food_type} == '일식'"></option>
+                <option th:text="양식" th:value="양식" th:selected="${info.trt_food_type} == '양식'"></option>
+                <option th:text="중식" th:value="중식" th:selected="${info.trt_food_type} == '중식'"></option>
+                <option th:text="기타" th:value="기타" th:selected="${info.trt_food_type} == '기타'"></option>
+            </select>
+            <label class="col-form-label mt-4" for="inputDefault">지역</label>
+            <select class="form-select" name="trt_regi" style=" width: 100px">
+                <option th:text="서울" th:value="서울" th:selected="${info.trt_regi} == '서울'"></option>
+                <option th:text="경기" th:value="경기" th:selected="${info.trt_regi} == '경기'"></option>
+                <option th:text="인천" th:value="인천" th:selected="${info.trt_regi} == '인'"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label mt-4">내용</label>
+            <textarea class="form-control" id="" rows="10" placeholder="내용을 입력해주세요" name="trt_rest_text" th:text="${info.trt_rest_text}"></textarea>
+        </div>
+        <div th:replace="~{/include/modal/procModal::globalProcBtn(${info.trt_seq},restaurant)}"></div>
+
+
+    </div>
+</form>
+<div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+
+

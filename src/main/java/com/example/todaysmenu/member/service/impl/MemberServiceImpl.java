@@ -1,14 +1,12 @@
 package com.example.todaysmenu.member.service.impl;
 
-import com.example.todaysmenu.board.common.modal.ComModal;
-import com.example.todaysmenu.board.entity.Criteria;
+import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.member.repository.MemberRepository;
 import com.example.todaysmenu.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

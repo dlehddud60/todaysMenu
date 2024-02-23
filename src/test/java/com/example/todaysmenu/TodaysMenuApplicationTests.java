@@ -1,7 +1,7 @@
 package com.example.todaysmenu;
 
 import com.example.todaysmenu.board.entity.BoardDTO;
-import com.example.todaysmenu.board.entity.Criteria;
+import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.board.repository.BoardRepository;
 import com.example.todaysmenu.board.service.BoardService;
 import org.junit.jupiter.api.Test;

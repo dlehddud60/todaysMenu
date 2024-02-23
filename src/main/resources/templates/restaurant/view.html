@@ -1,0 +1,66 @@
+<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<style>
+    tr td:first-child{
+        width: 100px;
+    }
+    .table {
+        width: 80%;
+        margin: 50px auto;
+        border: 1px solid #adadad;
+
+    }
+    tr, td {
+        border: 1px solid rgba(101, 57, 57, 0.35);
+
+    }
+
+
+</style>
+<form method="get">
+    <div class="container mt-3">
+        <h2>자유게시판</h2>
+        <table class="table">
+            <tbody>
+            <tr class="table-info">
+                <td>식당명</td>
+                <td><span th:text="${info.trt_rest_name}"></span></td>
+            </tr>
+            <tr class="table-info">
+                <td>지역</td>
+                <td><span th:text="${info.trt_regi}"></span></td>
+            </tr>
+            <tr class="table-info">
+                <td>주소</td>
+                <td><span th:text="${info.trt_addr}"></span></td>
+            </tr>
+            <tr class="table-info">
+                <td>식당 타입</td>
+                <td><span th:text="${info.trt_food_type}"></span></td>
+            </tr>
+            <tr class="table-info">
+                <td>식당 내용</td>
+                <td><span th:text="${info.trt_rest_text}"></span></td>
+            </tr>
+            <tr class="table-info" style="height: 300px; ">
+                <td style="line-height: 300px; ">작성자</td>
+                <td><span  th:text="${info.trt_input_nm}"></span></td>
+            </tr>
+            <tr class="table-info">
+                <td>작성일</td>
+                <td><span th:text="${info.trt_input_dt}"></span></td>
+            </tr>
+            <tr class="table-info">
+                <td>조회수</td>
+                <td><span th:text="${info.trt_count}"></span></td>
+            </tr>
+
+            </tbody>
+        </table>
+        <a class="btn btn-success" th:href="@{/restaurant/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
+        <a class="btn btn-info" th:href="@{/restaurant/write.do(trt_seq = ${info.trt_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>
+        <div th:replace="~{/include/modal/deleteModal::globalDel(restaurant,trt_seq,${info.trt_seq})}"></div>
+
+
+    </div>
+</form>
+<div th:insert="~{/include/footter.html}" th:remove="tag"></div>

@@ -1,7 +1,4 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
-[[${session.memberDTO}]]<br><br>
-[[${session}]]<br><br>
-[[${memberSession}]]
 <form method="post" action="/board/proc.do">
     <div class="container pt-5">
         <div class="form-group">
@@ -13,7 +10,7 @@
             <textarea class="form-control" id="" rows="10" placeholder="내용을 입력해주세요" name="tfb_text"></textarea>
         </div>
         <br>
-        <div th:insert="~{/include/modal/procModal.html}" th:remove="tag"></div>
+        <div th:replace="~{/include/modal/procModal::globalProcBtn(null,board)}"></div>
     </div>
 </form>
 <div th:insert="~{/include/footter.html}" th:remove="tag"></div>

@@ -15,7 +15,7 @@
                       th:text="${info.tfb_text}"></textarea>
         </div>
         <br>
-        <div th:insert="~{/include/modal/procModal.html}" th:remove="tag"></div>
+        <div th:replace="~{/include/modal/procModal::globalProcBtn(${info.tfb_seq},board)}"></div>
     </div>
 </form>
 <div th:insert="~{/include/footter.html}" th:remove="tag"></div>
