@@ -125,7 +125,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/delete.do")
-    public String  delete(RestaurantDTO restaurantDTO, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr, HttpServletRequest request){
+    public String delete(RestaurantDTO restaurantDTO, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr, HttpServletRequest request){
         int trt_seq = restaurantDTO.getTrt_seq();
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
@@ -157,6 +157,7 @@ public class RestaurantController {
 
     @GetMapping("/delChk.do")
     public String delChk(@RequestParam(value = "trt_seq",required=false)List<Integer> trt_seq,Criteria cri,RedirectAttributes rttr,HttpServletRequest request) {
+        log.info("===========restaurantDelChk============");
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         RestaurantDTO restaurantInfo;
@@ -189,7 +190,7 @@ public class RestaurantController {
         rttr.addFlashAttribute("result","success");
         rttr.addAttribute("pageNum",cri.getPageNum());
         rttr.addAttribute("amount",cri.getAmount());
-        return "redirect:/restaurant/index.do";
+        return redirect("restaurant/index.do",rttr,"성공 메세지","게시물을 삭제하였습니다.",SUCCESS);
     }
 
 

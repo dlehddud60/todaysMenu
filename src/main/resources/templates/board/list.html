@@ -122,7 +122,7 @@
                 </div>
             </th:block>
             <a class="btn btn-success" href="/board/write.do" role="button" style="float:right;">등록</a>
-            <div th:insert="~{/include/modal/delChkModal.html}" th:remove="tag"></div>
+            <div th:replace="~{/include/modal/delChkModal::globalChkBtn(board)}" th:remove="tag"></div>
         </div>
     </div>
 </form>
