@@ -16,4 +16,5 @@ public interface RestaurantRepository {
     int insert(RestaurantDTO restaurantDTO);
     int update(RestaurantDTO restaurantDTO);
     int delete(int trt_seq);
+    int updateCount(int trt_seq);
 }

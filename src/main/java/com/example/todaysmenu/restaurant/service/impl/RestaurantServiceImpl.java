@@ -46,4 +46,9 @@ public class RestaurantServiceImpl implements RestaurantService {
     public int delete(int tfb_seq) {
         return restaurantRepository.delete(tfb_seq);
     }
+
+    @Override
+    public int updateCount(int trt_seq) {
+        return restaurantRepository.updateCount(trt_seq);
+    }
 }

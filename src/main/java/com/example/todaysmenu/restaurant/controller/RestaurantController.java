@@ -120,6 +120,7 @@ public class RestaurantController {
 
     @GetMapping("/view.do")
     public String view(@RequestParam int trt_seq, Model model, @ModelAttribute("cri") Criteria cri) {
+        restaurantService.updateCount(trt_seq);
         model.addAttribute("info", restaurantService.info(trt_seq));
         return "restaurant/view";
     }
@@ -192,6 +193,7 @@ public class RestaurantController {
         rttr.addAttribute("amount",cri.getAmount());
         return redirect("restaurant/index.do",rttr,"성공 메세지","게시물을 삭제하였습니다.",SUCCESS);
     }
+
 
 
 

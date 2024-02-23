@@ -139,6 +139,13 @@
         WHERE	TRT_SEQ			 =         #{trt_seq}
     </update>
 
+    <update id="updateCount">
+        /*com.example.todaysmenu.restaurant.repository.RestaurantRepository.updateCount[조회수]*/
+        UPDATE	TM_REST_TBL
+        SET		TRT_COUNT = TRT_COUNT + 1
+        WHERE	TRT_SEQ = #{trt_seq}
+    </update>
+
 
     <delete id="delete">
         /*com.example.todaysmenu.restaurant.repository.RestaurantRepository.delete[삭제]*/
