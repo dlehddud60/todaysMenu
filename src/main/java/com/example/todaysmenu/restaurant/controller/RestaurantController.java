@@ -84,7 +84,9 @@ public class RestaurantController {
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
 
 
+        restaurantDTO.setTrt_input_ty(memberSession.getTmt_user_type());
         restaurantDTO.setTrt_input_nm(memberSession.getTmt_memb_name());
+        restaurantDTO.setTrt_input_id(memberSession.getTmt_login_id());
         restaurantDTO.setTrt_input_ip(request.getRemoteAddr());
 
 
