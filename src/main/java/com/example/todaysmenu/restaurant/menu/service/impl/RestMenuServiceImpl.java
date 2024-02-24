@@ -31,8 +31,8 @@ public class RestMenuServiceImpl implements RestMenuService {
     }
 
     @Override
-    public RestMenuDTO info(int trmt_seq) {
-        return restMenuRepository.info(trmt_seq);
+    public List<RestMenuDTO> rentMenuList(int trt_seq) {
+        return restMenuRepository.rentMenuList(trt_seq);
     }
 
     @Override

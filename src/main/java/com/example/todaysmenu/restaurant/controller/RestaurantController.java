@@ -16,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.example.todaysmenu.board.common.modal.ComModal.*;
@@ -82,74 +84,39 @@ public class RestaurantController {
     }
 
     @PostMapping("/proc.do")
-    public String proc(RestaurantDTO restaurantDTO, Criteria cri, RedirectAttributes rttr, HttpServletRequest request
-    , @RequestParam("trmt_menu_name") String trmt_menu_name[]
-    , @RequestParam("trmt_price") int trmt_price[]
-    , @RequestParam("trmt_menu_text") String trmt_menu_text[]) {
-
-//        log.info("====trmt_menu_name===={}",trmt_menu_name.toString());
-//        log.info("====trmt_price===={}",trmt_price.toString());
-//        log.info("====trmt_menu_text===={}",trmt_menu_text.toString());
-
-        for (int i = 0; i < trmt_menu_name.length; i++) {
-            log.info("====trmt_menu_name===={}",trmt_menu_name[i]);
-            log.info("====trmt_price===={}",trmt_price[i]);
-            log.info("====trmt_menu_text===={}",trmt_menu_text[i]);
-        }
-
-
-
-
-
-
+    public String proc(@ModelAttribute RestaurantDTO restaurantDTO
+                    ,  @ModelAttribute RestMenuDTO restMenuDTO
+                    ,  @ModelAttribute Criteria cri
+                    ,  RedirectAttributes rttr
+                    ,  HttpServletRequest request) {
         int trt_seq = restaurantDTO.getTrt_seq();
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-
-
         restaurantDTO.setTrt_input_ty(memberSession.getTmt_user_type());
         restaurantDTO.setTrt_input_nm(memberSession.getTmt_memb_name());
         restaurantDTO.setTrt_input_id(memberSession.getTmt_login_id());
         restaurantDTO.setTrt_input_ip(request.getRemoteAddr());
-
-
         restaurantDTO.setTrt_moder_ty(memberSession.getTmt_user_type());
         restaurantDTO.setTrt_moder_nm(memberSession.getTmt_memb_name());
         restaurantDTO.setTrt_moder_id(memberSession.getTmt_login_id());
         restaurantDTO.setTrt_moder_ip(request.getRemoteAddr());
 
-
-
-        RestMenuDTO restMenuDTO = new RestMenuDTO();
-
-
         if(trt_seq == 0){
            int dataSeq =  restaurantService.insert(restaurantDTO);
-            log.info("==========restaurantDTO.getTrt_seq()========{}",restaurantDTO.getTrt_seq());
+            for (int i = 0; i < restMenuDTO.getTrmt_menu_nameArr().size(); i++) {
 
-
-            for (int i = 0; i < trmt_menu_name.length; i++) {
-                log.info("=========================forLoopStart============================{}",i);
-                log.info("====trmt_menu_name===={}",trmt_menu_name[i]);
-                log.info("====trmt_price===={}",trmt_price[i]);
-                log.info("====trmt_menu_text===={}",trmt_menu_text[i]);
+                restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArr().get(i)); ;
+                restMenuDTO.setTrmt_price(restMenuDTO.getTrmt_priceArr().get(i)); ;
+                restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArr().get(i)); ;
 
                 restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
-                restMenuDTO.setTrmt_menu_name(trmt_menu_name[i]);
-                restMenuDTO.setTrmt_price(trmt_price[i]);
-                restMenuDTO.setTrmt_menu_text(trmt_menu_text[i]);
                 restMenuDTO.setTrmt_input_ty(memberSession.getTmt_user_type());
                 restMenuDTO.setTrmt_input_nm(memberSession.getTmt_memb_name());
                 restMenuDTO.setTrmt_input_id(memberSession.getTmt_login_id());
                 restMenuDTO.setTrmt_input_ip(request.getRemoteAddr());
-                log.info("=============restMenuDTOrestMenuDTO==========={}",restMenuDTO);
                 restMenuService.insert(restMenuDTO);
-                log.info("=========================forLoopEnd============================{}",i);
 
             }
-
-
-
 
 
             return redirect("restaurant/index.do",rttr,"성공 메세지","게시글 작성을 완료하였습니다.",SUCCESS);
@@ -176,6 +143,7 @@ public class RestaurantController {
     public String view(@RequestParam int trt_seq, Model model, @ModelAttribute("cri") Criteria cri) {
         restaurantService.updateCount(trt_seq);
         model.addAttribute("info", restaurantService.info(trt_seq));
+        model.addAttribute("rentMenuList", restMenuService.rentMenuList(trt_seq));
         return "restaurant/view";
     }
 

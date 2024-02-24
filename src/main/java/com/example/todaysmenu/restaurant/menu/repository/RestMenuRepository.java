@@ -12,7 +12,7 @@ public interface RestMenuRepository {
     int count(Criteria cri);
     List<RestMenuDTO> list();
     List<RestMenuDTO> listPaging(Criteria cri);
-    RestMenuDTO info(int trt_seq);
+    List<RestMenuDTO> rentMenuList(int trt_seq);
     int insert(RestMenuDTO restaurantDTO);
     int update(RestMenuDTO restaurantDTO);
     int delete(int trt_seq);

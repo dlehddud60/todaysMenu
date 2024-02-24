@@ -21,40 +21,56 @@
         <h2>자유게시판</h2>
         <table class="table">
             <tbody>
-            <tr class="table-info">
+            <tr>
                 <td>식당명</td>
                 <td><span th:text="${info.trt_rest_name}"></span></td>
             </tr>
-            <tr class="table-info">
+            <tr>
                 <td>지역</td>
                 <td><span th:text="${info.trt_regi}"></span></td>
             </tr>
-            <tr class="table-info">
+            <tr>
                 <td>주소</td>
                 <td><span th:text="${info.trt_addr}"></span></td>
             </tr>
-            <tr class="table-info">
+            <tr>
                 <td>식당 타입</td>
                 <td><span th:text="${info.trt_food_type}"></span></td>
             </tr>
-            <tr class="table-info">
+            <tr>
                 <td>식당 내용</td>
                 <td><span th:text="${info.trt_rest_text}"></span></td>
             </tr>
-            <tr class="table-info" style="height: 300px; ">
+            <tr style="height: 300px; ">
                 <td style="line-height: 300px; ">작성자</td>
                 <td><span  th:text="${info.trt_input_nm}"></span></td>
             </tr>
-            <tr class="table-info">
+            <tr>
                 <td>작성일</td>
                 <td><span th:text="${info.trt_input_dt}"></span></td>
             </tr>
-            <tr class="table-info">
+            <tr>
                 <td>조회수</td>
                 <td><span th:text="${info.trt_count}"></span></td>
             </tr>
 
             </tbody>
+        </table>
+
+        <table class="table table-bordered">
+            <tr>
+                <th style="width: 150px">메뉴명</th>
+                <th style="width: 150px">가격</th>
+                <th>상세내용</th>
+            </tr>
+            <th:blcok th:each="list : ${rentMenuList}">
+                <tr>
+                    <td style="width: 150px" th:text="${list.trmt_menu_name}"></td>
+                    <td style="width: 150px" th:text="${list.trmt_price}"></td>
+                    <td th:text="${list.trmt_menu_text}"></td>
+                </tr>
+            </th:blcok>
+
         </table>
         <a class="btn btn-success" th:href="@{/restaurant/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
         <a class="btn btn-info" th:href="@{/restaurant/write.do(trt_seq = ${info.trt_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>

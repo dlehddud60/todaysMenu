@@ -8,7 +8,7 @@ import java.util.List;
 public interface RestMenuService {
     int count(Criteria cri);
     List<RestMenuDTO> list();
-    RestMenuDTO info(int trmt_seq);
+    List<RestMenuDTO> rentMenuList(int trt_seq);
     int insert(RestMenuDTO restaurantDTO);
     int update(RestMenuDTO restaurantDTO);
     int delete(int trmt_seq);

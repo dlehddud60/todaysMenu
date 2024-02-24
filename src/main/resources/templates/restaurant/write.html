@@ -43,6 +43,15 @@
         border-radius: 20px;
 
     }
+    .procBtnArea {
+        width: 60%; height: 60px;
+        margin: 20px auto;
+
+    }
+    .procBtnArea button, a{
+        float: right;
+        text-align: right;
+    }
     .menuTable tr{
         border-radius: 20px;
         border: 1px solid black;
@@ -153,8 +162,9 @@
         <p class="menuText">메뉴 등록</p>
 
     </div>
-
-    <div th:replace="~{/include/modal/procModal::globalProcBtn(null,restaurant)}"></div>
+    <div class="procBtnArea">
+        <div th:replace="~{/include/modal/procModal::globalProcBtn(null,restaurant)}"></div>
+    </div>
 
 
 
@@ -169,15 +179,15 @@
         </tr>
         <tr>
             <td>
-                <input type="text" class="form-control" placeholder="메뉴" name="trmt_menu_name">
+                <input type="text" class="form-control" placeholder="메뉴" name="trmt_menu_nameArr">
 
             </td>
             <td>
-                <input type="number" class="form-control" placeholder="가격" name="trmt_price">
+                <input type="number" class="form-control" placeholder="가격" name="trmt_priceArr">
 
             </td>
             <td>
-                <input type="text" class="form-control" placeholder="상세내용" name="trmt_menu_text">
+                <input type="text" class="form-control" placeholder="상세내용" name="trmt_menu_textArr">
             </td>
             <td class="menuBtnArea">
                 <div class="menuPlusBtn">추가</div>
