@@ -102,5 +102,11 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
   });
   /*]]>*/
+  function modalMess(head, body, footter) {
+    $("#modalHead").html(head);
+    $("#ModalMessage").html(body);
+    $("#ModalType").attr("class", "btn btn-" + footter);
+    $("#commonModal").modal("show");
+  }
 </script>
 <div th:replace="~{/include/modal/modal:: commonModal (${msgType}, ${msg})}"></div>

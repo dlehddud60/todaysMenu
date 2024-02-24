@@ -1,10 +1,145 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<style>
+    body{
+        height: 100%;
+    }
+
+    .restArea {
+        width: 60%; height: 950px;
+        background: #88b275;
+        margin: 50px auto;
+        border-radius: 20px;
+        border: 1px solid black;
+    }
+    .restAreaTitle{
+        font-size: 3.5rem;
+        text-align: center;
+        font-family: D2Coding;
+
+    }
+    #menuArea {
+        margin: auto;
+        padding-top: 50px;
+        width: 60%; height: 300px;
+        background: #fff1c1;
+        border-radius: 20px;
+        transition: all 0.5s;
+
+
+    }
+    .menuText {
+        font-size: 3rem;
+        font-family: "Apple Braille";
+        text-align: center;
+    }
+    .menuTable {
+        border: 1px solid black;
+        width: 80%; height: 60px;
+        margin: auto;
+        border-radius: 20px;
+
+    }
+    .procBtnArea {
+        width: 60%; height: 60px;
+        margin: 20px auto;
+
+    }
+    .procBtnArea button, a{
+        float: right;
+        text-align: right;
+    }
+    .menuTable tr{
+        border-radius: 20px;
+        border: 1px solid black;
+        height: 40px;
+    }
+    .menuTable tr td{
+
+        text-align: center;
+
+        /*border: 1px solid black;*/
+    }
+    .menuBtnArea {
+        display: flex;
+        border: 0px solid black;
+
+    }
+    .menuTable tr td div{
+        width: 80px; height: 40px;
+        border-radius: 20px;
+        line-height: 40px;
+        cursor: pointer;
+    }
+    .menuTable tr td div:first-child {
+        background: #766cff;
+        color: #000000;
+    }
+    .menuTable tr td div:first-child:hover {
+        transition: all 0.3s;
+        background: #8CFF85;
+        color: #000000;
+
+    }
+    .menuTable tr td div:last-child {
+        background: #fc5069;
+        color: #000000;
+    }
+    .menuTable tr td div:last-child:hover {
+        transition: all 0.3s;
+        background: #ff8585;
+        color: #000000;
+
+    }
+
+
+</style>
+<script>
+    let menuAreaHeight = 300;
+    $(function () {
+        let menuShowLength = $(".menuCopyAreaShow").length;
+        menuAreaCopyFunc();
+        menuAreaHeight += (menuShowLength * 50);
+        $("#menuArea").css("height",menuAreaHeight)
+
+        if(menuShowLength > 1) {
+            $(".menuCopyAreaShow:last-child").remove();
+        }
+        console.log("=========menuCopyAreaShow=======" + menuShowLength);
+
+
+        $(document).on("click",".menuPlusBtn",function () {
+            menuAreaCopyFunc();
+            menuAreaHeight += 100;
+            $("#menuArea").css("height",menuAreaHeight)
+            console.log($(".menuCopyAreaShow").index())
+        });
+        $(document).on("click",".menuRemoveBtn",function () {
+            menuShowLength = $(".menuCopyAreaShow").length;
+            if(menuShowLength == 1) {
+                modalMess("메뉴 상태 알림창","메뉴 입력창이 1개인경우 제거하실 수 없습니다.","danger")
+            }else {
+                $(this).closest(".menuCopyAreaShow").remove();
+                menuAreaHeight -= 100;
+                $("#menuArea").css("height",menuAreaHeight)
+            }
+
+        });
+
+
+    });
+    const menuAreaCopyFunc = () => {
+        $( ".menuCopyAreaHide" ).clone().appendTo("#menuArea").attr("class","menuCopyAreaShow");
+        $(".menuCopyAreaShow").show();
+    }
+
+</script>
+
+
 <form method="post" action="/restaurant/proc.do">
-    [[${param.trt_seq}]]
     <input type="hidden" name="trt_seq" th:value="${param.trt_seq}">
     <input type="hidden" name="pageNum" th:value="${param.pageNum}">
     <input type="hidden" name="amount" th:value="${param.amount}">
-    <div class="container pt-5">
+    <div class="container pt-5 restArea">
         <div class="form-group">
             <label class="col-form-label mt-4" for="inputDefault">식당명</label>
             <input type="text" class="form-control" placeholder="식당명을 입력해주세요." id="inputDefault" name="trt_rest_name" th:value="${info.trt_rest_name}">
@@ -26,18 +161,84 @@
             <select class="form-select" name="trt_regi" style=" width: 100px">
                 <option th:text="서울" th:value="서울" th:selected="${info.trt_regi} == '서울'"></option>
                 <option th:text="경기" th:value="경기" th:selected="${info.trt_regi} == '경기'"></option>
-                <option th:text="인천" th:value="인천" th:selected="${info.trt_regi} == '인'"></option>
+                <option th:text="인천" th:value="인천" th:selected="${info.trt_regi} == '인천'"></option>
             </select>
         </div>
         <div class="form-group">
             <label class="form-label mt-4">내용</label>
             <textarea class="form-control" id="" rows="10" placeholder="내용을 입력해주세요" name="trt_rest_text" th:text="${info.trt_rest_text}"></textarea>
         </div>
-        <div th:replace="~{/include/modal/procModal::globalProcBtn(${info.trt_seq},restaurant)}"></div>
 
 
     </div>
+    <div id="menuArea">
+        <p class="menuText">메뉴 등록</p>
+
+        <th:block th:each="list : ${rentMenuList}">
+            <div class="menuCopyAreaShow" style="display: none">
+                <table class="menuTable">
+                    <tr>
+                        <td style="width: 150px">메뉴명</td>
+                        <td style="width: 150px">가격</td>
+                        <td>상세내용</td>
+                        <td style="width: 150px">추가/제거</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" placeholder="메뉴" name="trmt_menu_nameArr" th:value="${list.trmt_menu_name}">
+
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" placeholder="가격" name="trmt_priceArr" th:value="${list.trmt_price}">
+
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="상세내용" name="trmt_menu_textArr" th:value="${list.trmt_menu_text}">
+                        </td>
+                        <td class="menuBtnArea">
+                            <div class="menuPlusBtn">추가</div>
+                            <div class="menuRemoveBtn">제거</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </th:block>
+
+    </div>
+    <div class="procBtnArea">
+        <div th:replace="~{/include/modal/procModal::globalProcBtn(${info.trt_seq},restaurant)}"></div>
+    </div>
+
+
+
 </form>
+<div class="menuCopyAreaHide" style="display: none">
+    <table class="menuTable">
+        <tr>
+            <td style="width: 150px">메뉴명</td>
+            <td style="width: 150px">가격</td>
+            <td>상세내용</td>
+            <td style="width: 150px">추가/제거</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="text" class="form-control" placeholder="메뉴" name="trmt_menu_nameArr">
+
+            </td>
+            <td>
+                <input type="number" class="form-control" placeholder="가격" name="trmt_priceArr">
+
+            </td>
+            <td>
+                <input type="text" class="form-control" placeholder="상세내용" name="trmt_menu_textArr">
+            </td>
+            <td class="menuBtnArea">
+                <div class="menuPlusBtn">추가</div>
+                <div class="menuRemoveBtn">제거</div>
+            </td>
+        </tr>
+    </table>
+</div>
 <div th:insert="~{/include/footter.html}" th:remove="tag"></div>
 
 

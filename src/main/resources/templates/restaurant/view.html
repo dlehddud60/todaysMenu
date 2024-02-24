@@ -17,6 +17,9 @@
 
 </style>
 <form method="get">
+    [[${rentMenuList}]]
+    <br>
+    [[${not #strings.isEmpty(rentMenuList)}]]
     <div class="container mt-3">
         <h2>자유게시판</h2>
         <table class="table">
@@ -57,21 +60,23 @@
             </tbody>
         </table>
 
-        <table class="table table-bordered">
-            <tr>
-                <th style="width: 150px">메뉴명</th>
-                <th style="width: 150px">가격</th>
-                <th>상세내용</th>
-            </tr>
-            <th:blcok th:each="list : ${rentMenuList}">
+        <th:block th:if="${not #lists.isEmpty(rentMenuList)}">
+            <table class="table table-bordered">
                 <tr>
-                    <td style="width: 150px" th:text="${list.trmt_menu_name}"></td>
-                    <td style="width: 150px" th:text="${list.trmt_price}"></td>
-                    <td th:text="${list.trmt_menu_text}"></td>
+                    <th style="width: 150px">메뉴명</th>
+                    <th style="width: 150px">가격</th>
+                    <th>상세내용</th>
                 </tr>
-            </th:blcok>
+                <th:blcok th:each="list : ${rentMenuList}">
+                    <tr>
+                        <td style="width: 150px" th:text="${list.trmt_menu_name}"></td>
+                        <td style="width: 150px" th:text="${list.trmt_price}"></td>
+                        <td th:text="${list.trmt_menu_text}"></td>
+                    </tr>
+                </th:blcok>
 
-        </table>
+            </table>
+        </th:block>
         <a class="btn btn-success" th:href="@{/restaurant/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
         <a class="btn btn-info" th:href="@{/restaurant/write.do(trt_seq = ${info.trt_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>
         <div th:replace="~{/include/modal/deleteModal::globalDel(restaurant,trt_seq,${info.trt_seq})}"></div>

@@ -27,10 +27,6 @@
 
 
     }
-    /*.menuArea:hover {*/
-    /*    -webkit-box-shadow: 5px 5px 15px 5px #FF8080, -9px 5px 15px 5px #FFE488, -7px -5px 15px 5px #8CFF85, 12px -5px 15px 5px #80C7FF, 12px 10px 15px 7px #E488FF, -10px 10px 15px 7px #FF616B, -10px -7px 27px 1px #8E5CFF, 5px 5px 15px 5px rgba(0,0,0,0);*/
-    /*    box-shadow: 5px 5px 15px 5px #FF8080, -9px 5px 15px 5px #FFE488, -7px -5px 15px 5px #8CFF85, 12px -5px 15px 5px #80C7FF, 12px 10px 15px 7px #E488FF, -10px 10px 15px 7px #FF616B, -10px -7px 27px 1px #8E5CFF, 5px 5px 15px 5px rgba(0,0,0,0);*/
-    /*}*/
     .menuText {
         font-size: 3rem;
         font-family: "Apple Braille";
@@ -69,14 +65,13 @@
 
     }
     .menuTable tr td div{
-        border: 1px solid black;
         width: 80px; height: 40px;
-        border-radius: 5px;
+        border-radius: 20px;
         line-height: 40px;
         cursor: pointer;
     }
     .menuTable tr td div:first-child {
-        background: #13ff00;
+        background: #766cff;
         color: #000000;
     }
     .menuTable tr td div:first-child:hover {
@@ -86,7 +81,7 @@
 
     }
     .menuTable tr td div:last-child {
-        background: #ff0000;
+        background: #fc5069;
         color: #000000;
     }
     .menuTable tr td div:last-child:hover {
@@ -101,23 +96,24 @@
 <script>
     let menuAreaHeight = 300;
     $(function () {
+        let menuShowLength = $(".menuCopyAreaShow").length;
         menuAreaCopyFunc();
-        $(".menuRemoveBtn:eq(0)").remove();
-        $(".menuPlusBtn:eq(0)").css("background","#13ff00");
-
-
         $(document).on("click",".menuPlusBtn",function () {
             menuAreaCopyFunc();
             menuAreaHeight += 100;
             $("#menuArea").css("height",menuAreaHeight)
+            console.log($(".menuCopyAreaShow").index())
         });
-         $(document).on("click",".menuRemoveBtn",function () {
-            $(this).closest(".menuCopyAreaShow").remove();
-             menuAreaHeight -= 100;
-             $("#menuArea").css("height",menuAreaHeight)
-         });
-
-
+        $(document).on("click",".menuRemoveBtn",function () {
+            menuShowLength = $(".menuCopyAreaShow").length;
+            if(menuShowLength == 1) {
+                alert("지울 수 없음")
+            }else {
+                $(this).closest(".menuCopyAreaShow").remove();
+                menuAreaHeight -= 100;
+                $("#menuArea").css("height",menuAreaHeight)
+            }
+        });
     });
     const menuAreaCopyFunc = () => {
         $( ".menuCopyAreaHide" ).clone().appendTo("#menuArea").attr("class","menuCopyAreaShow");

@@ -57,6 +57,7 @@
         ,       TO_CHAR(TRMT.TRMT_MODER_DT,'YYYY-MM-dd') AS TRMT_MODER_DT
         FROM    TM_REST_MENU_TBL TRMT
         WHERE   TRT_SEQ = #{trt_seq}
+        ORDER BY TRMT_SEQ ASC
     </select>
 
     <select id="listPaging" resultType="com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO">
@@ -99,6 +100,12 @@
         ,   TRMT_INPUT_ID
         ,   TRMT_INPUT_IP
         ,   TRMT_INPUT_DT
+        ,   TRMT_MODER_TY
+        ,   TRMT_MODER_NM
+        ,   TRMT_MODER_ID
+        ,   TRMT_MODER_IP
+        ,   TRMT_MODER_DT
+
         )
         VALUES
         (   TM_TRMT_SEQ.nextval
@@ -110,6 +117,11 @@
         ,   #{trmt_input_nm}
         ,   #{trmt_input_id}
         ,   #{trmt_input_ip}
+        ,   SYSDATE
+        ,   #{trmt_moder_ty}
+        ,   #{trmt_moder_nm}
+        ,   #{trmt_moder_id}
+        ,   #{trmt_moder_ip}
         ,   SYSDATE
         )
         <selectKey keyProperty="trmt_seq" resultType="int" order="AFTER">SELECT TM_TRMT_SEQ.CURRVAL FROM DUAL</selectKey>
@@ -135,7 +147,7 @@
         /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.delete[삭제]*/
         DELETE FROM	TM_REST_MENU_TBL
         WHERE	1 = 1
-        AND		TRMT_SEQ = #{trmt_seq}
+        AND		TRT_SEQ = #{trt_seq}
     </delete>
 
 </mapper>
