@@ -1,4 +1,70 @@
 <div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d7c247130688fc47e72341dd6fa5081c"></script>
+<script>
+    $(function () {
+        let restAddress = "[[${info.trt_addr}]]"
+        $.ajax({
+            url : "https://dapi.kakao.com/v2/local/search/address.json",
+            headers : {"Authorization": "KakaoAK 16fb04781943e64fdcd7acf19c7170db"},
+            type : "get",
+            data : {"query" : restAddress},
+            dataType : "json",
+            success : mapView,
+            error : function () {
+                modalMess("실패 메시지", "위치를 불러오는데 실패하였습니다.", "danger");
+            }
+
+
+        });
+    });
+    function mapView(data) {
+
+        var x = data.documents[0].x;
+        var y = data.documents[0].y;
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(y, x), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+        // 마커를 표시할 위치입니다
+        var position =  new kakao.maps.LatLng(y, x);
+
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+            position: position,
+            clickable: true // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+        });
+
+        // 아래 코드는 위의 마커를 생성하는 코드에서 clickable: true 와 같이
+        // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+        // marker.setClickable(true);
+
+        // 마커를 지도에 표시합니다.
+        marker.setMap(map);
+
+        // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
+        var iwContent = '<div style="padding:5px;">[[${info.trt_rest_name}]]</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+            iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
+
+        // 인포윈도우를 생성합니다
+        var infowindow = new kakao.maps.InfoWindow({
+            content : iwContent,
+            removable : iwRemoveable
+        });
+        infowindow.open(map, marker);
+        // 마커에 클릭이벤트를 등록합니다
+        // kakao.maps.event.addListener(marker, 'click', function() {
+        //     // 마커 위에 인포윈도우를 표시합니다
+        //
+        // });
+    }
+
+
+</script>
 <style>
     tr td:first-child{
         width: 100px;
@@ -13,6 +79,7 @@
         border: 1px solid rgba(101, 57, 57, 0.35);
 
     }
+
 
 
 </style>
@@ -34,16 +101,20 @@
                 <td><span th:text="${info.trt_addr}"></span></td>
             </tr>
             <tr>
+                <td >지도</td>
+                <td><div id="map" style="width:100%;height:350px;"></div></td>
+            </tr>
+            <tr>
                 <td>식당 타입</td>
                 <td><span th:text="${info.trt_food_type}"></span></td>
             </tr>
-            <tr>
-                <td>식당 내용</td>
-                <td><span th:text="${info.trt_rest_text}"></span></td>
-            </tr>
             <tr style="height: 300px; ">
-                <td style="line-height: 300px; ">작성자</td>
-                <td><span  th:text="${info.trt_input_nm}"></span></td>
+                <td style="line-height: 300px; ">식당 내용</td>
+                <td><span  th:text="${info.trt_rest_text}"></span></td>
+            </tr>
+            <tr>
+                <td>작성자</td>
+                <td><span th:text="${info.trt_input_nm}"></span></td>
             </tr>
             <tr>
                 <td>작성일</td>
