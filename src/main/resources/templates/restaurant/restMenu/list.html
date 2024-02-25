@@ -1,0 +1,187 @@
+<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<script>
+    $(document).ready(function () {
+        $("#frmList").attr("action", "");
+        var frmList = $("#frmList");
+        $(".page-item a").on("click", function (e) {
+            $("input[name='search']").val("");
+            e.preventDefault();
+            console.log("click");
+            frmList.find("input[name='pageNum']").val($(this).attr("href"));
+            frmList.submit();
+        });
+        $("#reset").on("click", function (e) {
+            $("select[name='trt_food_typeSh']").val("");
+            $("select[name='trt_regiSh']").val("");
+            $("input[name='startPriceSh']").val("");
+            $("input[name='endPriceSh']").val("");
+            $("input[name='search']").val("");
+            paramReset();
+            frmList.submit();
+        });
+        $("#searchButton").on("click", function (e) {
+            paramReset();
+            frmList.submit();
+        });
+        $("#searchInput").on("keyup", function (key) {
+            if (key.keyCode == 13) {
+                paramReset();
+                frmList.submit();
+            }
+        });
+    });
+    function setPageAmount() {
+        // paramReset();
+        $("[name='amount']").val($("#pageAmount").val());
+        $("#frmList").submit();
+    }
+    function paramReset() {
+        $("input[name='pageNum']").val("1");
+        $("input[name='amount']").val("10");
+    }
+    function startInsertFunc(score,trmtSeq,trstSeq) {
+        let starScoreVal = $(score).val();
+        let parentType = "MENU";
+        if(trstSeq < 1) {
+            trstSeq = 0;
+        }
+        $.ajax({
+            url: "/star/proc.do",
+            type: "post",
+            data: {
+                "trst_star_score": starScoreVal,
+                "trst_parent_type": parentType,
+                "trst_parent_seq": trmtSeq,
+                "trst_seq": trstSeq,
+            }, // 서버로 전송할 데이터
+            success: function(result) {
+                modalMess("메시지", "별점주기에 성공하였습니다.", "success");
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                alert("AJAX Error: " + error); // 에러 메시지를 표시
+            }
+        });
+
+    }
+</script>
+<style>
+    ul {
+        justify-content: center;
+    }
+    #title {
+        font-size: 3rem;
+        background: greenyellow;
+        border-radius: 15px;
+        width: 300px; height: 100px;
+        text-align: center; line-height: 100px;
+        transition: all 0.5s;
+        cursor: pointer;
+    }
+    #title:hover {
+        background: dodgerblue;
+        color: white;
+    }
+    .searchBox {
+        transition: all 0.5s;
+    }
+    .searchBox:hover {
+        border-radius: 40px;
+
+    }
+    .text-overflow {
+        max-width: 150px; /* 표시하고자 하는 최대 너비 */
+        white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+        overflow: hidden; /* 넘치는 텍스트를 숨김 */
+        text-overflow: ellipsis; /* 넘치는 텍스트에 ... 추가 */
+    }
+</style>
+<form method="get" id="frmList">
+    <input type="hidden" name="pageNum" th:value="${pageMaker.cri.pageNum}">
+    <input type="hidden" name="amount" th:value="${pageMaker.cri.amount}">
+    <div class="form-group">
+        <div class="container pt-5">
+            <p id="title">메뉴 리스트</p>
+            <p>메뉴에 별점을 부여하실 수 있습니다.</p>
+            <div class="container p-5 my-5 bg-secondary text-white searchBox">
+                <h1 style=" width: 100px ;height: 50px; text-align: center; line-height: 50px; border-radius: 10px; margin : 0 0 50px 0;">검색</h1>
+                <span style="font-size: 1.2rem; color: white;  margin-right: 10px;">가격</span>
+                <input type="number" name="startPriceSh" th:value="${param.startPriceSh}" placeholder="시작가격">
+                <span>~</span>
+                <input type="number" name="endPriceSh" th:value="${param.endPriceSh}" placeholder="마지막가격">
+
+
+                <span style="font-size: 1.2rem; color: white;  margin-right: 10px;">지역</span>
+                <select name="trt_regiSh" class="form-select" aria-label="Small select example" style="width: 100px;  margin-bottom: 20px; margin-right: 10px; display: inline; ">
+                    <option th:text="ALL" value=""></option>
+                    <option th:text="서울" value="서울" th:selected="${#strings.toString(param.trt_regiSh)} == '서울'"></option>
+                    <option th:text="경기" value="경기" th:selected="${#strings.toString(param.trt_regiSh)} == '경기'"></option>
+                    <option th:text="인천" value="인천" th:selected="${#strings.toString(param.trt_regiSh)} == '인천'"></option>
+                </select>
+
+                <span style="font-size: 1.2rem; color: white;  margin-right: 10px;">종류</span>
+                <select name="trt_food_typeSh" class="form-select" aria-label="Small select example" style="width: 100px;  margin-bottom: 20px; margin-right: 10px; display: inline; ">
+                    <option th:text="ALL" value=""></option>
+                    <option th:text="한식" value="한식" th:selected="${#strings.toString(param.trt_food_typeSh)} == '한식'"></option>
+                    <option th:text="중식" value="중식" th:selected="${#strings.toString(param.trt_food_typeSh)} == '중식'"></option>
+                    <option th:text="일식" value="일식" th:selected="${#strings.toString(param.trt_food_typeSh)} == '일식'"></option>
+                    <option th:text="양식" value="양식" th:selected="${#strings.toString(param.trt_food_typeSh)} == '양식'"></option>
+                    <option th:text="기타" value="기타" th:selected="${#strings.toString(param.trt_food_typeSh)} == '기타'"></option>
+                </select>
+
+                <div th:replace="~{include/pagination/pageMain::globalSearchBox('메뉴명 식당명으로 검색해주시길 바랍니다.')}"></div>
+            </div>
+            <div th:replace="~{include/pagination/pageMain::globalPagingEaSelect1}"></div>
+
+
+            <table class="table table-hover">
+                <thead>
+
+                <tr class="table-active">
+                    <th scope="col">번호</th>
+                    <th scope="col" style="width: 200px;">메뉴명</th>
+                    <th scope="col">가격</th>
+                    <th scope="col" >상세내용</th>
+                    <th scope="col">식당명</th>
+                    <th scope="col">지역</th>
+                    <th scope="col">주소</th>
+                    <th scope="col">종류</th>
+                    <th scope="col" style="width: 130px;text-align: center">나의별점</th>
+                    <th scope="col" style="width: 130px;text-align: center">평균별점</th>
+                    <th scope="col" style="width: 130px;text-align: center">먹은일자</th>
+                </tr>
+                </thead>
+                <tbody>
+                <div th:each="list : ${list}">
+                    <tr class="table-light">
+                        <td scope="row" th:text="${list.row_num}"></td>
+                        <td th:text="${list.trmt_menu_name}"></td>
+                        <td th:text="${list.trmt_price_comma}"></td>
+                        <td th:text="${list.trmt_menu_text}" class="text-overflow"  ></td>
+                        <td th:text="${list.trt_rest_name}"></td>
+                        <td th:text="${list.trt_regi}"></td>
+                        <td th:text="${list.trt_addr}" class="text-overflow"></td>
+                        <td th:text="${list.trt_food_type}"></td>
+                        <td>
+                            <select name="trst_star_score" class="form-select" aria-label="Small select example" th:onchange="startInsertFunc(this,[[${list.trmt_seq}]],[[${list.trst_seq}]])">
+                                <option th:text="'미평가'" value=""></option>
+                                <option th:text="1점" value="1" th:selected="${list.trst_star_score} == '1'"></option>
+                                <option th:text="2점" value="2" th:selected="${list.trst_star_score} == '2'"></option>
+                                <option th:text="3점" value="3" th:selected="${list.trst_star_score} == '3'"></option>
+                                <option th:text="4점" value="4" th:selected="${list.trst_star_score} == '4'"></option>
+                                <option th:text="5점" value="5" th:selected="${list.trst_star_score} == '5'"></option>
+                            </select>
+                        </td>
+                        <td th:text="${list.trst_avg_score}" style="text-align: center"></td>
+                        <td th:text="${list.trst_today_ymd}"></td>
+
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+            <br>
+            <div th:replace="~{/include/pagination/pageMain::globalPagingSet(list)}"></div>
+        </div>
+    </div>
+</form>
+<div th:insert="~{/include/footter.html}" th:remove="tag"></div>

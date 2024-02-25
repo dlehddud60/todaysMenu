@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.todaysmenu.restaurant.star.repository.RestStarRepository">
+    <sql id="where">
+        WHERE 1 = 1
+    </sql>
+
+    <select id="count" resultType="int">
+        /*com.example.todaysmenu.restaurant.star.repository.RestStarRepository.count[목록]*/
+        SELECT	COUNT(1)
+        FROM	TM_REST_STAR_TBL TRST
+        <include refid="where"/>
+    </select>
+
+    <select id="list" resultType="com.example.todaysmenu.restaurant.star.entity.RestStarDTO">
+        /*com.example.todaysmenu.restaurant.star.repository.RestStarRepository.list[목록]*/
+        SELECT  ROWNUM AS data_seq,T1.*
+        FROM (
+                SELECT  TRST.TRST_SEQ
+                ,       TRST.TRST_PARENT_SEQ
+                ,       TRST.TRST_PARENT_TYPE
+                ,       TRST.TRST_STAR_SCORE
+                ,       TO_CHAR(TRST.TRST_TODAY_YMD,'YYYY-MM-dd') AS TRST_TODAY_YMD
+                ,       TRST.TRST_INPUT_TY
+                ,       TRST.TRST_INPUT_NM
+                ,       TRST.TRST_INPUT_ID
+                ,       TRST.TRST_INPUT_IP
+                ,       TO_CHAR(TRST.TRST_INPUT_DT,'YYYY-MM-dd') AS TRST_INPUT_DT
+                ,       TRST.TRST_MODER_TY
+                ,       TRST.TRST_MODER_NM
+                ,       TRST.TRST_MODER_ID
+                ,       TRST.TRST_MODER_IP
+                ,       TO_CHAR(TRST.TRST_MODER_DT,'YYYY-MM-dd') AS TRST_MODER_DT
+                FROM    TM_REST_STAR_TBL TRST
+            ) T1
+    </select>
+
+    <select id="info" resultType="com.example.todaysmenu.restaurant.star.entity.RestStarDTO">
+        /*com.example.todaysmenu.restaurant.star.repository.RestStarRepository.rentMenuList[식당메뉴리스트]*/
+        SELECT  TRST.SEQ
+        ,       TRST.PARENT_SEQ
+        ,       TRST.PARENT_TYPE
+        ,       TRST.STAR_SCORE
+        ,       TRST.TODAY_YMD
+        ,       TRST.TRST_INPUT_TY
+        ,       TRST.TRST_INPUT_NM
+        ,       TRST.TRST_INPUT_ID
+        ,       TRST.TRST_INPUT_IP
+        ,       TO_CHAR(TRST.TRST_INPUT_DT,'YYYY-MM-dd') AS TRST_INPUT_DT
+        ,       TRST.TRST_MODER_TY
+        ,       TRST.TRST_MODER_NM
+        ,       TRST.TRST_MODER_ID
+        ,       TRST.TRST_MODER_IP
+        ,       TO_CHAR(TRST.TRST_MODER_DT,'YYYY-MM-dd') AS TRST_MODER_DT
+        FROM    TM_REST_STAR_TBL TRST
+        ORDER BY TRST_SEQ DESC
+    </select>
+
+    <select id="listPaging" resultType="com.example.todaysmenu.restaurant.star.entity.RestStarDTO">
+        /*com.example.todaysmenu.restaurant.star.repository.RestStarRepository.listPaging[목록페이징]*/
+        <include refid="pagination.header"/>
+        SELECT  TRST.TRST_SEQ
+        ,       TRST.TRST_PARENT_SEQ
+        ,       TRST.TRST_PARENT_TYPE
+        ,       TRST.TRST_STAR_SCORE
+        ,       TRST.TRST_TODAY_YMD
+        ,       TRST.TRST_INPUT_TY
+        ,       TRST.TRST_INPUT_NM
+        ,       TRST.TRST_INPUT_ID
+        ,       TRST.TRST_INPUT_IP
+        ,       TO_CHAR(TRST.TRST_INPUT_DT,'YYYY-MM-dd') AS TRST_INPUT_DT
+        ,       TRST.TRST_MODER_TY
+        ,       TRST.TRST_MODER_NM
+        ,       TRST.TRST_MODER_ID
+        ,       TRST.TRST_MODER_IP
+        ,       TO_CHAR(TRST.TRST_MODER_DT,'YYYY-MM-dd') AS TRST_MODER_DT
+        FROM    TM_REST_STAR_TBL TRST
+        ORDER BY TRST_SEQ DESC
+
+        <include refid="where"/>
+        ORDER BY TRST_SEQ DESC
+        <include refid="pagination.footer"/>
+    </select>
+
+    <insert id="insert" parameterType="com.example.todaysmenu.restaurant.star.entity.RestStarDTO">
+        /*com.example.todaysmenu.restaurant.star.repository.RestStarRepository.insert[등록]*/
+        INSERT INTO TM_REST_STAR_TBL
+        (   TRST_SEQ
+        ,   TRST_PARENT_SEQ
+        ,   TRST_PARENT_TYPE
+        ,   TRST_STAR_SCORE
+        ,   TRST_TODAY_YMD
+        ,   TRST_INPUT_TY
+        ,   TRST_INPUT_NM
+        ,   TRST_INPUT_ID
+        ,   TRST_INPUT_IP
+        ,   TRST_INPUT_DT
+
+        )
+        VALUES
+        (   TM_TRST_SEQ.nextval
+        ,   #{trst_parent_seq}
+        ,   #{trst_parent_type}
+        ,   #{trst_star_score}
+        ,   SYSDATE
+        ,   #{trst_input_ty}
+        ,   #{trst_input_nm}
+        ,   #{trst_input_id}
+        ,   #{trst_input_ip}
+        ,   SYSDATE
+        )
+        <selectKey keyProperty="trst_seq" resultType="int" order="AFTER">SELECT TM_TRST_SEQ.CURRVAL FROM DUAL</selectKey>
+    </insert>
+
+    <update id="update">
+        /*com.example.todaysmenu.restaurant.star.repository.RestStarRepository.update[수정]*/
+        UPDATE	TM_REST_STAR_TBL
+        SET		TRST_MODER_TY 	    =         #{trst_moder_ty}
+        ,		TRST_MODER_NM 	    =         #{trst_moder_nm}
+        ,		TRST_MODER_ID 	    =         #{trst_moder_id}
+        ,		TRST_MODER_IP	    =         #{trst_moder_ip}
+        ,		TRST_MODER_DT	    =         SYSDATE
+        ,       TRST_STAR_SCORE     =         #{trst_star_score}
+        ,       TRST_TODAY_YMD      =         SYSDATE
+        WHERE	TRST_SEQ			=         #{trst_seq}
+    </update>
+
+
+
+    <delete id="delete">
+        /*com.example.todaysmenu.restaurant.star.repository.RestStarRepository.delete[삭제]*/
+        DELETE FROM	TM_REST_STAR_TBL
+        WHERE	1 = 1
+        AND		TRST_SEQ = #{trst_seq}
+    </delete>
+
+</mapper>

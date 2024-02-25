@@ -43,8 +43,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public int delete(int tfb_seq) {
-        return restaurantRepository.delete(tfb_seq);
+    public int delete(int trt_seq) {
+        return restaurantRepository.delete(trt_seq);
     }
 
     @Override

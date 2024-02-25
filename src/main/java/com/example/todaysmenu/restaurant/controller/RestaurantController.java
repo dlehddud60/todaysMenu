@@ -16,8 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.example.todaysmenu.board.common.modal.ComModal.*;
@@ -106,8 +104,6 @@ public class RestaurantController {
         if(trt_seq == 0){
            int dataSeq =  restaurantService.insert(restaurantDTO);
             restInsertMeth(restaurantDTO, restMenuDTO, request, memberSession);
-
-
             return redirect("restaurant/index.do",rttr,"성공 메세지","게시글 작성을 완료하였습니다.",SUCCESS);
         }else{
             int dataSeq = restaurantDTO.getTrt_seq();
@@ -116,22 +112,17 @@ public class RestaurantController {
             String restInputNm = restaurantDTO.getTrt_input_nm();
             if(memberWriter.equals(restInputNm)){
                 restaurantService.update(restaurantDTO);
-                log.info("==========|trt_seqtrt_seq|========={}",trt_seq);
                 restMenuService.delete(trt_seq);
                 restInsertMeth(restaurantDTO, restMenuDTO, request, memberSession);
-
             }else{
                 return redirect("restaurant/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
             }
             rttr.addFlashAttribute("result","success");
             rttr.addAttribute("pageNum",cri.getPageNum());
             rttr.addAttribute("amount",cri.getAmount());
-
         }
         return redirect("restaurant/index.do",rttr,"성공 메세지","수정을 완료하였습니다.",SUCCESS);
     }
-
-
 
     @GetMapping("/view.do")
     public String view(@RequestParam int trt_seq, Model model, @ModelAttribute("cri") Criteria cri) {
@@ -157,19 +148,14 @@ public class RestaurantController {
         } catch (NullPointerException e) {
             return redirect("restaurant/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
         }
-
-
         if(memberWriter.equals(restaurant)){
             int dataSeq = restaurantService.delete(trt_seq);
             if(dataSeq == 1) {
                 restMenuService.delete(trt_seq);
             }
-
-
         }else{
             return redirect("restaurant/index.do",rttr,"실패 메세지","본인글만 삭제 가능합니다.",DANGER);
         }
-
         rttr.addFlashAttribute("result","success");
         rttr.addAttribute("pageNum",cri.getPageNum());
         rttr.addAttribute("amount",cri.getAmount());
@@ -178,7 +164,6 @@ public class RestaurantController {
 
     @GetMapping("/delChk.do")
     public String delChk(@RequestParam(value = "trt_seq",required=false)List<Integer> trt_seq,Criteria cri,RedirectAttributes rttr,HttpServletRequest request) {
-        log.info("===========restaurantDelChk============");
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         RestaurantDTO restaurantInfo;
@@ -199,7 +184,6 @@ public class RestaurantController {
                 if(dataSeq == 1) {
                     restMenuService.delete(trt_seq.get(i));
                 }
-                log.info("|=============|dataSeq|=============|{}",dataSeq);
                 } else {
                     if(memberSession == null) {
                         statusMsg = "로그인을 해주시길 바랍니다.";
@@ -211,7 +195,6 @@ public class RestaurantController {
                 }
             }
 
-
         rttr.addFlashAttribute("result","success");
         rttr.addAttribute("pageNum",cri.getPageNum());
         rttr.addAttribute("amount",cri.getAmount());
@@ -219,11 +202,9 @@ public class RestaurantController {
     }
     private void restInsertMeth(@ModelAttribute RestaurantDTO restaurantDTO, @ModelAttribute RestMenuDTO restMenuDTO, HttpServletRequest request, MemberDTO memberSession) {
         for (int i = 0; i < restMenuDTO.getTrmt_menu_nameArr().size(); i++) {
-
             restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArr().get(i)); ;
             restMenuDTO.setTrmt_price(restMenuDTO.getTrmt_priceArr().get(i)); ;
             restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArr().get(i)); ;
-
             restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
             restMenuDTO.setTrmt_input_ty(memberSession.getTmt_user_type());
             restMenuDTO.setTrmt_input_nm(memberSession.getTmt_memb_name());
@@ -237,7 +218,4 @@ public class RestaurantController {
 
         }
     }
-
-
-
 }

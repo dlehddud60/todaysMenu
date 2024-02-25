@@ -5,12 +5,33 @@
 <mapper namespace="com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository">
     <sql id="where">
         WHERE 1 = 1
+        <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(search)">
+            AND	UPPER(T1.TRMT_MENU_NAME) || UPPER(T1.TRT_REST_NAME)  LIKE '%' || UPPER(#{search}) || '%'
+        </if>
+        <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(startPriceSh)">
+            AND     T1.TRMT_PRICE <![CDATA[>=]]> #{startPriceSh}
+        </if>
+        <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(endPriceSh)">
+            AND     T1.TRMT_PRICE <![CDATA[<=]]> #{endPriceSh}
+        </if>
+        <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(trt_regiSh)">
+            AND     T1.TRT_REGI = #{trt_regiSh}
+        </if>
+        <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(trt_food_typeSh)">
+            AND     T1.TRT_FOOD_TYPE = #{trt_food_typeSh}
+        </if>
+
     </sql>
 
     <select id="count" resultType="int">
         /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.count[목록]*/
-        SELECT	COUNT(1)
-        FROM	TM_REST_MENU_TBL T1
+        SELECT COUNT(1)
+        FROM(
+                SELECT	*
+                FROM	TM_REST_MENU_TBL TRMT
+                LEFT JOIN TM_REST_TBL TRT
+                ON		TRMT.TRT_SEQ = TRT.TRT_SEQ
+            )T1
         <include refid="where"/>
     </select>
 
@@ -18,24 +39,24 @@
         /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.list[목록]*/
         SELECT  ROWNUM AS data_seq,T1.*
         FROM (
-        SELECT  TRMT.TRMT_SEQ
-        ,       TRMT.TRT_SEQ
-        ,       TRMT.TRMT_MENU_NAME
-        ,       TRMT.TRMT_PRICE
-        ,       TRMT.TRMT_MENU_TEXT
-        ,       TRMT.TRMT_INPUT_TY
-        ,       TRMT.TRMT_INPUT_NM
-        ,       TRMT.TRMT_INPUT_ID
-        ,       TRMT.TRMT_INPUT_IP
-        ,       TO_CHAR(TRMT.TRMT_INPUT_DT,'YYYY-MM-dd') AS TRMT_INPUT_DT
-        ,       TRMT.TRMT_MODER_TY
-        ,       TRMT.TRMT_MODER_NM
-        ,       TRMT.TRMT_MODER_ID
-        ,       TRMT.TRMT_MODER_IP
-        ,       TO_CHAR(TRMT.TRMT_MODER_DT,'YYYY-MM-dd') AS TRMT_MODER_DT
-        FROM    TM_REST_MENU_TBL TRMT
-        ORDER BY TRMT_SEQ DESC
-        ) T1
+                SELECT  TRMT.TRMT_SEQ
+                ,       TRMT.TRT_SEQ
+                ,       TRMT.TRMT_MENU_NAME
+                ,       TRMT.TRMT_PRICE
+                ,       TRMT.TRMT_MENU_TEXT
+                ,       TRMT.TRMT_INPUT_TY
+                ,       TRMT.TRMT_INPUT_NM
+                ,       TRMT.TRMT_INPUT_ID
+                ,       TRMT.TRMT_INPUT_IP
+                ,       TO_CHAR(TRMT.TRMT_INPUT_DT,'YYYY-MM-dd') AS TRMT_INPUT_DT
+                ,       TRMT.TRMT_MODER_TY
+                ,       TRMT.TRMT_MODER_NM
+                ,       TRMT.TRMT_MODER_ID
+                ,       TRMT.TRMT_MODER_IP
+                ,       TO_CHAR(TRMT.TRMT_MODER_DT,'YYYY-MM-dd') AS TRMT_MODER_DT
+                FROM    TM_REST_MENU_TBL TRMT
+                ORDER BY TRMT_SEQ DESC
+            ) T1
     </select>
 
     <select id="rentMenuList" resultType="com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO">
@@ -43,7 +64,7 @@
         SELECT  TRMT.TRMT_SEQ
         ,       TRMT.TRT_SEQ
         ,       TRMT.TRMT_MENU_NAME
-        ,       TRMT.TRMT_PRICE
+        ,       TO_CHAR(TRMT.TRMT_PRICE,'999,999,999,999,999') || '원' AS TRMT_PRICE_COMMA
         ,       TRMT.TRMT_MENU_TEXT
         ,       TRMT.TRMT_INPUT_TY
         ,       TRMT.TRMT_INPUT_NM
@@ -63,25 +84,48 @@
     <select id="listPaging" resultType="com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO">
         /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.listPaging[목록페이징]*/
         <include refid="pagination.header"/>
-        SELECT  T1.*
+        SELECT T1.*
+        ,		(
+                        SELECT TRST.TRST_STAR_SCORE
+                        FROM   TM_REST_STAR_TBL TRST
+                        WHERE  TRST_INPUT_ID = #{tmt_login_id}
+                        AND 	TRST_PARENT_TYPE = 'MENU'
+                        AND    TRST.TRST_PARENT_SEQ = T1.TRMT_SEQ
+                 )      AS     TRST_STAR_SCORE
+        ,		 NVL((
+                        SELECT	ROUND(AVG(TRST_STAR_SCORE),1) || '점'
+                        FROM	TM_REST_STAR_TBL TRST
+                        GROUP BY TRST_PARENT_SEQ
+                        HAVING TRST.TRST_PARENT_SEQ = T1.TRMT_SEQ
+                 ),'미평가')      AS     TRST_AVG_SCORE
+        ,		 (
+                        SELECT TRST.TRST_SEQ
+                        FROM   TM_REST_STAR_TBL TRST
+                        WHERE  TRST_INPUT_ID = #{tmt_login_id}
+                        AND 	TRST_PARENT_TYPE = 'MENU'
+                        AND    TRST.TRST_PARENT_SEQ = T1.TRMT_SEQ
+                  )     AS     TRST_SEQ
+        ,		  NVL((
+                        SELECT TO_CHAR(TRST.TRST_TODAY_YMD,'YYYY-MM-dd')
+                        FROM   TM_REST_STAR_TBL TRST
+                        WHERE  TRST_INPUT_ID = #{tmt_login_id}
+                        AND 	TRST_PARENT_TYPE = 'MENU'
+                        AND    TRST.TRST_PARENT_SEQ = T1.TRMT_SEQ
+                      ),'안먹어본 메뉴')     AS     TRST_TODAY_YMD
         FROM(
-        SELECT  TRMT.TRMT_SEQ
-        ,       TRMT.TRT_SEQ
-        ,       TRMT.TRMT_MENU_NAME
-        ,       TRMT.TRMT_PRICE
-        ,       TRMT.TRMT_MENU_TEXT
-        ,       TRMT.TRMT_INPUT_TY
-        ,       TRMT.TRMT_INPUT_NM
-        ,       TRMT.TRMT_INPUT_ID
-        ,       TRMT.TRMT_INPUT_IP
-        ,       TO_CHAR(TRMT.TRMT_INPUT_DT,'YYYY-MM-dd') AS TRMT_INPUT_DT
-        ,       TRMT.TRMT_MODER_TY
-        ,       TRMT.TRMT_MODER_NM
-        ,       TRMT.TRMT_MODER_ID
-        ,       TRMT.TRMT_MODER_IP
-        ,       TO_CHAR(TRMT.TRMT_MODER_DT,'YYYY-MM-dd') AS TRMT_MODER_DT
-        FROM    TM_REST_MENU_TBL TRMT
-        ) T1
+                SELECT  TRMT.TRT_SEQ
+                ,       TRMT.TRMT_SEQ
+                ,       TRMT.TRMT_MENU_NAME
+                ,       TO_CHAR(TRMT.TRMT_PRICE,'999,999,999,999,999') || '원' AS TRMT_PRICE_COMMA
+                ,       TRMT.TRMT_MENU_TEXT
+                ,       TRT.TRT_REST_NAME
+                ,       TRT.TRT_REGI
+                ,       TRT.TRT_ADDR
+                ,       TRT.TRT_FOOD_TYPE
+                FROM    TM_REST_MENU_TBL TRMT
+                LEFT JOIN TM_REST_TBL TRT
+                ON      TRMT.TRT_SEQ = TRT.TRT_SEQ
+            ) T1
         <include refid="where"/>
         ORDER BY TRMT_SEQ DESC
         <include refid="pagination.footer"/>
@@ -105,7 +149,6 @@
         ,   TRMT_MODER_ID
         ,   TRMT_MODER_IP
         ,   TRMT_MODER_DT
-
         )
         VALUES
         (   TM_TRMT_SEQ.nextval

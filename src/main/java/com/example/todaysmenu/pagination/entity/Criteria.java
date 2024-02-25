@@ -17,6 +17,13 @@ public class Criteria {
     private String userType;
     private String trt_regiSh;
     private String trt_food_typeSh;
+    private String startPriceSh;
+    private String endPriceSh;
+    private String tmt_login_id;
+
+
+
+
 
     public Criteria() {
         this(1,10);

@@ -17,10 +17,7 @@
 
 </style>
 <form method="get">
-    [[${rentMenuList}]]
-    <br>
-    [[${not #strings.isEmpty(rentMenuList)}]]
-    <div class="container mt-3">
+   <div class="container mt-3">
         <h2>자유게시판</h2>
         <table class="table">
             <tbody>
@@ -70,7 +67,7 @@
                 <th:blcok th:each="list : ${rentMenuList}">
                     <tr>
                         <td style="width: 150px" th:text="${list.trmt_menu_name}"></td>
-                        <td style="width: 150px" th:text="${list.trmt_price}"></td>
+                        <td style="width: 150px" th:text="${list.trmt_price_comma}"></td>
                         <td th:text="${list.trmt_menu_text}"></td>
                     </tr>
                 </th:blcok>

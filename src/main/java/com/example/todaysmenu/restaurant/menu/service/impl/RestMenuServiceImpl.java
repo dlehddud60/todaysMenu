@@ -1,11 +1,9 @@
 package com.example.todaysmenu.restaurant.menu.service.impl;
 
 import com.example.todaysmenu.pagination.entity.Criteria;
-import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
 import com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO;
 import com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository;
 import com.example.todaysmenu.restaurant.menu.service.RestMenuService;
-import com.example.todaysmenu.restaurant.repository.RestaurantRepository;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +26,11 @@ public class RestMenuServiceImpl implements RestMenuService {
     @Override
     public List<RestMenuDTO> list() {
         return restMenuRepository.list();
+    }
+
+    @Override
+    public List<RestMenuDTO> listPaging(Criteria cri) {
+        return restMenuRepository.listPaging(cri);
     }
 
     @Override

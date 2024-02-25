@@ -5,7 +5,6 @@
         // if([[${session.memberDTO}]])
         let sessionVal = [[${session.memberDTO}]];
         if(sessionVal != null) {
-            console.log("==========sessionVal11===========",sessionVal)
             duplicateCheckResult = 1;
         }
         console.log(sessionVal);
@@ -78,12 +77,6 @@
         }
     }
 
-    function modalMess(head, body, footter) {
-        $("#modalHead").html(head);
-        $("#ModalMessage").html(body);
-        $("#ModalType").attr("class", "btn btn-" + footter);
-        $("#commonModal").modal("show");
-    }
 
     function emailChk() {
         let tmt_memb_email = $("#tmt_memb_email").val();

@@ -8,6 +8,7 @@ import java.util.List;
 public interface RestMenuService {
     int count(Criteria cri);
     List<RestMenuDTO> list();
+    List<RestMenuDTO> listPaging(Criteria cri);
     List<RestMenuDTO> rentMenuList(int trt_seq);
     int insert(RestMenuDTO restaurantDTO);
     int update(RestMenuDTO restaurantDTO);
