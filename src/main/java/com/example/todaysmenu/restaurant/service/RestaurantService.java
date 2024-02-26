@@ -8,7 +8,8 @@ import java.util.List;
 public interface RestaurantService {
     int count(Criteria cri);
     List<RestaurantDTO> list(Criteria cri);
-    RestaurantDTO info(int trt_seq);
+    RestaurantDTO info(RestaurantDTO restaurantDTO);
+    RestaurantDTO info(int trt_Seq);
     int insert(RestaurantDTO restaurantDTO);
     int update(RestaurantDTO restaurantDTO);
     int delete(int trt_seq);

@@ -11,7 +11,8 @@ public interface RestaurantRepository {
     int count(Criteria cri);
     List<RestaurantDTO> list();
     List<RestaurantDTO> listPaging(Criteria cri);
-    RestaurantDTO info(int trt_seq);
+    RestaurantDTO info(RestaurantDTO restaurantDTO);
+    RestaurantDTO info(int restaurantDTO);
     int insert(RestaurantDTO restaurantDTO);
     int update(RestaurantDTO restaurantDTO);
     int delete(int trt_seq);

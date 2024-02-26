@@ -63,6 +63,38 @@
         // });
     }
 
+    function startInsertFunc(score,trmtSeq,trstSeq) {
+        let starScoreVal = $(score).val();
+        let parentType = "REST";
+        console.log("============score============"+ starScoreVal)
+        console.log("============trmtSeq============"+ trmtSeq)
+        console.log("============trst_seqtrst_seq============"+ trstSeq)
+        if(trstSeq < 1) {
+            trstSeq = 0;
+        }
+        $.ajax({
+            url: "/star/proc.do",
+            type: "post",
+            data: {
+                "trst_star_score": starScoreVal,
+                "trst_parent_type": parentType,
+                "trst_parent_seq": trmtSeq,
+                "trst_seq": trstSeq,
+            }, // 서버로 전송할 데이터
+            success: function(result) {
+                modalMess("메시지", "별점주기에 성공하였습니다.", "success");
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", status, error);
+                alert("AJAX Error: " + error); // 에러 메시지를 표시
+            }
+        });
+
+    }
+
+
+
+
 
 </script>
 <style>
@@ -85,44 +117,57 @@
 </style>
 <form method="get">
    <div class="container mt-3">
-        <h2>자유게시판</h2>
+        <h2>식당 상세보기</h2>
         <table class="table">
             <tbody>
             <tr>
-                <td>식당명</td>
-                <td><span th:text="${info.trt_rest_name}"></span></td>
+                <td style="padding-top: 15px;">식당명</td>
+                <td style="padding-top: 15px;"><span th:text="${info.trt_rest_name}"></span></td>
+                <td style="padding-top: 15px; width: 100px;">별점 평가</td>
+                <td style="width: 300px;">
+                    <select name="trst_star_score" class="form-select" aria-label="Small select example" style="width: 250px;" th:onchange="startInsertFunc(this,[[${info.trt_seq}]],[[${info.trst_seq}]])">
+                        <option th:text="'미평가'" value=""></option>
+                        <option th:text="1점" value="1" th:selected="${info.trst_star_score} == '1'"></option>
+                        <option th:text="2점" value="2" th:selected="${info.trst_star_score} == '2'"></option>
+                        <option th:text="3점" value="3" th:selected="${info.trst_star_score} == '3'"></option>
+                        <option th:text="4점" value="4" th:selected="${info.trst_star_score} == '4'"></option>
+                        <option th:text="5점" value="5" th:selected="${info.trst_star_score} == '5'"></option>
+                    </select>
+                </td>
+                <td style="padding-top: 15px; width: 130px;">회원평균별점</td>
+                <td style="padding-top: 15px;"><span th:text="${info.trst_avg_score}"></span></td>
             </tr>
             <tr>
                 <td>지역</td>
-                <td><span th:text="${info.trt_regi}"></span></td>
+                <td colspan="5"><span th:text="${info.trt_regi}"></span></td>
             </tr>
             <tr>
                 <td>주소</td>
-                <td><span th:text="${info.trt_addr}"></span></td>
+                <td colspan="5"> <span th:text="${info.trt_addr}"></span></td>
             </tr>
             <tr>
                 <td >지도</td>
-                <td><div id="map" style="width:100%;height:350px;"></div></td>
+                <td colspan="5"><div id="map" style="width:100%;height:350px;"></div></td>
             </tr>
             <tr>
                 <td>식당 타입</td>
-                <td><span th:text="${info.trt_food_type}"></span></td>
+                <td colspan="5"><span th:text="${info.trt_food_type}"></span></td>
             </tr>
             <tr style="height: 300px; ">
                 <td style="line-height: 300px; ">식당 내용</td>
-                <td><span  th:text="${info.trt_rest_text}"></span></td>
+                <td colspan="5"><span  th:text="${info.trt_rest_text}"></span></td>
             </tr>
             <tr>
                 <td>작성자</td>
-                <td><span th:text="${info.trt_input_nm}"></span></td>
+                <td colspan="5"><span th:text="${info.trt_input_nm}"></span></td>
             </tr>
             <tr>
                 <td>작성일</td>
-                <td><span th:text="${info.trt_input_dt}"></span></td>
+                <td colspan="5"><span th:text="${info.trt_input_dt}"></span></td>
             </tr>
             <tr>
                 <td>조회수</td>
-                <td><span th:text="${info.trt_count}"></span></td>
+                <td colspan="5"><span th:text="${info.trt_count}"></span></td>
             </tr>
 
             </tbody>

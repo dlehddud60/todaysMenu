@@ -51,25 +51,52 @@
 
     <select id="info" resultType="com.example.todaysmenu.restaurant.entity.RestaurantDTO">
         /*com.example.todaysmenu.restaurant.repository.RestaurantRepository.info[상세]*/
-        SELECT  TRT.TRT_SEQ
-        ,       TRT.TRT_COUNT
-        ,       TRT.TRT_REST_NAME
-        ,       TRT.TRT_REGI
-        ,       TRT.TRT_ADDR
-        ,       TRT.TRT_FOOD_TYPE
-        ,       TRT.TRT_REST_TEXT
-        ,       TRT.TRT_INPUT_TY
-        ,       TRT.TRT_INPUT_NM
-        ,       TRT.TRT_INPUT_ID
-        ,       TRT.TRT_INPUT_IP
-        ,       TO_CHAR(TRT.TRT_INPUT_DT,'YYYY-MM-dd') AS TRT_INPUT_DT
-        ,       TRT.TRT_MODER_TY
-        ,       TRT.TRT_MODER_NM
-        ,       TRT.TRT_MODER_ID
-        ,       TRT.TRT_MODER_IP
-        ,       TO_CHAR(TRT.TRT_MODER_DT,'YYYY-MM-dd') AS TRT_MODER_DT
-        FROM    TM_REST_TBL TRT
-        WHERE   TRT_SEQ = #{trt_seq}
+        <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(tmt_login_id)">
+        SELECT T1.*
+        ,		(
+                    SELECT TRST.TRST_STAR_SCORE
+                    FROM   TM_REST_STAR_TBL TRST
+                    WHERE  TRST_INPUT_ID = #{tmt_login_id}
+                    AND 	TRST_PARENT_TYPE = 'REST'
+                    AND    TRST.TRST_PARENT_SEQ = T1.TRT_SEQ
+        )      AS   TRST_STAR_SCORE
+        ,	NVL((
+                    SELECT	ROUND(AVG(TRST_STAR_SCORE),1) || '점'
+                    FROM	TM_REST_STAR_TBL TRST
+                    GROUP BY TRST_PARENT_SEQ
+                    HAVING TRST.TRST_PARENT_SEQ = T1.TRT_SEQ
+                 ),'미평가')      AS     TRST_AVG_SCORE
+        ,		 (
+                    SELECT TRST.TRST_SEQ
+                    FROM   TM_REST_STAR_TBL TRST
+                    WHERE  TRST_INPUT_ID = #{tmt_login_id}
+                    AND 	TRST_PARENT_TYPE = 'REST'
+                    AND    TRST.TRST_PARENT_SEQ = T1.TRT_SEQ
+                 )  AS     TRST_SEQ
+        FROM(
+        </if>
+                SELECT  TRT.TRT_SEQ
+                ,       TRT.TRT_COUNT
+                ,       TRT.TRT_REST_NAME
+                ,       TRT.TRT_REGI
+                ,       TRT.TRT_ADDR
+                ,       TRT.TRT_FOOD_TYPE
+                ,       TRT.TRT_REST_TEXT
+                ,       TRT.TRT_INPUT_TY
+                ,       TRT.TRT_INPUT_NM
+                ,       TRT.TRT_INPUT_ID
+                ,       TRT.TRT_INPUT_IP
+                ,       TO_CHAR(TRT.TRT_INPUT_DT,'YYYY-MM-dd') AS TRT_INPUT_DT
+                ,       TRT.TRT_MODER_TY
+                ,       TRT.TRT_MODER_NM
+                ,       TRT.TRT_MODER_ID
+                ,       TRT.TRT_MODER_IP
+                ,       TO_CHAR(TRT.TRT_MODER_DT,'YYYY-MM-dd') AS TRT_MODER_DT
+                FROM    TM_REST_TBL TRT
+                WHERE   TRT_SEQ = #{trt_seq}
+        <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(tmt_login_id)">
+            ) T1
+        </if>
     </select>
 
     <select id="listPaging" resultType="com.example.todaysmenu.restaurant.entity.RestaurantDTO">

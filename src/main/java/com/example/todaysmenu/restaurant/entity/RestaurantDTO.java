@@ -27,4 +27,12 @@ public class RestaurantDTO {
     private String trt_moder_id;
     private String trt_moder_ip;
     private String trt_moder_dt;
+
+
+    private String trst_seq;
+    private String trst_star_score;
+    private String trst_avg_score;
+    private String tmt_login_id;
+
+
 }

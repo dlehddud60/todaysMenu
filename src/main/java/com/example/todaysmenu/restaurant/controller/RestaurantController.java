@@ -125,9 +125,18 @@ public class RestaurantController {
     }
 
     @GetMapping("/view.do")
-    public String view(@RequestParam int trt_seq, Model model, @ModelAttribute("cri") Criteria cri) {
+    public String view(@ModelAttribute RestaurantDTO restaurantDTO,@ModelAttribute Criteria cri,  Model model, HttpServletRequest request, RedirectAttributes rttr) {
+        HttpSession session = request.getSession();
+        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        try{
+            restaurantDTO.setTmt_login_id(memberSession.getTmt_login_id());
+        }catch (NullPointerException e) {
+            return redirect("",rttr,"실패 메세지","비로그인 유저는 진입하실 수 없습니다.",DANGER);
+        }
+        int trt_seq = restaurantDTO.getTrt_seq();
         restaurantService.updateCount(trt_seq);
-        model.addAttribute("info", restaurantService.info(trt_seq));
+        log.info("==========restaurantDTO=========={}",restaurantDTO);
+        model.addAttribute("info", restaurantService.info(restaurantDTO));
         model.addAttribute("rentMenuList", restMenuService.rentMenuList(trt_seq));
         return "restaurant/view";
     }

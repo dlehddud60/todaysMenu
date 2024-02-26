@@ -24,7 +24,7 @@
     </sql>
 
     <select id="count" resultType="int">
-        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.count[목록]*/
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.count[목록]*/
         SELECT COUNT(1)
         FROM(
                 SELECT	*
@@ -36,7 +36,7 @@
     </select>
 
     <select id="list" resultType="com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO">
-        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.list[목록]*/
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.list[목록]*/
         SELECT  ROWNUM AS data_seq,T1.*
         FROM (
                 SELECT  TRMT.TRMT_SEQ
@@ -60,11 +60,12 @@
     </select>
 
     <select id="rentMenuList" resultType="com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO">
-        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.rentMenuList[식당메뉴리스트]*/
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.rentMenuList[식당메뉴리스트]*/
         SELECT  TRMT.TRMT_SEQ
         ,       TRMT.TRT_SEQ
         ,       TRMT.TRMT_MENU_NAME
         ,       TO_CHAR(TRMT.TRMT_PRICE,'999,999,999,999,999') || '원' AS TRMT_PRICE_COMMA
+        ,       TRMT.TRMT_PRICE
         ,       TRMT.TRMT_MENU_TEXT
         ,       TRMT.TRMT_INPUT_TY
         ,       TRMT.TRMT_INPUT_NM
@@ -82,7 +83,7 @@
     </select>
 
     <select id="listPaging" resultType="com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO">
-        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.listPaging[목록페이징]*/
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.listPaging[목록페이징]*/
         <include refid="pagination.header"/>
         SELECT T1.*
         ,		(
@@ -132,7 +133,7 @@
     </select>
 
     <insert id="insert" parameterType="com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO">
-        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.insert[등록]*/
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.insert[등록]*/
         INSERT INTO TM_REST_MENU_TBL
         (   TRMT_SEQ
         ,   TRT_SEQ
@@ -171,7 +172,7 @@
     </insert>
 
     <update id="update">
-        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.update[수정]*/
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.update[수정]*/
         UPDATE	TM_REST_MENU_TBL
         SET		TRMT_MODER_TY 	    =         #{trmt_moder_ty}
         ,		TRMT_MODER_NM 	    =         #{trmt_moder_nm}
@@ -187,7 +188,7 @@
 
 
     <delete id="delete">
-        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuServiceRepository.delete[삭제]*/
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.delete[삭제]*/
         DELETE FROM	TM_REST_MENU_TBL
         WHERE	1 = 1
         AND		TRT_SEQ = #{trt_seq}
