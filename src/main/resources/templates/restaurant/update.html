@@ -97,14 +97,28 @@
     let menuAreaHeight = 300;
     $(function () {
         let menuShowLength = $(".menuCopyAreaShow").length;
+        let menuName =  $(".menuCopyAreaShow input[name=trmt_menu_nameArr]");
+        let menuPrice =  $(".menuCopyAreaShow input[name=trmt_priceArr]");
+        let menuTextArr =  $(".menuCopyAreaShow input[name=trmt_menu_textArr]");
         menuAreaCopyFunc();
         menuAreaHeight += (menuShowLength * 50);
-        $("#menuArea").css("height",menuAreaHeight)
+        if(menuName.val() != null) {
+            menuName.attr("name","trmt_menu_nameArrUpdate");
+        }
+        if(menuPrice.val() != null) {
+            menuPrice.attr("name","trmt_priceArrUpdate");
+        }
+        if(menuTextArr.val() != null) {
+            menuTextArr.attr("name","trmt_menu_textArrUpdate");
+        }
+
+
+
+        $("#menuArea").css("height",menuAreaHeight);
 
         if(menuShowLength > 1) {
             $(".menuCopyAreaShow:last-child").remove();
         }
-        console.log("=========menuCopyAreaShow=======" + menuShowLength);
 
 
         $(document).on("click",".menuPlusBtn",function () {
@@ -115,10 +129,21 @@
         });
         $(document).on("click",".menuRemoveBtn",function () {
             menuShowLength = $(".menuCopyAreaShow").length;
-            if(menuShowLength == 1) {
+            if(menuShowLength === 1) {
                 modalMess("메뉴 상태 알림창","메뉴 입력창이 1개인경우 제거하실 수 없습니다.","danger")
             }else {
-                $(this).closest(".menuCopyAreaShow").remove();
+                let menuObjQuery =  $(this).closest(".menuCopyAreaShow")
+                let trmtSeq = menuObjQuery.find("input[name = trmt_seq]").val();
+                if(trmtSeq != null) {
+                    menuObjQuery.find("input[name = trmt_menu_nameArrUpdate]").attr("name","trmt_menu_nameArrDelete");
+                    menuObjQuery.find("input[name = trmt_priceArrUpdate]").attr("name","trmt_priceArrDelete");
+                    menuObjQuery.find("input[name = trmt_menu_textArrUpdate]").attr("name","trmt_menu_textArrDelete");
+                    menuObjQuery.find("input[name = trmt_seq]").attr("name","trmt_seqArrDelete");
+                    $(this).closest(".menuCopyAreaShow").attr("class","menuCopyAreaShowDelete").hide();
+                }else {
+                    $(this).closest(".menuCopyAreaShow").remove();
+                }
+
                 menuAreaHeight -= 100;
                 $("#menuArea").css("height",menuAreaHeight)
             }
@@ -186,6 +211,7 @@
                     <tr>
                         <td>
                             <input type="text" class="form-control" placeholder="메뉴" name="trmt_menu_nameArr" th:value="${list.trmt_menu_name}">
+                            <input type="text" class="form-control" name="trmt_seq" th:value="${list.trmt_seq}">
 
                         </td>
                         <td>

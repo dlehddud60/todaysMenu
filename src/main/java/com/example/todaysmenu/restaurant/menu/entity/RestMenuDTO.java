@@ -16,9 +16,25 @@ public class RestMenuDTO {
     private int trt_seq;
     private String row_num;
     private String trmt_price_comma;
+//    메뉴 리스트 같은 name값을 가진 객체들을 배열로 받기 위한 필드
     private List<Integer> trmt_priceArr;
     private List<String> trmt_menu_nameArr;
     private List<String> trmt_menu_textArr;
+    private List<Integer> trmt_seqArr;
+
+// 메뉴리스트 수정용 스테이터스값이 있는 필드
+    private List<Integer> trmt_priceArrUpdate;
+    private List<String> trmt_menu_nameArrUpdate;;
+    private List<String> trmt_menu_textArrUpdate;
+    private List<Integer> trmt_seqArrDelete;
+
+// 메뉴리스트 제거용 스테이터스값이 있는 필드
+    private List<Integer> trmt_priceArrDelete;
+    private List<String> trmt_menu_nameArrDelete; ;
+    private List<String> trmt_menu_textArrDelete;
+
+
+
     private int trmt_price;
     private String trmt_menu_name;
     private String trmt_menu_text;
@@ -46,5 +62,7 @@ public class RestMenuDTO {
     private String trst_seq;
     private String trst_today_ymd;
     private String trst_avg_score;
+
+
 
 }

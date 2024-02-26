@@ -7,6 +7,8 @@ import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
 import com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO;
 import com.example.todaysmenu.restaurant.menu.service.impl.RestMenuServiceImpl;
 import com.example.todaysmenu.restaurant.service.RestaurantService;
+import com.example.todaysmenu.restaurant.star.entity.RestStarDTO;
+import com.example.todaysmenu.restaurant.star.service.RestStarService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -32,6 +34,8 @@ public class RestaurantController {
     RestaurantService restaurantService;
     @Autowired
     RestMenuServiceImpl restMenuService;
+    @Autowired
+    RestStarService restStarService;
 
 
     @GetMapping("/index.do")
@@ -112,7 +116,7 @@ public class RestaurantController {
             String restInputNm = restaurantDTO.getTrt_input_nm();
             if(memberWriter.equals(restInputNm)){
                 restaurantService.update(restaurantDTO);
-                restMenuService.delete(trt_seq);
+//                restMenuService.delete(trt_seq);
                 restInsertMeth(restaurantDTO, restMenuDTO, request, memberSession);
             }else{
                 return redirect("restaurant/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
@@ -210,21 +214,54 @@ public class RestaurantController {
         return redirect("restaurant/index.do",rttr,"성공 메세지","게시물을 삭제하였습니다.",SUCCESS);
     }
     private void restInsertMeth(@ModelAttribute RestaurantDTO restaurantDTO, @ModelAttribute RestMenuDTO restMenuDTO, HttpServletRequest request, MemberDTO memberSession) {
-        for (int i = 0; i < restMenuDTO.getTrmt_menu_nameArr().size(); i++) {
-            restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArr().get(i)); ;
-            restMenuDTO.setTrmt_price(restMenuDTO.getTrmt_priceArr().get(i)); ;
-            restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArr().get(i)); ;
-            restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
-            restMenuDTO.setTrmt_input_ty(memberSession.getTmt_user_type());
-            restMenuDTO.setTrmt_input_nm(memberSession.getTmt_memb_name());
-            restMenuDTO.setTrmt_input_id(memberSession.getTmt_login_id());
-            restMenuDTO.setTrmt_input_ip(request.getRemoteAddr());
-            restMenuDTO.setTrmt_moder_ty(memberSession.getTmt_user_type());
-            restMenuDTO.setTrmt_moder_nm(memberSession.getTmt_memb_name());
-            restMenuDTO.setTrmt_moder_id(memberSession.getTmt_login_id());
-            restMenuDTO.setTrmt_moder_ip(request.getRemoteAddr());
-            restMenuService.insert(restMenuDTO);
+        List<String> insert = restMenuDTO.getTrmt_menu_nameArr();
+        List<String> update = restMenuDTO.getTrmt_menu_nameArrUpdate();
+        List<Integer> delete = restMenuDTO.getTrmt_seqArrDelete();
 
-        }
+
+        if(insert != null) {
+            for (int i = 0; i < insert.size(); i++) {
+                restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArr().get(i)); ;
+                restMenuDTO.setTrmt_price(restMenuDTO.getTrmt_priceArr().get(i)); ;
+                restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArr().get(i)); ;
+                restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
+                restMenuDTO.setTrmt_input_ty(memberSession.getTmt_user_type());
+                restMenuDTO.setTrmt_input_nm(memberSession.getTmt_memb_name());
+                restMenuDTO.setTrmt_input_id(memberSession.getTmt_login_id());
+                restMenuDTO.setTrmt_input_ip(request.getRemoteAddr());
+                restMenuDTO.setTrmt_moder_ty(memberSession.getTmt_user_type());
+                restMenuDTO.setTrmt_moder_nm(memberSession.getTmt_memb_name());
+                restMenuDTO.setTrmt_moder_id(memberSession.getTmt_login_id());
+                restMenuDTO.setTrmt_moder_ip(request.getRemoteAddr());
+            restMenuService.insert(restMenuDTO);
+                log.info("|===============restMenuDTOinsertinsertinsertinsertinsertinsert=============|{}",restMenuDTO);
+            }//if
+        } //for
+        if(update != null) {
+            for (int i = 0; i < update.size(); i++) {
+                restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArrUpdate().get(i));
+                restMenuDTO.setTrmt_price(restMenuDTO.getTrmt_priceArrUpdate().get(i));
+                restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArrUpdate().get(i));
+                restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
+
+                restMenuDTO.setTrmt_moder_ty(memberSession.getTmt_user_type());
+                restMenuDTO.setTrmt_moder_nm(memberSession.getTmt_memb_name());
+                restMenuDTO.setTrmt_moder_id(memberSession.getTmt_login_id());
+                restMenuDTO.setTrmt_moder_ip(request.getRemoteAddr());
+            restMenuService.update(restMenuDTO);
+                log.info("|===============restMenuDTOupdateupdateupdateupdate=============|{}", restMenuDTO);
+            }//for
+        }//if
+        if(delete != null) {
+            for (int i = 0; i < delete.size(); i++) {
+                 restMenuDTO.setTrmt_seq(delete.get(i));
+                 int deleteSeq = restMenuDTO.getTrmt_seq();
+
+
+            restMenuService.delete(deleteSeq);
+                log.info("|===============restMenuDTOdeletedeletedeletedelete=============|{}", deleteSeq);
+            }//for
+        }//if
+
     }
 }
