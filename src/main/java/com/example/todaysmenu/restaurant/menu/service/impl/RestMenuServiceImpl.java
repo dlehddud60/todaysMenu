@@ -1,14 +1,23 @@
 package com.example.todaysmenu.restaurant.menu.service.impl;
 
+import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO;
 import com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository;
 import com.example.todaysmenu.restaurant.menu.service.RestMenuService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
+
+import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
+import static com.example.todaysmenu.board.common.modal.ComModal.redirect;
 
 @Service
 @Log4j2
@@ -57,5 +66,13 @@ public class RestMenuServiceImpl implements RestMenuService {
     public int parentDel(int trt_seq) {
         return restMenuRepository.parentDel(trt_seq);
 
+    }
+
+    @Override
+    public RestMenuDTO userRecommendMenu(RestMenuDTO restMenuDTO, HttpServletRequest request, RedirectAttributes rttr) {
+        HttpSession session = request.getSession();
+        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+            restMenuDTO.setTmt_login_id(memberSession.getTmt_login_id());
+        return restMenuRepository.userRecommendMenu(restMenuDTO);
     }
 }

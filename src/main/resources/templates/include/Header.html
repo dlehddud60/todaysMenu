@@ -35,7 +35,7 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
           <a class="nav-link" href="/restMenu/index.do">메뉴리스트</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">오늘의메뉴추천</a>
+          <a class="nav-link" href="/restMenu/recommendMenu.do?recomNum=1">오늘의메뉴추천</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
@@ -107,6 +107,6 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     $("#ModalMessage").html(body);
     $("#ModalType").attr("class", "btn btn-" + footter);
     $("#commonModal").modal("show");
-  }결
+  }
 </script>
 <div th:replace="~{/include/modal/modal:: commonModal (${msgType}, ${msg})}"></div>

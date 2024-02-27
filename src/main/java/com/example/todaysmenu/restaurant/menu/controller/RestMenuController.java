@@ -3,11 +3,13 @@ package com.example.todaysmenu.restaurant.menu.controller;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.pagination.entity.PageDTO;
+import com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO;
 import com.example.todaysmenu.restaurant.menu.service.impl.RestMenuServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +44,16 @@ public class RestMenuController {
         model.addAttribute("list", restMenuService.listPaging(cri));
         model.addAttribute("pageMaker",new PageDTO(total,cri));
         return "restaurant/restMenu/list";
+    }
+
+    @GetMapping("/recommendMenu.do")
+    public String recommendMenu(@ModelAttribute RestMenuDTO restMenuDTO, Model model, HttpServletRequest request, RedirectAttributes rttr) {
+        try{
+            model.addAttribute("recommendMenu",restMenuService.userRecommendMenu(restMenuDTO, request,rttr));
+        } catch (NullPointerException e) {
+            return redirect("",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
+        }
+        return "restaurant/restMenu/recommendMenu";
     }
 
 

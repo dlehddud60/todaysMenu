@@ -1,0 +1,128 @@
+<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<script>
+    let recomNum = [[${param.recomNum}]]
+$(function () {
+    $(".nextBtn").on("click",function () {
+        recomNum += 1;
+        $("input[name=recomNum]").val(recomNum);
+        $("#frmList").submit();
+    })
+    $(".resetBtn").on("click",function () {
+        recomNum = 1;
+        $("input[name=recomNum]").val(recomNum);
+        $("#frmList").submit();
+    })
+})
+</script>
+<style>
+    ul {
+        justify-content: center;
+    }
+    .recommendArea {
+        position: relative;
+        width: 70%;
+    }
+    #title {
+        font-size: 3rem;
+        background: greenyellow;
+        border-radius: 15px;
+        width: 400px; height: 100px;
+        text-align: center; line-height: 100px;
+        transition: all 0.5s;
+        cursor: pointer;
+    }
+    #title:hover {
+        background: dodgerblue;
+        color: white;
+    }
+    .searchBox {
+        transition: all 0.5s;
+    }
+    .searchBox:hover {
+        border-radius: 40px;
+
+    }
+    .text-overflow {
+        max-width: 150px; /* 표시하고자 하는 최대 너비 */
+        white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
+        overflow: hidden; /* 넘치는 텍스트를 숨김 */
+        text-overflow: ellipsis; /* 넘치는 텍스트에 ... 추가 */
+    }
+    #midTitle {
+        font-size: 2rem;
+    }
+    .moveArea {
+        position: absolute;
+        right: 10px; display: flex;
+    }
+    .nextBtn, .resetBtn{
+        width: 100px; height: 40px;
+        font-size: 1.2rem;
+        border-radius: 10px;
+        text-align: center;
+        line-height: 40px;
+        color: white;
+        cursor: pointer;
+        transition: all 0.5s;
+
+    }
+    .nextBtn {
+        background: dodgerblue;
+    }
+    .nextBtn:hover {
+        background: #55a9ff;
+    }
+    .resetBtn {
+        background: #fc5069;
+    }
+    .resetBtn:hover {
+        background: #ff9cad;
+    }
+</style>
+<form method="get" id="frmList">
+    <input type="hidden" name="recomNum">
+    <div class="form-group">
+        <div class="container pt-5 recommendArea">
+            <p id="title">오늘의 메뉴 추천</p>
+            <p id ="midTitle">오늘의 [[${param.recomNum}]]번째 추천 메뉴</p>
+            <th:block th:if="${not #strings.isEmpty(recommendMenu)}">
+                <table class="table table-hover">
+                    <thead>
+
+                    <tr class="table-active">
+                        <th scope="col">추천메뉴</th>
+                        <th scope="col">식당이름</th>
+                        <th scope="col">가격</th>
+                        <th scope="col">나의 메뉴 별점</th>
+                        <th scope="col">평균 메뉴 별점</th>
+                        <th scope="col">평균 식당 별점</th>
+                        <th scope="col">최근 먹은 일자</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-light">
+                            <td th:text="${recommendMenu.trmt_menu_name}"></td>
+                            <td th:text="${recommendMenu.trt_rest_name}"></td>
+                            <td th:text="${recommendMenu.trmt_price_comma}"></td>
+                            <td th:text="${recommendMenu.trst_star_score}"></td>
+                            <td th:text="${recommendMenu.trst_menu_avg_score}"></td>
+                            <td th:text="${recommendMenu.trst_rest_avg_score}"></td>
+                            <td th:text="${recommendMenu.trst_today_ymd}"></td>
+
+
+                        </tr>
+                    </tbody>
+                </table>
+            </th:block>
+            <th:block th:if="${#strings.isEmpty(recommendMenu)}">
+                추천할 메뉴가 없습니다.
+            </th:block>
+
+            <div class="moveArea">
+                <div class="resetBtn">리셋</div>
+                <div class="nextBtn" th:text="다음추천"></div>
+            </div>
+        </div>
+    </div>
+</form>
+<div th:insert="~{/include/footter.html}" th:remove="tag"></div>

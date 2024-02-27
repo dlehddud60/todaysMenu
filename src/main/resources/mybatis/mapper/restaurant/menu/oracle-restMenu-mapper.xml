@@ -117,6 +117,7 @@
                 SELECT  TRMT.TRT_SEQ
                 ,       TRMT.TRMT_SEQ
                 ,       TRMT.TRMT_MENU_NAME
+                ,       TRMT.TRMT_PRICE
                 ,       TO_CHAR(TRMT.TRMT_PRICE,'999,999,999,999,999') || '원' AS TRMT_PRICE_COMMA
                 ,       TRMT.TRMT_MENU_TEXT
                 ,       TRT.TRT_REST_NAME
@@ -200,5 +201,84 @@
         WHERE	1 = 1
         AND		TRT_SEQ = #{trt_seq}
     </delete>
+
+
+
+    <select id="userRecommendMenu" resultType="com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO">
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.userRecommendMenu[사용자 메뉴 추천]*/
+        SELECT	T1.*
+        FROM(
+                SELECT	T1.*
+                ,		FIRST_VALUE(TRUNC(DBMS_RANDOM.VALUE(1,T1.RNMAX))) OVER() AS RANDOM_NUM
+                FROM(
+                SELECT	T1.*
+                ,		MAX(ROWNUM) OVER()AS RNMAX
+                ,		ROWNUM AS RN
+                FROM(
+                        SELECT T1.*
+                        FROM(
+                                SELECT  T1.TRMT_SEQ
+                                ,		T1.TRMT_MENU_NAME
+                                ,		T1.TRMT_PRICE_COMMA
+                                ,		T1.TRT_REST_NAME
+                                ,		 NVL((
+                                                SELECT TRST.TRST_STAR_SCORE
+                                                FROM   TM_REST_STAR_TBL TRST
+                                                WHERE  TRST_INPUT_ID = #{tmt_login_id}
+                                                AND 	TRST_PARENT_TYPE = 'MENU'
+                                                AND    TRST.TRST_PARENT_SEQ = T1.TRMT_SEQ
+                                                ),0)      AS     TRST_STAR_SCORE
+                                ,		 NVL((
+                                                SELECT	ROUND(AVG(TRST_STAR_SCORE),1)
+                                                FROM	TM_REST_STAR_TBL TRST
+                                                GROUP BY TRST_PARENT_SEQ
+                                                HAVING TRST.TRST_PARENT_SEQ = T1.TRMT_SEQ
+                                                ),0)      AS     TRST_MENU_AVG_SCORE
+                                ,			NVL((
+                                                    SELECT	ROUND(AVG(TRST_STAR_SCORE),1)
+                                                    FROM	TM_REST_STAR_TBL TRST
+                                                    GROUP BY TRST_PARENT_SEQ
+                                                    HAVING TRST.TRST_PARENT_SEQ = T1.TRT_SEQ
+                                                    ),0)      AS     TRST_REST_AVG_SCORE
+                                ,		    (
+                                                    SELECT TRST.TRST_SEQ
+                                                    FROM   TM_REST_STAR_TBL TRST
+                                                    WHERE  TRST_INPUT_ID = #{tmt_login_id}
+                                                    AND 	TRST_PARENT_TYPE = 'MENU'
+                                                    AND    TRST.TRST_PARENT_SEQ = T1.TRMT_SEQ
+                                                    )      AS     TODAY_EAT_TRST_SEQ
+                                ,		  NVL((
+                                                    SELECT TO_CHAR(TRST.TRST_TODAY_YMD,'YYYY-MM-dd')
+                                                    FROM   TM_REST_STAR_TBL TRST
+                                                    WHERE  TRST_INPUT_ID = #{tmt_login_id}
+                                                    AND 	TRST_PARENT_TYPE = 'MENU'
+                                                    AND    TRST.TRST_PARENT_SEQ = T1.TRMT_SEQ
+                                                    ),'안먹어본 메뉴')      AS     TRST_TODAY_YMD
+                                                    FROM(
+                                                            SELECT  TRMT.TRT_SEQ
+                                                            ,       TRMT.TRMT_SEQ
+                                                            ,       TRMT.TRMT_MENU_NAME
+                                                            ,       TRMT.TRMT_PRICE
+                                                            ,       TO_CHAR(TRMT.TRMT_PRICE,'999,999,999,999,999') || '원' AS TRMT_PRICE_COMMA
+                                                            ,       TRMT.TRMT_MENU_TEXT
+                                                            ,       TRT.TRT_REST_NAME
+                                                            ,       TRT.TRT_REGI
+                                                            ,       TRT.TRT_ADDR
+                                                            ,       TRT.TRT_FOOD_TYPE
+                                                            FROM    TM_REST_MENU_TBL TRMT
+                                                            LEFT JOIN TM_REST_TBL TRT
+                                                            ON      TRMT.TRT_SEQ = TRT.TRT_SEQ
+                                                    ) T1
+                                )T1
+                                WHERE 1 = 1
+                        )T1
+                )T1
+        )T1
+        WHERE T1.RN = RANDOM_NUM
+    </select>
+
+
+
+
 
 </mapper>

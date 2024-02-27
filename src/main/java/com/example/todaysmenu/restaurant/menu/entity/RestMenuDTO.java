@@ -33,6 +33,9 @@ public class RestMenuDTO {
     private List<String> trmt_menu_nameArrDelete; ;
     private List<String> trmt_menu_textArrDelete;
 
+//  사용자 아이디
+    private String tmt_login_id;
+
 
 
     private int trmt_price;
@@ -62,6 +65,11 @@ public class RestMenuDTO {
     private String trst_seq;
     private String trst_today_ymd;
     private String trst_avg_score;
+
+//   추천 순서 숫자
+    private int recomNum;
+    private int trst_menu_avg_score;
+    private int trst_rest_avg_score;
 
 
 
