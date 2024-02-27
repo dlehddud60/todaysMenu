@@ -15,4 +15,5 @@ public interface RestMenuRepository {
     int insert(RestMenuDTO restaurantDTO);
     int update(RestMenuDTO restaurantDTO);
     int delete(int trt_seq);
+    int parentDel(int trt_seq);
 }

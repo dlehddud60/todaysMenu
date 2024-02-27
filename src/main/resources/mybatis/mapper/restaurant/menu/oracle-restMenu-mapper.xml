@@ -194,4 +194,11 @@
         AND		TRMT_SEQ = #{trmt_seq}
     </delete>
 
+    <delete id="parentDel">
+        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.delete[삭제]*/
+        DELETE FROM	TM_REST_MENU_TBL
+        WHERE	1 = 1
+        AND		TRT_SEQ = #{trt_seq}
+    </delete>
+
 </mapper>

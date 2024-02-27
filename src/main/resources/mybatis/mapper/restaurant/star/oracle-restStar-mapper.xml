@@ -133,7 +133,15 @@
         /*com.example.todaysmenu.restaurant.star.repository.RestStarRepository.delete[삭제]*/
         DELETE FROM	TM_REST_STAR_TBL
         WHERE	1 = 1
-        AND		TRST_SEQ = #{trst_seq}
+        <if test="trst_seq > 0">
+            AND		TRST_SEQ = #{trst_seq}
+        </if>
+        <if test="trt_seq > 0">
+            AND		TRST_PARENT_SEQ = #{trt_seq}
+        </if>
+        <if test="trmt_seq > 0">
+            AND		TRST_PARENT_SEQ = #{trmt_seq}
+        </if>
     </delete>
 
 </mapper>

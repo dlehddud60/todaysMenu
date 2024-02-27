@@ -15,4 +15,5 @@ public interface RestStarRepository {
     int insert(RestStarDTO restaurantDTO);
     int update(RestStarDTO restaurantDTO);
     int delete(int trst_seq);
+    int delete(RestStarDTO restStarDTO);
 }

@@ -49,4 +49,8 @@ public class RestStarServiceImpl implements RestStarService {
         return restStarRepository.delete(trst_seq);
     }
 
+    @Override
+    public int delete(RestStarDTO restStarDTO) {
+        return restStarRepository.delete(restStarDTO);
+    }
 }

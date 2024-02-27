@@ -13,5 +13,7 @@ public interface RestStarService {
     int insert(RestStarDTO restStarDTO);
     int update(RestStarDTO restStarDTO);
     int delete(int trst_seq);
+    int delete(RestStarDTO restStarDTO);
+
 
 }

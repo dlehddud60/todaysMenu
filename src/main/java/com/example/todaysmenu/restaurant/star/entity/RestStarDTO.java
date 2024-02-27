@@ -11,6 +11,10 @@ public class RestStarDTO {
     private String row_num;
 
     private int trst_seq;
+    private int trt_seq;
+    private int trmt_seq;
+
+
     private String trst_parent_seq;
     private String trst_parent_type;
     private String trst_star_score;

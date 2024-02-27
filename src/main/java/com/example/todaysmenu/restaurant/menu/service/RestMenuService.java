@@ -13,5 +13,7 @@ public interface RestMenuService {
     int insert(RestMenuDTO restaurantDTO);
     int update(RestMenuDTO restaurantDTO);
     int delete(int trmt_seq);
+    int parentDel(int trt_seq);
+
 
 }

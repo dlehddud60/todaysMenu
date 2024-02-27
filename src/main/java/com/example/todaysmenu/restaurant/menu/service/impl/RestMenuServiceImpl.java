@@ -52,4 +52,10 @@ public class RestMenuServiceImpl implements RestMenuService {
     public int delete(int trmt_seq) {
         return restMenuRepository.delete(trmt_seq);
     }
+
+    @Override
+    public int parentDel(int trt_seq) {
+        return restMenuRepository.parentDel(trt_seq);
+
+    }
 }
