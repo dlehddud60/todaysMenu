@@ -221,6 +221,7 @@
                                 ,		T1.TRMT_MENU_NAME
                                 ,		T1.TRMT_PRICE_COMMA
                                 ,		T1.TRT_REST_NAME
+                                ,       T1.TRT_ADDR
                                 ,		 NVL((
                                                 SELECT TRST.TRST_STAR_SCORE
                                                 FROM   TM_REST_STAR_TBL TRST

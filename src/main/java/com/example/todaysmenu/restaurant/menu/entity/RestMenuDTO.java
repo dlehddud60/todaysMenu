@@ -60,6 +60,7 @@ public class RestMenuDTO {
     private String trt_addr;
     private String trt_food_type;
 
+
 //  별점 테이블 데이터
     private String trst_star_score;
     private String trst_seq;
