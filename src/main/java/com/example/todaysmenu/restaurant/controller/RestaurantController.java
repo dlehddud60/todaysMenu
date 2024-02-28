@@ -52,10 +52,14 @@ public class RestaurantController {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         RestaurantDTO restaurantDTO;
+        RestaurantDTO restaurantDTOInfo = new RestaurantDTO();
+        RestMenuDTO restMenuDTO = new RestMenuDTO();
         String memberWriter;
         String restaurant;
         try{
-            restaurantDTO = restaurantService.info(trt_seq);
+            restaurantDTOInfo.setTmt_login_id(memberSession.getTmt_login_id());
+            restaurantDTOInfo.setTrt_seq(trt_seq);
+            restaurantDTO = restaurantService.info(restaurantDTOInfo);
             memberWriter = memberSession.getTmt_memb_name();
             restaurant = restaurantDTO.getTrt_input_nm();
         } catch (NullPointerException e) {
@@ -74,10 +78,11 @@ public class RestaurantController {
             return redirect("restaurant/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
         }
         if(trt_seq != null){
-            model.addAttribute("info",restaurantService.info(trt_seq));
-            model.addAttribute("menuList",restaurantService.info(trt_seq));
+            restMenuDTO.setTrt_seq(trt_seq);
+            model.addAttribute("info",restaurantService.info(restaurantDTOInfo));
+            model.addAttribute("menuList",restaurantService.info(restaurantDTOInfo));
 
-            model.addAttribute("rentMenuList", restMenuService.rentMenuList(trt_seq));
+            model.addAttribute("rentMenuList", restMenuService.rentMenuList(restMenuDTO));
             return "restaurant/update";
         }else{
             return "restaurant/write";
@@ -101,15 +106,19 @@ public class RestaurantController {
         restaurantDTO.setTrt_moder_nm(memberSession.getTmt_memb_name());
         restaurantDTO.setTrt_moder_id(memberSession.getTmt_login_id());
         restaurantDTO.setTrt_moder_ip(request.getRemoteAddr());
-
+        log.info("=============procTrt_seq=============={}",trt_seq);
         if(trt_seq == 0){
            int dataSeq =  restaurantService.insert(restaurantDTO);
             restInsertMeth(restaurantDTO, restMenuDTO, request, memberSession);
             return redirect("restaurant/index.do",rttr,"성공 메세지","게시글 작성을 완료하였습니다.",SUCCESS);
         }else{
-            int dataSeq = restaurantDTO.getTrt_seq();
+//            int dataSeq = restaurantDTO.getTrt_seq();
             String memberWriter = memberSession.getTmt_memb_name();
-            RestaurantDTO restaurantInfo = restaurantService.info(dataSeq);
+            RestaurantDTO restaurantDTOInfo = new RestaurantDTO();
+            restaurantDTOInfo.setTmt_login_id(memberSession.getTmt_login_id());
+            restaurantDTOInfo.setTrt_seq(trt_seq);
+
+            restaurantService.info(restaurantDTOInfo);
             String restInputNm = restaurantDTO.getTrt_input_nm();
             if(memberWriter.equals(restInputNm)){
                 restaurantService.update(restaurantDTO);
@@ -133,11 +142,13 @@ public class RestaurantController {
         }catch (NullPointerException e) {
             return redirect("",rttr,"실패 메세지","비로그인 유저는 진입하실 수 없습니다.",DANGER);
         }
+        RestMenuDTO restMenuDTO = new RestMenuDTO();
         int trt_seq = restaurantDTO.getTrt_seq();
+        restMenuDTO.setTrt_seq(trt_seq);
         restaurantService.updateCount(trt_seq);
-        log.info("==========restaurantDTO=========={}",restaurantDTO);
+//        log.info("==========restaurantDTO=========={}",restaㅌurantDTO);
         model.addAttribute("info", restaurantService.info(restaurantDTO));
-        model.addAttribute("rentMenuList", restMenuService.rentMenuList(trt_seq));
+        model.addAttribute("rentMenuList", restMenuService.rentMenuList(restMenuDTO));
         return "restaurant/view";
     }
 
@@ -163,7 +174,9 @@ public class RestaurantController {
             int dataSeq = restaurantService.delete(trt_seq); //식당 부모 게시글 삭제1
             restStarService.delete(restStarDTO);  //식당을 부모로 갖는 별점 삭제
             if(dataSeq == 1) {
-                List<RestMenuDTO> restMenuDTO = restMenuService.rentMenuList(trt_seq); //식당seq를 부모키로 갖는 메뉴리스트들 조회
+                RestMenuDTO dataRestMenuDTO = new RestMenuDTO();
+                dataRestMenuDTO.setTrt_seq(trt_seq);
+                List<RestMenuDTO> restMenuDTO = restMenuService.rentMenuList(dataRestMenuDTO); //식당seq를 부모키로 갖는 메뉴리스트들 조회
                 for (RestMenuDTO menuDTO : restMenuDTO) {
                     int trmt_seq_Arr = menuDTO.getTrmt_seq();
                     int menuDelResult = restMenuService.delete(trmt_seq_Arr); // for문으로 메뉴 리스트 삭제
@@ -222,23 +235,7 @@ public class RestaurantController {
         List<String> insert = restMenuDTO.getTrmt_menu_nameArr();
         List<String> update = restMenuDTO.getTrmt_menu_nameArrUpdate();
         List<Integer> delete = restMenuDTO.getTrmt_seqArrDelete();
-        if(insert != null) {
-            for (int i = 0; i < insert.size(); i++) {
-                restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArr().get(i)); ;
-                restMenuDTO.setTrmt_price(restMenuDTO.getTrmt_priceArr().get(i)); ;
-                restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArr().get(i)); ;
-                restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
-                restMenuDTO.setTrmt_input_ty(memberSession.getTmt_user_type());
-                restMenuDTO.setTrmt_input_nm(memberSession.getTmt_memb_name());
-                restMenuDTO.setTrmt_input_id(memberSession.getTmt_login_id());
-                restMenuDTO.setTrmt_input_ip(request.getRemoteAddr());
-                restMenuDTO.setTrmt_moder_ty(memberSession.getTmt_user_type());
-                restMenuDTO.setTrmt_moder_nm(memberSession.getTmt_memb_name());
-                restMenuDTO.setTrmt_moder_id(memberSession.getTmt_login_id());
-                restMenuDTO.setTrmt_moder_ip(request.getRemoteAddr());
-            restMenuService.insert(restMenuDTO);
-            }
-        }
+
         if(update != null) {
             for (int i = 0; i < update.size(); i++) {
                 restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArrUpdate().get(i));
@@ -258,6 +255,23 @@ public class RestaurantController {
                  restMenuDTO.setTrmt_seq(delete.get(i));
                  int deleteSeq = restMenuDTO.getTrmt_seq();
             restMenuService.delete(deleteSeq);
+            }
+        }
+        if(insert != null) {
+            for (int i = 0; i < insert.size(); i++) {
+                restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArr().get(i)); ;
+                restMenuDTO.setTrmt_price(restMenuDTO.getTrmt_priceArr().get(i)); ;
+                restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArr().get(i)); ;
+                restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
+                restMenuDTO.setTrmt_input_ty(memberSession.getTmt_user_type());
+                restMenuDTO.setTrmt_input_nm(memberSession.getTmt_memb_name());
+                restMenuDTO.setTrmt_input_id(memberSession.getTmt_login_id());
+                restMenuDTO.setTrmt_input_ip(request.getRemoteAddr());
+                restMenuDTO.setTrmt_moder_ty(memberSession.getTmt_user_type());
+                restMenuDTO.setTrmt_moder_nm(memberSession.getTmt_memb_name());
+                restMenuDTO.setTrmt_moder_id(memberSession.getTmt_login_id());
+                restMenuDTO.setTrmt_moder_ip(request.getRemoteAddr());
+                restMenuService.insert(restMenuDTO);
             }
         }
 

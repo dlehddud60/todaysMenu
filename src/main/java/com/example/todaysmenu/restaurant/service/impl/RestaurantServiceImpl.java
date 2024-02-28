@@ -33,7 +33,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
     @Override
     public RestaurantDTO info(int trt_seq) {
-        return restaurantRepository.info(trt_seq);
+         return restaurantRepository.info(trt_seq);
     }
 
     @Override

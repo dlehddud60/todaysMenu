@@ -1,4 +1,4 @@
-<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<div th:insert="~{include/Header.html}" th:remove="tag"></div>
 <style>
     body{
         height: 100%;
@@ -159,7 +159,7 @@
 
     </div>
     <div class="procBtnArea">
-        <div th:replace="~{/include/modal/procModal::globalProcBtn(null,restaurant)}"></div>
+        <div th:replace="~{include/modal/procModal::globalProcBtn(null,restaurant)}"></div>
     </div>
 
 
@@ -192,6 +192,6 @@
         </tr>
     </table>
 </div>
-<div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+<div th:insert="~{include/footter.html}" th:remove="tag"></div>
 
 

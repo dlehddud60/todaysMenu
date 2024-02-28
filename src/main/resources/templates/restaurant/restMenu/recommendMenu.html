@@ -1,18 +1,32 @@
-<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<div th:insert="~{include/Header.html}" th:remove="tag"></div>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d7c247130688fc47e72341dd6fa5081c"></script>
 <script>
     let recomNum = [[${param.recomNum}]]
+
 $(function () {
-    let restAddress = "[[${recommendMenu.trt_addr}]]"
+    let trmtSeq = "[[${recommendMenu?.trmt_seq}]]"
+    let trtSeq = "[[${recommendMenu?.trt_seq}]]"
+    let restAddress = "[[${recommendMenu?.trt_addr}]]"
     $(".nextBtn").on("click",function () {
-        recomNum += 1;
         $("input[name=recomNum]").val(recomNum);
+        $("#frmList").append("<input type=\"hidden\" name=\"trmt_seqArr\" value='"+trmtSeq+"'>")
+
+        // $("input[name=trmt_seq]").val(trmtSeq);
+        $("#frmList").submit();
+    })
+    $(".restExcept").on("click",function () {
+        $("input[name=recomNum]").val(recomNum);
+        $("#frmList").append("<input type=\"text\" name=\"trt_seqArr\" value='"+trtSeq+"'>")
+
+        // $("input[name=trmt_seq]").val(trmtSeq);
         $("#frmList").submit();
     })
     $(".resetBtn").on("click",function () {
+        console.log("gdgd")
         recomNum = 1;
         $("input[name=recomNum]").val(recomNum);
-        $("#frmList").submit();
+        location.replace('/restMenu/recommendMenu.do?recomNum=1');
+
     })
     $.ajax({
         url : "https://dapi.kakao.com/v2/local/search/address.json",
@@ -22,7 +36,9 @@ $(function () {
         dataType : "json",
         success : mapView,
         error : function () {
-            modalMess("실패 메시지", "위치를 불러오는데 실패하였습니다.", "danger");
+            if([[${not #strings.isEmpty(recommendMenu?.trmt_seq)}]]) {
+                modalMess("실패 메시지", "위치를 불러오는데 실패하였습니다.", "danger");
+            }
         }
 
 
@@ -63,7 +79,7 @@ $(function () {
         marker.setMap(map);
 
         // 마커를 클릭했을 때 마커 위에 표시할 인포윈도우를 생성합니다
-        var iwContent = '<div style="padding:5px;">[[${recommendMenu.trt_rest_name}]]</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+        var iwContent = '<div style="padding:5px;">[[${recommendMenu?.trt_rest_name}]]</div>', // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
             iwRemoveable = true; // removeable 속성을 ture 로 설정하면 인포윈도우를 닫을 수 있는 x버튼이 표시됩니다
 
         // 인포윈도우를 생성합니다
@@ -116,11 +132,15 @@ $(function () {
     #midTitle {
         font-size: 2rem;
     }
+    .parentBtnArea {
+        position: relative;
+        width: 100%; height: 50px;
+    }
     .moveArea {
         position: absolute;
-        right: 10px; display: flex;
+        right: 1px; display: flex;
     }
-    .nextBtn, .resetBtn{
+    .nextBtn, .resetBtn, .restExcept{
         width: 100px; height: 40px;
         font-size: 1.2rem;
         border-radius: 10px;
@@ -129,6 +149,7 @@ $(function () {
         color: white;
         cursor: pointer;
         transition: all 0.5s;
+        margin-left: 10px;
 
     }
     .nextBtn {
@@ -137,20 +158,49 @@ $(function () {
     .nextBtn:hover {
         background: #55a9ff;
     }
+    .restExcept {
+        background: #fffc6a;
+        color: black;
+
+    }
+    .restExcept:hover {
+        background: #fffdd3;
+    }
     .resetBtn {
         background: #fc5069;
     }
     .resetBtn:hover {
         background: #ff9cad;
     }
+    .subMenuText {
+        font-size: 2rem;
+    }
 </style>
 <form method="get" id="frmList">
+    <input type="text" name="trt_seq" th:value="${recommendMenu?.trt_seq}">
+    <th:block th:each="list : ${param?.trmt_seqArr}">
+        <input type="hidden" name="trmt_seqArr" th:value="${list}">
+    </th:block>
+    <th:block th:each="list : ${param?.trt_seqArr}">
+        <input type="text" name="trt_seqArr" th:value="${list}">
+    </th:block>
     <input type="hidden" name="recomNum">
     <div class="form-group">
         <div class="container pt-5 recommendArea">
             <p id="title">오늘의 메뉴 추천</p>
-            <p id ="midTitle">오늘의 [[${param.recomNum}]]번째 추천 메뉴</p>
             <th:block th:if="${not #strings.isEmpty(recommendMenu)}">
+                <div class="exeptArea">
+                    <span th:if="${not #lists.isEmpty(exceptMenuList)}">추천받아본 메뉴 : </span>
+                    <th:block th:each="list : ${exceptMenuList} ">
+                        <span>[</span>
+                        <span th:text="${list.menu_row_num}"></span>
+                        . <span th:text="${list.trmt_menu_name}"></span>
+                        <span>]</span>&nbsp;
+                    </th:block>
+                </div>
+                <p id ="midTitle">오늘의 추천 메뉴는[<span style="color: #fc5069">[[${recommendMenu?.trt_rest_name}]]</span>] 의 [<span style="color: deepskyblue">[[${recommendMenu?.trmt_menu_name}]]</span>] 입니다!!!</p>
+
+
                 <table class="table table-hover">
                     <thead>
 
@@ -166,16 +216,58 @@ $(function () {
                     </thead>
                     <tbody>
                         <tr class="table-light">
-                            <td th:text="${recommendMenu.trmt_menu_name}"></td>
-                            <td th:text="${recommendMenu.trt_rest_name}"></td>
-                            <td th:text="${recommendMenu.trmt_price_comma}"></td>
-                            <td th:text="${recommendMenu.trst_star_score}"></td>
-                            <td th:text="${recommendMenu.trst_menu_avg_score}"></td>
-                            <td th:text="${recommendMenu.trst_rest_avg_score}"></td>
-                            <td th:text="${recommendMenu.trst_today_ymd}"></td>
+
+                            <td th:text="${recommendMenu?.trmt_menu_name}"></td>
+                            <td th:text="${recommendMenu?.trt_rest_name}"></td>
+                            <td th:text="${recommendMenu?.trmt_price_comma}"></td>
+                            <td th:text="${recommendMenu?.trst_star_score}"></td>
+                            <td th:text="${recommendMenu?.trst_menu_avg_score}"></td>
+                            <td th:text="${recommendMenu?.trst_rest_avg_score}"></td>
+                            <td th:text="${recommendMenu?.trst_today_ymd}"></td>
 
 
                         </tr>
+                    </tbody>
+                </table>
+
+                <div class="parentBtnArea">
+                    <div class="moveArea">
+                        <div class="resetBtn" th:text="리셋"></div>
+                        <div class="restExcept" th:text="식당제외"></div>
+                        <div class="nextBtn" th:text="다음추천"></div>
+                    </div>
+                </div>
+
+                <th:block th:if="${not #lists.isEmpty(recommendMenuAllList)}">
+                <table class="table table-hover">
+                    <thead>
+
+                    <tr class="table-active">
+                        <th scope="col">서브메뉴</th>
+                        <th scope="col">식당이름</th>
+                        <th scope="col">가격</th>
+                        <th scope="col">나의 메뉴 별점</th>
+                        <th scope="col">평균 메뉴 별점</th>
+                        <th scope="col">평균 식당 별점</th>
+                        <th scope="col">최근 먹은 일자</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <p class="subMenuText">추천메뉴의 식당메뉴</p>
+                        <th:block th:each="list : ${recommendMenuAllList}">
+                            <tr class="table-light">
+
+                                <td th:text="${list.trmt_menu_name}"></td>
+                                <td th:text="${list.trt_rest_name}"></td>
+                                <td th:text="${list.trmt_price_comma}"></td>
+                                <td th:text="${list.trst_star_score}"></td>
+                                <td th:text="${list.trst_menu_avg_score }"></td>
+                                <td th:text="${list.trst_rest_avg_score}"></td>
+                                <td th:text="${list.trst_today_ymd}"></td>
+                            </tr>
+                        </th:block>
+                    </th:block>
                     </tbody>
                 </table>
 
@@ -185,11 +277,8 @@ $(function () {
                 추천할 메뉴가 없습니다.
             </th:block>
 
-            <div class="moveArea">
-                <div class="resetBtn">리셋</div>
-                <div class="nextBtn" th:text="다음추천"></div>
-            </div>
+
         </div>
     </div>
 </form>
-<div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+<div th:insert="~{include/footter.html}" th:remove="tag"></div>

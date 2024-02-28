@@ -1,4 +1,4 @@
-<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<div th:insert="~{include/Header.html}" th:remove="tag"></div>
 <form method="post" action="/board/proc.do">
     <input type="hidden" name="tfb_seq" th:value="${info.tfb_seq}">
     <input type="hidden" name="pageNum" th:value="${param.pageNum}">
@@ -15,9 +15,9 @@
                       th:text="${info.tfb_text}"></textarea>
         </div>
         <br>
-        <div th:replace="~{/include/modal/procModal::globalProcBtn(${info.tfb_seq},board)}"></div>
+        <div th:replace="~{include/modal/procModal::globalProcBtn(${info.tfb_seq},board)}"></div>
     </div>
 </form>
-<div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+<div th:insert="~{include/footter.html}" th:remove="tag"></div>
 
 

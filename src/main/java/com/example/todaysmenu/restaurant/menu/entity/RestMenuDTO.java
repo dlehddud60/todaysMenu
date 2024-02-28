@@ -13,10 +13,12 @@ public class RestMenuDTO {
 
 //  메뉴테이블 데이터
     private int trmt_seq;
+    private int menu_row_num;
     private int trt_seq;
     private String row_num;
     private String trmt_price_comma;
-//    메뉴 리스트 같은 name값을 가진 객체들을 배열로 받기 위한 필드
+    private List<Integer> trt_seqArr; //시퀀스를 배열로 받기 위함
+    //    메뉴 리스트 같은 name값을 가진 객체들을 배열로 받기 위한 필드
     private List<Integer> trmt_priceArr;
     private List<String> trmt_menu_nameArr;
     private List<String> trmt_menu_textArr;

@@ -1,4 +1,4 @@
-<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<div th:insert="~{include/Header.html}" th:remove="tag"></div>
 
 <script>
     $(document).ready(function () {
@@ -161,9 +161,9 @@
                 </tbody>
             </table>
             <br>
-            <div th:replace="~{/include/pagination/pageMain::globalPagingSet(memberList)}"></div>
+            <div th:replace="~{include/pagination/pageMain::globalPagingSet(memberList)}"></div>
 
         </div>
     </div>
 </form>
-<div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+<div th:insert="~{include/footter.html}" th:remove="tag"></div>

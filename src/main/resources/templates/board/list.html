@@ -1,4 +1,4 @@
-<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<div th:insert="~{include/Header.html}" th:remove="tag"></div>
 <script>
     $(document).ready(function () {
         $("#frmList").attr("action", "");
@@ -89,11 +89,11 @@
                 </tbody>
             </table>
             <br>
-            <div th:replace="~{/include/pagination/pageMain::globalPagingSet(list)}"></div>
+            <div th:replace="~{include/pagination/pageMain::globalPagingSet(list)}"></div>
 
             <a class="btn btn-success" href="/board/write.do" role="button" style="float:right;">등록</a>
-            <div th:replace="~{/include/modal/delChkModal::globalChkBtn(board)}" th:remove="tag"></div>
+            <div th:replace="~{include/modal/delChkModal::globalChkBtn(board)}" th:remove="tag"></div>
         </div>
     </div>
 </form>
-<div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+<div th:insert="~{include/footter.html}" th:remove="tag"></div>

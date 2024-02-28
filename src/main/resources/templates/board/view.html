@@ -1,4 +1,4 @@
-<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<div th:insert="~{include/Header.html}" th:remove="tag"></div>
 <form method="get">
     <div class="container mt-3">
         <h2>자유게시판</h2>
@@ -22,10 +22,10 @@
             </tr>
             </tbody>
         </table>
-        <a class="btn btn-success" th:href="@{/board/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
-        <a class="btn btn-info" th:href="@{/board/write.do(tfb_seq = ${info.tfb_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>
-        <div th:replace="~{/include/modal/deleteModal::globalDel(board,tfb_seq,${info.tfb_seq})}"></div>
+        <a class="btn btn-success" th:href="@{board/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
+        <a class="btn btn-info" th:href="@{board/write.do(tfb_seq = ${info.tfb_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>
+        <div th:replace="~{include/modal/deleteModal::globalDel(board,tfb_seq,${info.tfb_seq})}"></div>
 
     </div>
 </form>
-<div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+<div th:insert="~{include/footter.html}" th:remove="tag"></div>

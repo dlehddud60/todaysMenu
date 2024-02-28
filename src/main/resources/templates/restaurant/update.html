@@ -1,4 +1,4 @@
-<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<div th:insert="~{include/Header.html}" th:remove="tag"></div>
 <style>
     body{
         height: 100%;
@@ -211,7 +211,7 @@
                     <tr>
                         <td>
                             <input type="text" class="form-control" placeholder="메뉴" name="trmt_menu_nameArr" th:value="${list.trmt_menu_name}">
-                            <input type="text" class="form-control" name="trmt_seq" th:value="${list.trmt_seq}">
+                            <input type="hidden" class="form-control" name="trmt_seq" th:value="${list.trmt_seq}">
 
                         </td>
                         <td>
@@ -265,6 +265,6 @@
         </tr>
     </table>
 </div>
-<div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+<div th:insert="~{include/footter.html}" th:remove="tag"></div>
 
 

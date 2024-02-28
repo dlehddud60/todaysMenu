@@ -1,4 +1,4 @@
-<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<div th:insert="~{include/Header.html}" th:remove="tag"></div>
 <div class="container mt-3">
     <form id="frm" method="post" action="/imageUpdate.do" enctype="multipart/form-data">
         <input type="hidden" id="tmt_seq" name="tmt_seq"
@@ -17,5 +17,5 @@
         <button type="submit" class="btn btn-success" th:text="등록"></button>
     </form>
 </div>
-<div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+<div th:insert="~{include/footter.html}" th:remove="tag"></div>
 

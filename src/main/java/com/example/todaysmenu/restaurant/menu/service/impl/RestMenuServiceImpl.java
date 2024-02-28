@@ -10,10 +10,12 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
@@ -25,6 +27,7 @@ public class RestMenuServiceImpl implements RestMenuService {
 
     @Autowired
     RestMenuRepository restMenuRepository;
+    List<Integer> exceptSeq = new ArrayList<>();
 
 
     @Override
@@ -33,8 +36,8 @@ public class RestMenuServiceImpl implements RestMenuService {
     }
 
     @Override
-    public List<RestMenuDTO> list() {
-        return restMenuRepository.list();
+    public List<RestMenuDTO> list(RestMenuDTO restMenuDTO) {
+        return restMenuRepository.list(restMenuDTO);
     }
 
     @Override
@@ -45,6 +48,13 @@ public class RestMenuServiceImpl implements RestMenuService {
     @Override
     public List<RestMenuDTO> rentMenuList(int trt_seq) {
         return restMenuRepository.rentMenuList(trt_seq);
+    }
+
+    @Override
+    public List<RestMenuDTO> rentMenuList(RestMenuDTO restMenuDTO) {
+        log.info("=============rentMenuListRestMenuDTO==============={}",restMenuDTO.getTrmt_seqArr());
+
+        return restMenuRepository.rentMenuList(restMenuDTO);
     }
 
     @Override
@@ -72,7 +82,15 @@ public class RestMenuServiceImpl implements RestMenuService {
     public RestMenuDTO userRecommendMenu(RestMenuDTO restMenuDTO, HttpServletRequest request, RedirectAttributes rttr) {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-            restMenuDTO.setTmt_login_id(memberSession.getTmt_login_id());
+        restMenuDTO.setTmt_login_id(memberSession.getTmt_login_id());
+
+        log.info("=============getTrmt_seqArr==============={}",restMenuDTO.getTrmt_seqArr());
+        log.info("=============getTrt_seqArr==============={}",restMenuDTO.getTrt_seqArr());
         return restMenuRepository.userRecommendMenu(restMenuDTO);
+    }
+
+    @Override
+    public RestMenuDTO userRecommendMenu(RestMenuDTO restMenuDTO, HttpServletRequest request, RedirectAttributes rttr,Model model) {
+        return null;
     }
 }

@@ -1,4 +1,4 @@
-<div th:insert="~{/include/Header.html}" th:remove="tag"></div>
+<div th:insert="~{include/Header.html}" th:remove="tag"></div>
 <script th:inline="javascript">
     let duplicateCheckResult = 0;
     $(document).ready(function () {
@@ -179,5 +179,5 @@
         <button type="button" class="btn btn-success"  onclick="ageChk();" th:text="${session.memberDTO == null} ? '회원가입' : '정보수정' "></button>
     </form>
 </div>
-<div th:insert="~{/include/footter.html}" th:remove="tag"></div>
+<div th:insert="~{include/footter.html}" th:remove="tag"></div>
 

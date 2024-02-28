@@ -12,9 +12,15 @@ spring:
       enabled: true
   freemarker:
     cache: false
+#  servlet:
+#    multipart:
+#      enabled: false
+#
+#server:
+#  tomcat:
+#    max-swallow-size: 1
 
-
-#  datasource:
+  #  datasource:
 ##      url: jdbc:log4jdbc:oracle:thin:@ar89k9o2gxhgfodr_high?TNS_ADMIN=/Users/leedongyoung/opt/OracleCloudWallet/WVFX
 #      url: jdbc:oracle:thin:@192.168.64.2:1521:xe
 #      username: TODAY
@@ -45,6 +51,9 @@ spring:
         data-source-j-n-d-i: jdbc/HikariCP
         minimum-idle: 2
         idle-timeout: 10000
+  servlet:
+    multipart:
+      max-file-size: 10MB
 
 #driver-class-name: oracle.jdbc.OracleDriver
 #  url: jdbc:oracle:thin:@112.65.186.215:1521:testname
@@ -54,4 +63,5 @@ mybatis:
   configuration:
     cache-enabled: false
     jdbc-type-for-null: NULL
+
 

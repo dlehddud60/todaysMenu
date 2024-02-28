@@ -1,16 +1,16 @@
 CREATE TABLE TM_FREE_BOARD
 (       TFB_SEQ         NUMBER(10) NOT NULL
-,       TFB_TITLE_NM    VARCHAR2(300)
-,       TFB_TEXT        VARCHAR2(4000)
-,       TFB_INPUT_TY    VARCHAR2(300)
-,       TFB_INPUT_NM    VARCHAR2(300)
-,       TFB_INPUT_DT    DATE
-,       TFB_INPUT_IP    VARCHAR2(300)
-,       TFB_MODER_TY    VARCHAR2(300)
-,       TFB_MODER_NM    VARCHAR2(300)
-,       TFB_MODER_DT    DATE
-,       TFB_MODER_IP    VARCHAR2(300)
-,       PRIMARY KEY(TFB_SEQ)
+    ,       TFB_TITLE_NM    VARCHAR2(300)
+    ,       TFB_TEXT        VARCHAR2(4000)
+    ,       TFB_INPUT_TY    VARCHAR2(300)
+    ,       TFB_INPUT_NM    VARCHAR2(300)
+    ,       TFB_INPUT_DT    DATE
+    ,       TFB_INPUT_IP    VARCHAR2(300)
+    ,       TFB_MODER_TY    VARCHAR2(300)
+    ,       TFB_MODER_NM    VARCHAR2(300)
+    ,       TFB_MODER_DT    DATE
+    ,       TFB_MODER_IP    VARCHAR2(300)
+    ,       PRIMARY KEY(TFB_SEQ)
 );
 
 
