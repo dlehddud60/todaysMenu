@@ -11,15 +11,10 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
-import static com.example.todaysmenu.board.common.modal.ComModal.redirect;
 
 @Service
 @Log4j2

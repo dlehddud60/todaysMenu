@@ -57,6 +57,13 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
       <th:block th:unless="${session.memberDTO == null}">
         <ul class="nav navbar-nav navbar-right">
           <li ><a class="nav-link" href="#"><span class="nav-item" th:text="${session.memberDTO.tmt_memb_name}"></span>님 반갑습니다.</a></li>
+          <li>
+            <th:block th:if="${not #strings.isEmpty(memFile)}">
+              <img th:src="@{|/upload/${memFile.tmft_change_fine_name}|}" style="width: 40px; height: 40px; border-radius: 100%" alt="">
+            </th:block>
+            <th:block th:if="${#strings.isEmpty(memFile)}">
+              <img th:src="@{/img/티모.png}" style="width: 40px; height: 40px; border-radius: 100%" alt="">
+            </th:block>
           <li th:if="${session.memberDTO.tmt_user_type} == 'master'"><a class="nav-link" href="/memberList.do"><span class="nav-item"></span>회원관리</a></li>
           <li><a class="nav-link" href="/updateLogin.do"><span class="nav-item"></span>회원정보수정</a></li>
           <li><a class="nav-link" href="/imageForm.do"><span class="nav-item"></span>프로필사진등록</a></li>

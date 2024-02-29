@@ -20,7 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
-import static com.example.todaysmenu.board.common.modal.ComModal.*;
+import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.*;
 
 
 @Log4j2

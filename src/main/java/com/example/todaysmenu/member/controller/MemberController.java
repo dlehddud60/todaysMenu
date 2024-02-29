@@ -8,11 +8,8 @@ import com.example.todaysmenu.member.repository.MemberRepository;
 import com.example.todaysmenu.member.service.MemberService;
 
 
-import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,11 +17,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-
-import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
-import static com.example.todaysmenu.board.common.modal.ComModal.SUCCESS;
-import static com.example.todaysmenu.board.common.modal.ComModal.redirect;
+import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.DANGER;
+import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.SUCCESS;
+import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.redirect;
 
 @Controller
 @Log4j2
@@ -91,7 +86,12 @@ public class MemberController {
         return login;
     }
     @RequestMapping("/imageForm.do")
-    public String imageForm() {
+    public String imageForm(HttpServletRequest request, RedirectAttributes rttr) {
+        HttpSession session = request.getSession();
+        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        if(memberSession == null) {
+            return redirect("",rttr,"실패 메시지","로그인을 해주시길 바랍니다.", DANGER);
+        }
         return "member/imageForm";
     }
 
@@ -125,12 +125,16 @@ public class MemberController {
 
     @RequestMapping("/imageUpdate.do")
     public String memImageUpdate(@ModelAttribute MemFileDTO memFileDTO,HttpServletRequest request, RedirectAttributes rttr) {
-        log.info("==============imageUpdate============");
-        try{
 
+        log.info("==============imageUpdate============");
+
+
+        try{
             memberService.memImageUpdate(memFileDTO,request);
-        }catch (Exception e) {
-            return redirect("/imageForm.do",rttr,"실패 메시지","파일첨부를 실패하였습니다.", DANGER);
+
+        }catch (NullPointerException e) {
+            return redirect("/imageForm.do",rttr,"실패 메시지","파일첨부를 하지 않았습니다.", DANGER);
+
 
         }
 

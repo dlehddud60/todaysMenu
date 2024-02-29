@@ -25,20 +25,6 @@ public class MainController {
 
     @GetMapping("/")
     public String home(HttpServletRequest request,Model model) {
-        HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-        String userIp = request.getRemoteAddr();
-        log.info("USER_IP{}",userIp);
-        log.info("======memberSession======={}",memberSession);
-        try{
-        int memberSeq = Integer.parseInt(memberSession.getTmt_seq());
-        model.addAttribute("memFile",fileRepository.list(memberSeq));
-        }catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
-//
         return "home";
     }
-
 }

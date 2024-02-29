@@ -31,8 +31,18 @@
         ,       TMFT.TMFT_MODER_IP
         ,       TO_CHAR(TMFT.TMFT_MODER_DT,'YYYY-MM-dd') AS TMFT_MODER_DT
         FROM    TM_MEM_FILE_TBL TMFT
-        WHERE   TMFT_PARENT_SEQ = ${tmt_seq}
+        WHERE   1 = 1
+        <choose>
+            <when test="tmt_seq > 0">
+                AND     TMFT_PARENT_SEQ = ${tmt_seq}
+            </when>
+            <when test="tmft_seq > 0">
+                AND     TMFT_SEQ = ${tmft_seq}
+            </when>
+        </choose>
     </select>
+
+
 
 
 
@@ -71,9 +81,9 @@
         ,		TMFT_MODER_ID 	              =         #{tmft_moder_id}
         ,		TMFT_MODER_IP	              =         #{tmft_moder_ip}
         ,		TMFT_MODER_DT	              =         SYSDATE
-        ,       TMFT_PARENT_SEQ               =         #{tmft_rest_name}
-        ,       TMFT_ORIGIN_FILE_NAME         =         #{tmft_regi}
-        ,       TMFT_CHANGE_FINE_NAME         =         #{tmft_addr}
+        ,       TMFT_PARENT_SEQ               =         #{tmft_parent_seq}
+        ,       TMFT_ORIGIN_FILE_NAME         =         #{tmft_origin_file_name}
+        ,       TMFT_CHANGE_FINE_NAME         =         #{tmft_change_fine_name}
         WHERE	TMFT_SEQ			          =         #{tmft_seq}
     </update>
 

@@ -1,6 +1,5 @@
 package com.example.todaysmenu.member.service.impl;
 
-import com.example.todaysmenu.board.entity.BoardDTO;
 import com.example.todaysmenu.member.entity.file.MemFileDTO;
 import com.example.todaysmenu.member.repository.file.MemFileRepository;
 import com.example.todaysmenu.pagination.entity.Criteria;
@@ -21,9 +20,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.regex.*;
 
-import static com.example.todaysmenu.board.common.modal.ComModal.DANGER;
-import static com.example.todaysmenu.board.common.modal.ComModal.SUCCESS;
-import static com.example.todaysmenu.board.common.modal.ComModal.redirect;
+import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.DANGER;
+import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.SUCCESS;
+import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.redirect;
 
 @Service
 @Log4j2
@@ -198,6 +197,7 @@ public class MemberServiceImpl implements MemberService {
         memFileDTO.setTmft_input_nm(memberSession.getTmt_memb_name());
         memFileDTO.setTmft_input_id(memberSession.getTmt_login_id());
         memFileDTO.setTmft_input_ip(request.getRemoteAddr());
+        int dataSeq = memFileDTO.getTmft_seq();
 
 
         // 파일만 따로 가져오기
@@ -216,14 +216,41 @@ public class MemberServiceImpl implements MemberService {
         memFileDTO.setTmft_parent_seq(Integer.parseInt( memberSession.getTmt_seq()));
         log.info("===============memFileDTO==============={}",memFileDTO);
         // 파일 저장용 폴더에 파일 저장 처리
-        String savePath = "/Users/leedongyoung/app/2023/workspace/todaysMenu/src/main/resources/static/upload/" + storedFileName; // mac
+        String savePath = "/Users/leedongyoung/app/2023/workspace/todaysMenu/src/main/resources/static/upload/";
+        //새로 업로드된 이미지(new 1.png), 현재 DB에 있는 이미지(old 4.png)
+        log.info("=================dataSeq================={}",dataSeq);
+        MemFileDTO dataSeqDTO = new MemFileDTO();
+        dataSeqDTO.setTmft_seq(dataSeq);
+
+        if(dataSeq > 0) {
+            String oldFileName = memFileRepository.list(dataSeqDTO).getTmft_change_fine_name();
+            log.info("=========oldFileName========={}",oldFileName);
+            File oldFile = new File(savePath + "/" + oldFileName);
+            if (oldFile.exists()) {
+                oldFile.delete();
+            }
+        }
+
+
+
         try {
-            boardFile.transferTo(new File(savePath));
+            boardFile.transferTo(new File(savePath+storedFileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     // board_file_table 저장 처리
-        memFileRepository.insert(memFileDTO);
+        log.info("==============dataSeq============={}",dataSeq);
+        if(dataSeq == 0) {
+            memFileRepository.insert(memFileDTO);
+        }else {
+            log.info("==============update============={}",dataSeq);
+            memFileDTO.setTmft_moder_ty(memberSession.getTmt_user_type());
+            memFileDTO.setTmft_moder_nm(memberSession.getTmt_memb_name());
+            memFileDTO.setTmft_moder_id(memberSession.getTmt_login_id());
+            memFileDTO.setTmft_moder_ip(request.getRemoteAddr());
+            memFileRepository.update(memFileDTO);
+
+        }
     }
 }
 

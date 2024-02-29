@@ -1,12 +1,18 @@
 package com.example.todaysmenu.member.entity.file;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
-
-@ToString
 @Data
 public class MemFileDTO {
+
+    public MemFileDTO() {
+    }
+
+    public MemFileDTO(int tmt_seq) {
+        this.tmt_seq = tmt_seq;
+    }
 
     private int tmt_seq;
     private int tmft_seq;

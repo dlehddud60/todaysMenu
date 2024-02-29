@@ -11,7 +11,9 @@ import java.util.List;
 @Mapper
 public interface MemFileRepository {
     int count(Criteria cri);
-      MemFileDTO list(int tmt_seq);
+    MemFileDTO list(MemFileDTO memFileDTO);
+    MemFileDTO list2(int tmt_seq);
+
     int insert(MemFileDTO memFileDTO);
     int update(MemFileDTO memFileDTO);
 
