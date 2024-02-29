@@ -4,19 +4,24 @@
     let recomNum = [[${param.recomNum}]]
 
 $(function () {
-    let trmtSeq = "[[${recommendMenu?.trmt_seq}]]"
-    let trtSeq = "[[${recommendMenu?.trt_seq}]]"
-    let restAddress = "[[${recommendMenu?.trt_addr}]]"
+    let trmtSeq = "[[${recommendMenu?.trmt_seq}]]";
+    let trtSeq = "[[${recommendMenu?.trt_seq}]]";
+    let trtRestNameSh = "[[${recommendMenu?.trt_rest_name}]]";
+    let trmtMenuNameSh = "[[${recommendMenu?.trmt_menu_name}]]";
+    let restAddress = "[[${recommendMenu?.trt_addr}]]";
     $(".nextBtn").on("click",function () {
         $("input[name=recomNum]").val(recomNum);
         $("#frmList").append("<input type=\"hidden\" name=\"trmt_seqArr\" value='"+trmtSeq+"'>")
+        $("#frmList").append("<input type=\"hidden\" name=\"trmt_menu_nameSh\" value='"+trmtMenuNameSh+"'>")
+
 
         // $("input[name=trmt_seq]").val(trmtSeq);
         $("#frmList").submit();
     })
     $(".restExcept").on("click",function () {
         $("input[name=recomNum]").val(recomNum);
-        $("#frmList").append("<input type=\"text\" name=\"trt_seqArr\" value='"+trtSeq+"'>")
+        $("#frmList").append("<input type=\"hidden\" name=\"trt_seqArr\" value='"+trtSeq+"'>")
+        $("#frmList").append("<input type=\"hidden\" name=\"trt_rest_nameSh\" value='"+trtRestNameSh+"'>")
 
         // $("input[name=trmt_seq]").val(trmtSeq);
         $("#frmList").submit();
@@ -104,11 +109,11 @@ $(function () {
         width: 70%;
     }
     #title {
-        font-size: 3rem;
+        font-size: 1.5rem;
         background: greenyellow;
         border-radius: 15px;
-        width: 400px; height: 100px;
-        text-align: center; line-height: 100px;
+        width: 200px; height:50px;
+        text-align: center; line-height: 50px;
         transition: all 0.5s;
         cursor: pointer;
     }
@@ -116,19 +121,20 @@ $(function () {
         background: dodgerblue;
         color: white;
     }
-    .searchBox {
-        transition: all 0.5s;
-    }
-    .searchBox:hover {
-        border-radius: 40px;
+
+    .detailText {
+        width: 100%; height: 150px;
+        background: #d9d9d9;
+        border-radius: 30px;
+        text-align: left;
 
     }
-    .text-overflow {
-        max-width: 150px; /* 표시하고자 하는 최대 너비 */
-        white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
-        overflow: hidden; /* 넘치는 텍스트를 숨김 */
-        text-overflow: ellipsis; /* 넘치는 텍스트에 ... 추가 */
+    .detailText p {
+        margin: 10px;
+        text-indent: 20px;
+        font-size: 1.1rem;
     }
+
     #midTitle {
         font-size: 2rem;
     }
@@ -177,26 +183,42 @@ $(function () {
     }
 </style>
 <form method="get" id="frmList">
-    <input type="text" name="trt_seq" th:value="${recommendMenu?.trt_seq}">
+
+    <input type="hidden" name="trt_seq" th:value="${recommendMenu?.trt_seq}">
     <th:block th:each="list : ${param?.trmt_seqArr}">
         <input type="hidden" name="trmt_seqArr" th:value="${list}">
     </th:block>
     <th:block th:each="list : ${param?.trt_seqArr}">
-        <input type="text" name="trt_seqArr" th:value="${list}">
+        <input type="hidden" name="trt_seqArr" th:value="${list}">
     </th:block>
+
     <input type="hidden" name="recomNum">
     <div class="form-group">
         <div class="container pt-5 recommendArea">
             <p id="title">오늘의 메뉴 추천</p>
+            <div class="detailText">
+                <p>1. 한번 추천된 메뉴는 추천리스트에서 제외가 되며 어떤것을 추천 받았는지 리스트에 나타납니다.</p>
+                <p>2. 식당 제외 버튼을 누르게 되면 해당 메뉴의 식당 메뉴 전체가 추천메뉴에서 제외 됩니다.</p>
+                <p>3. 리셋버튼을 누르게 되면 식당&메뉴 제외리스트가 초기화 되어 다시 추천 받습니다.</p>
+                <p>4. 사용자 개인 데이터에 의한 맞춤형 추천 서비스가 제공 됩니다.</p>
+            </div>
             <th:block th:if="${not #strings.isEmpty(recommendMenu)}">
                 <div class="exeptArea">
-                    <span th:if="${not #lists.isEmpty(exceptMenuList)}">추천받아본 메뉴 : </span>
-                    <th:block th:each="list : ${exceptMenuList} ">
-                        <span>[</span>
-                        <span th:text="${list.menu_row_num}"></span>
-                        . <span th:text="${list.trmt_menu_name}"></span>
-                        <span>]</span>&nbsp;
-                    </th:block>
+                    <span th:if="${not #lists.isEmpty(param?.trmt_menu_nameSh)}">추천받아본 메뉴 : </span>
+                    <th:div th:each="list, listStatus : ${param?.trmt_menu_nameSh}">
+                        [<span th:text="${listStatus.count}"></span>.&nbsp;<span th:text="${list}"></span>]
+                        <input type="hidden" name="trmt_menu_nameSh" th:value="${list}">
+                    </th:div>
+
+                    <br>
+                    <span th:if="${not #lists.isEmpty(param?.trt_rest_nameSh)}">추전 제외한 식당 : </span>
+                    <th:div th:each="list, listStatus : ${param?.trt_rest_nameSh}">
+                        [<span th:text="${listStatus.count}"></span>.&nbsp;<span th:text="${list}"></span>]
+                        <input type="hidden" name="trt_rest_nameSh" th:value="${list}">
+
+                    </th:div>
+
+
                 </div>
                 <p id ="midTitle">오늘의 추천 메뉴는[<span style="color: #fc5069">[[${recommendMenu?.trt_rest_name}]]</span>] 의 [<span style="color: deepskyblue">[[${recommendMenu?.trmt_menu_name}]]</span>] 입니다!!!</p>
 

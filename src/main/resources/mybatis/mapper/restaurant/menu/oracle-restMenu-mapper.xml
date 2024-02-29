@@ -117,7 +117,6 @@
                 ,       TRMT.TRMT_MODER_IP
                 ,       TO_CHAR(TRMT.TRMT_MODER_DT,'YYYY-MM-dd') AS TRMT_MODER_DT
                 FROM    TM_REST_MENU_TBL TRMT
-<!--                WHERE   TRT_SEQ = #{trt_seq}-->
                 ORDER BY TRMT_SEQ ASC
             ) T1
         WHERE   1 = 1
