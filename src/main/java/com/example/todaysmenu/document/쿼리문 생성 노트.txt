@@ -226,16 +226,6 @@ html
 -----------------------------추천기능---------------------------------------
 
 
-
-
-
-
-
-
-
-
-
-
 -----------------------------------------------------------------------------
 컨트롤러명 : RestStarController
 서비스명  : RestStarService
@@ -249,3 +239,17 @@ html
 별점      :TRST_STAR_SCORE
 먹은일자    :TRST_TODAY_YMD
 =================컬럼=================
+
+-----------------------------------------------------------------------------
+컨트롤러명 : MemFileController
+서비스명  : MemFileService
+리포지토리 : MemFileServiceRepository
+마이바티스 : oracle-memFile-mapper
+테이블명  : TM_FILE_TBL
+=================컬럼=================
+번호             :TFT_SEQ
+부모번호           :PARENT_SEQ
+오리지널파일이름      :ORIGIN_FILE_NAME
+바뀐 파일이름         :CHANGE_FINE_NAME
+
+

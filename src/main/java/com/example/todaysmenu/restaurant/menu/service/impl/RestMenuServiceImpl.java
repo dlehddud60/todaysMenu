@@ -83,20 +83,46 @@ public class RestMenuServiceImpl implements RestMenuService {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         restMenuDTO.setTmt_login_id(memberSession.getTmt_login_id());
+
+        log.info("=============getTrmt_seqArr==============={}",restMenuDTO.getTrmt_seqArr());
+        log.info("=============getTrt_seqArr==============={}",restMenuDTO.getTrt_seqArr());
+
         RestMenuDTO restMenuDTOResult = restMenuRepository.userRecommendMenu(restMenuDTO);
+        log.info("========================restMenuDTOResult1==========================={}",restMenuDTOResult);
         if(restMenuDTO.getStatus() == 0 && restMenuDTOResult == null) {
+            log.info("====================if 1번 시작=========================");
             restMenuDTO.setStatus(1);
+            log.info("====================if 1번 시작restMenuDTO========================={}",restMenuDTO);
             restMenuDTOResult = restMenuRepository.userRecommendMenu(restMenuDTO);
         }
         if(restMenuDTO.getStatus()  == 1 && restMenuDTOResult == null){
+            log.info("====================if 2번 시작=========================");
+
             restMenuDTO.setStatus(2);
+            log.info("====================if 2번 시작restMenuDTO========================={}",restMenuDTO);
+
             restMenuDTOResult = restMenuRepository.userRecommendMenu(restMenuDTO);
 
         }
         if(restMenuDTO.getStatus()  == 2 && restMenuDTOResult == null){
+            log.info("====================if 3번 시작=========================");
+
             restMenuDTO.setStatus(3);
+            log.info("====================if 3번 시작restMenuDTO========================={}",restMenuDTO);
+
             restMenuDTOResult = restMenuRepository.userRecommendMenu(restMenuDTO);
+
         }
+        if(restMenuDTO.getStatus()  == 3 && restMenuDTOResult == null){
+            log.info("====================if 4번 시작=========================");
+
+            restMenuDTO.setStatus(4);
+            log.info("====================if 4번 시작restMenuDTO========================={}",restMenuDTO);
+            restMenuDTOResult = restMenuRepository.userRecommendMenu(restMenuDTO);
+
+        }
+        log.info("========================restMenuDTOResult2==========================={}",restMenuDTOResult);
+
         return restMenuDTOResult;
     }
 

@@ -8,13 +8,13 @@ import java.util.List;
 
 @Mapper
 public interface MemberRepository {
-    public MemberDTO registerCheck(String tmt_login_id);
-    public int register(MemberDTO memberDTO);
-    public MemberDTO login(MemberDTO memberDTO);
-    public String memberInfo(String tmt_seq);
-    public int memberUpdate(MemberDTO memberDTO);
-    public List<MemberDTO> memberList(Criteria cri);
-    public int count(Criteria cri);
-    public void userTypeUpdate(MemberDTO memberDTO);
+    MemberDTO registerCheck(String tmt_login_id);
+    int register(MemberDTO memberDTO);
+    MemberDTO login(MemberDTO memberDTO);
+    String memberInfo(String tmt_seq);
+    int memberUpdate(MemberDTO memberDTO);
+    List<MemberDTO> memberList(Criteria cri);
+    int count(Criteria cri);
+    void userTypeUpdate(MemberDTO memberDTO);
 
 }

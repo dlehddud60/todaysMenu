@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.todaysmenu.member.repository.file.MemFileRepository">
+    <sql id="where">
+        WHERE 1 = 1
+    </sql>
+
+    <select id="count" resultType="int">
+        /*com.example.todaysmenu.member.repository.file.MemFileServiceRepository.count[회원수]*/
+        SELECT	COUNT(1)
+        FROM	TM_MEM_FILE_TBL T1
+        <include refid="where"/>
+    </select>
+
+    <select id="list" resultType="com.example.todaysmenu.member.entity.file.MemFileDTO">
+        /*com.example.todaysmenu.member.repository.file.MemFileServiceRepository.registerCheck[중복확인]*/
+        SELECT  TMFT.TMFT_SEQ
+        ,       TMFT.TMFT_PARENT_SEQ
+        ,       TMFT.TMFT_ORIGIN_FILE_NAME
+        ,       TMFT.TMFT_CHANGE_FINE_NAME
+        ,       TMFT.TMFT_INPUT_TY
+        ,       TMFT.TMFT_INPUT_NM
+        ,       TMFT.TMFT_INPUT_ID
+        ,       TMFT.TMFT_INPUT_IP
+        ,       TO_CHAR(TMFT.TMFT_INPUT_DT,'YYYY-MM-dd') AS TMFT_INPUT_DT
+        ,       TMFT.TMFT_MODER_TY
+        ,       TMFT.TMFT_MODER_NM
+        ,       TMFT.TMFT_MODER_ID
+        ,       TMFT.TMFT_MODER_IP
+        ,       TO_CHAR(TMFT.TMFT_MODER_DT,'YYYY-MM-dd') AS TMFT_MODER_DT
+        FROM    TM_MEM_FILE_TBL TMFT
+        WHERE   TMFT_PARENT_SEQ = ${tmt_seq}
+    </select>
+
+
+
+    <insert id="insert" parameterType="com.example.todaysmenu.member.entity.file.MemFileDTO">
+        /*com.example.todaysmenu.member.repository.file.MemFileServiceRepository.register[회원가입]*/
+        INSERT INTO TM_MEM_FILE_TBL
+        (   TMFT_SEQ
+        ,   TMFT_PARENT_SEQ
+        ,   TMFT_ORIGIN_FILE_NAME
+        ,   TMFT_CHANGE_FINE_NAME
+        ,   TMFT_INPUT_TY
+        ,   TMFT_INPUT_NM
+        ,   TMFT_INPUT_ID
+        ,   TMFT_INPUT_IP
+        ,   TMFT_INPUT_DT
+        )
+        VALUES
+        (   TM_TMFT_SEQ.nextval
+        ,   #{tmft_parent_seq}
+        ,   #{tmft_origin_file_name}
+        ,   #{tmft_change_fine_name}
+        ,   #{tmft_input_ty}
+        ,   #{tmft_input_nm}
+        ,   #{tmft_input_id}
+        ,   #{tmft_input_ip}
+        ,   SYSDATE
+        )
+        <selectKey keyProperty="tmft_seq" resultType="int" order="AFTER">SELECT TM_TMFT_SEQ.CURRVAL FROM DUAL</selectKey>
+    </insert>
+
+    <update id="update"  parameterType="com.example.todaysmenu.member.entity.file.MemFileDTO">
+        /*com.example.todaysmenu.member.repository.file.MemFileServiceRepository.memberUpdate[회원정보수정]*/
+        UPDATE	TM_MEM_FILE_TBL
+        SET		TMFT_MODER_TY 	              =         #{tmft_moder_ty}
+        ,		TMFT_MODER_NM 	              =         #{tmft_moder_nm}
+        ,		TMFT_MODER_ID 	              =         #{tmft_moder_id}
+        ,		TMFT_MODER_IP	              =         #{tmft_moder_ip}
+        ,		TMFT_MODER_DT	              =         SYSDATE
+        ,       TMFT_PARENT_SEQ               =         #{tmft_rest_name}
+        ,       TMFT_ORIGIN_FILE_NAME         =         #{tmft_regi}
+        ,       TMFT_CHANGE_FINE_NAME         =         #{tmft_addr}
+        WHERE	TMFT_SEQ			          =         #{tmft_seq}
+    </update>
+
+
+
+
+</mapper>

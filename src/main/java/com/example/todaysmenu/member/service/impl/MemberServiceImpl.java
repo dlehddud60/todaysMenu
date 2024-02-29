@@ -1,5 +1,8 @@
 package com.example.todaysmenu.member.service.impl;
 
+import com.example.todaysmenu.board.entity.BoardDTO;
+import com.example.todaysmenu.member.entity.file.MemFileDTO;
+import com.example.todaysmenu.member.repository.file.MemFileRepository;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.member.repository.MemberRepository;
@@ -10,8 +13,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.*;
 
@@ -31,6 +37,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    MemFileRepository memFileRepository;
 
     private boolean duplChek;
 
@@ -103,7 +112,7 @@ public class MemberServiceImpl implements MemberService {
             return redirect("join.do",rttr,"아이디 중복체크","중복된 아이디 입니다. 다른 아이디를 입력해주시길 바랍니다.", DANGER);
         }
 
-        memberDTO.setTmt_memb_file("");//사진 이미지는 없다는 의미로 ""
+
         //회원을 테이블에 저장하기
         int result = 0;
         try {
@@ -179,5 +188,42 @@ public class MemberServiceImpl implements MemberService {
             memberRepository.userTypeUpdate(memberDTO);
             }
         }
+
+    @Override
+    public void memImageUpdate(MemFileDTO memFileDTO,HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+
+        memFileDTO.setTmft_input_ty(memberSession.getTmt_user_type());
+        memFileDTO.setTmft_input_nm(memberSession.getTmt_memb_name());
+        memFileDTO.setTmft_input_id(memberSession.getTmt_login_id());
+        memFileDTO.setTmft_input_ip(request.getRemoteAddr());
+
+
+        // 파일만 따로 가져오기
+        MultipartFile boardFile = memFileDTO.getTmt_multi_file();
+        // 파일 이름 가져오기
+        String originalFilename = boardFile.getOriginalFilename();
+        log.info("=================originalFilename=============={} ",originalFilename);
+        // 저장용 이름 만들기
+        System.out.println(System.currentTimeMillis());
+        String storedFileName = System.currentTimeMillis() + "-" + originalFilename;
+        log.info("=================storedFileName=============={} ",storedFileName);
+
+        // BoardFileDTO 세팅
+        memFileDTO.setTmft_origin_file_name(originalFilename);
+        memFileDTO.setTmft_change_fine_name(storedFileName);
+        memFileDTO.setTmft_parent_seq(Integer.parseInt( memberSession.getTmt_seq()));
+        log.info("===============memFileDTO==============={}",memFileDTO);
+        // 파일 저장용 폴더에 파일 저장 처리
+        String savePath = "/Users/leedongyoung/app/2023/workspace/todaysMenu/src/main/resources/static/upload/" + storedFileName; // mac
+        try {
+            boardFile.transferTo(new File(savePath));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    // board_file_table 저장 처리
+        memFileRepository.insert(memFileDTO);
+    }
 }
 

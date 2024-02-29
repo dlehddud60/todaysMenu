@@ -123,16 +123,16 @@ $(function () {
     }
 
     .detailText {
-        width: 100%; height: 150px;
+        padding-top: 5px;
+        width: 100%; height: 160px;
         background: #d9d9d9;
         border-radius: 30px;
         text-align: left;
 
     }
     .detailText p {
-        margin: 10px;
+        margin: 5px;
         text-indent: 20px;
-        font-size: 1.1rem;
     }
 
     #midTitle {
@@ -196,10 +196,11 @@ $(function () {
         <div class="container pt-5 recommendArea">
             <p id="title">오늘의 메뉴 추천</p>
             <div class="detailText">
-                <p>1. 한번 추천된 메뉴는 추천리스트에서 제외가 되며 어떤것을 추천 받았는지 리스트에 나타납니다.</p>
+                <p>1. 한번 추천받고 다음추천 버튼을 누르면 해당메뉴는 추천리스트에서 제외가 되며 어떤것을 추천 받았는지 리스트에 나타납니다.</p>
                 <p>2. 식당 제외 버튼을 누르게 되면 해당 메뉴의 식당 메뉴 전체가 추천메뉴에서 제외 됩니다.</p>
                 <p>3. 리셋버튼을 누르게 되면 식당&메뉴 제외리스트가 초기화 되어 다시 추천 받습니다.</p>
                 <p>4. 사용자 개인 데이터에 의한 맞춤형 추천 서비스가 제공 됩니다.</p>
+                <p>5. 메뉴의 추천은 사용자가 음식을 안먹은지 3일된 메뉴 이면서 평점이 3점이상 식당평점3점 평균메뉴평점 3점 이상 조건으로 맨 처음으로 추천됩니다.</p>
             </div>
             <th:block th:if="${not #strings.isEmpty(recommendMenu)}">
                 <div class="exeptArea">
