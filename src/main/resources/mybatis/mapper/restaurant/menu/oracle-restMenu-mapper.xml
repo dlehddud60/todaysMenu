@@ -337,10 +337,27 @@
                                             #{item}
                                         </foreach>
                                     </if>
-<!--                                AND TO_CHAR(SYSDATE-3 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD-->
-<!--                                AND	T1.TRST_STAR_SCORE >= 3-->
-<!--                                AND T1.TRST_MENU_AVG_SCORE >= 3-->
-<!--                                AND T1.TRST_REST_AVG_SCORE >= 3-->
+                                <choose>
+                                    <when test="status == 0">
+                                        AND TO_CHAR(SYSDATE-3 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD
+                                        AND	T1.TRST_STAR_SCORE >= 3
+                                        AND T1.TRST_MENU_AVG_SCORE >= 3
+                                        AND T1.TRST_REST_AVG_SCORE >= 3
+                                    </when>
+                                    <when test="status == 1">
+                                        AND TO_CHAR(SYSDATE-3 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD
+                                        AND	T1.TRST_STAR_SCORE >= 3
+                                        AND T1.TRST_MENU_AVG_SCORE >= 3
+                                    </when>
+                                    <when test="status == 2">
+                                        AND	T1.TRST_STAR_SCORE >= 3
+                                        AND T1.TRST_MENU_AVG_SCORE >= 3
+                                    </when>
+                                    <when test="status == 3">
+                                        AND T1.TRST_MENU_AVG_SCORE >= 3
+                                    </when>
+                                </choose>
+
                         )T1
                 )T1
         )T1

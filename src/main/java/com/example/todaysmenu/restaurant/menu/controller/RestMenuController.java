@@ -56,9 +56,9 @@ public class RestMenuController {
             RestMenuDTO recommendMenuDTO = restMenuService.userRecommendMenu(restMenuDTO, request, rttr);
             model.addAttribute("recommendMenu",recommendMenuDTO);
             model.addAttribute("exceptMenuList",restMenuService.rentMenuList(restMenuDTO));
-            restMenuDTO.setTrt_seq(recommendMenuDTO.getTrt_seq());           ;
-            restMenuDTO.setTrmt_seq(recommendMenuDTO.getTrmt_seq());           ;
-            restMenuDTO.setTmt_login_id(memberSession.getTmt_login_id());           ;
+            restMenuDTO.setTrt_seq(recommendMenuDTO.getTrt_seq());
+            restMenuDTO.setTrmt_seq(recommendMenuDTO.getTrmt_seq());
+            restMenuDTO.setTmt_login_id(memberSession.getTmt_login_id());
             model.addAttribute("recommendMenuAllList",restMenuService.list(restMenuDTO));
         } catch (NullPointerException e) {
 //            return redirect("",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);

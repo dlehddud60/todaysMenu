@@ -83,10 +83,21 @@ public class RestMenuServiceImpl implements RestMenuService {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         restMenuDTO.setTmt_login_id(memberSession.getTmt_login_id());
+        RestMenuDTO restMenuDTOResult = restMenuRepository.userRecommendMenu(restMenuDTO);
+        if(restMenuDTO.getStatus() == 0 && restMenuDTOResult == null) {
+            restMenuDTO.setStatus(1);
+            restMenuDTOResult = restMenuRepository.userRecommendMenu(restMenuDTO);
+        }
+        if(restMenuDTO.getStatus()  == 1 && restMenuDTOResult == null){
+            restMenuDTO.setStatus(2);
+            restMenuDTOResult = restMenuRepository.userRecommendMenu(restMenuDTO);
 
-        log.info("=============getTrmt_seqArr==============={}",restMenuDTO.getTrmt_seqArr());
-        log.info("=============getTrt_seqArr==============={}",restMenuDTO.getTrt_seqArr());
-        return restMenuRepository.userRecommendMenu(restMenuDTO);
+        }
+        if(restMenuDTO.getStatus()  == 2 && restMenuDTOResult == null){
+            restMenuDTO.setStatus(3);
+            restMenuDTOResult = restMenuRepository.userRecommendMenu(restMenuDTO);
+        }
+        return restMenuDTOResult;
     }
 
     @Override

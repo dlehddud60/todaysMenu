@@ -74,6 +74,10 @@ public class RestMenuDTO {
     private int trst_menu_avg_score;
     private int trst_rest_avg_score;
 
+//  추천 로직 상태값
+    private int status = 0;
+
+
 
 
 }

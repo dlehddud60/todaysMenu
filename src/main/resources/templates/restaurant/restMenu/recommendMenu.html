@@ -183,7 +183,6 @@ $(function () {
     }
 </style>
 <form method="get" id="frmList">
-
     <input type="hidden" name="trt_seq" th:value="${recommendMenu?.trt_seq}">
     <th:block th:each="list : ${param?.trmt_seqArr}">
         <input type="hidden" name="trmt_seqArr" th:value="${list}">
