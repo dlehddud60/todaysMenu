@@ -1,5 +1,7 @@
 package com.example.todaysmenu.member.controller;
 
+import com.example.todaysmenu.common.customExaption.FileExtensionExaption;
+import com.example.todaysmenu.common.customExaption.FileSizeExaption;
 import com.example.todaysmenu.member.entity.file.MemFileDTO;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.pagination.entity.PageDTO;
@@ -129,14 +131,13 @@ public class MemberController {
         log.info("==============imageUpdate============");
 
 
-        try{
+        try {
             memberService.memImageUpdate(memFileDTO,request);
-
-        }catch (NullPointerException e) {
-            return redirect("/imageForm.do",rttr,"실패 메시지","파일첨부를 하지 않았습니다.", DANGER);
-
+        } catch (FileExtensionExaption | FileSizeExaption e) {
+            return redirect("",rttr,"실패",e.getMessage(),DANGER);
 
         }
+
 
         return redirect("",rttr,"성공 메세지","파일첨부를 완료했습니다.",SUCCESS);
 

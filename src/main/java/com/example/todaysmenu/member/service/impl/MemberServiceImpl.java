@@ -1,5 +1,7 @@
 package com.example.todaysmenu.member.service.impl;
 
+import com.example.todaysmenu.common.customExaption.FileExtensionExaption;
+import com.example.todaysmenu.common.customExaption.FileSizeExaption;
 import com.example.todaysmenu.member.entity.file.MemFileDTO;
 import com.example.todaysmenu.member.repository.file.MemFileRepository;
 import com.example.todaysmenu.pagination.entity.Criteria;
@@ -189,7 +191,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
     @Override
-    public void memImageUpdate(MemFileDTO memFileDTO,HttpServletRequest request) {
+    public void memImageUpdate(MemFileDTO memFileDTO,HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
 
@@ -201,40 +203,51 @@ public class MemberServiceImpl implements MemberService {
 
 
         // 파일만 따로 가져오기
-        MultipartFile boardFile = memFileDTO.getTmt_multi_file();
+        MultipartFile memFile = memFileDTO.getTmt_multi_file();
+        long memFileSize = memFile.getSize();
+        int fileSize = 3145728;
+
         // 파일 이름 가져오기
-        String originalFilename = boardFile.getOriginalFilename();
-        log.info("=================originalFilename=============={} ",originalFilename);
+        String originalFilename = memFile.getOriginalFilename();
+
         // 저장용 이름 만들기
         System.out.println(System.currentTimeMillis());
         String storedFileName = System.currentTimeMillis() + "-" + originalFilename;
-        log.info("=================storedFileName=============={} ",storedFileName);
 
-        // BoardFileDTO 세팅
+        // FileDTO 세팅
         memFileDTO.setTmft_origin_file_name(originalFilename);
         memFileDTO.setTmft_change_fine_name(storedFileName);
         memFileDTO.setTmft_parent_seq(Integer.parseInt( memberSession.getTmt_seq()));
-        log.info("===============memFileDTO==============={}",memFileDTO);
         // 파일 저장용 폴더에 파일 저장 처리
         String savePath = "/Users/leedongyoung/app/2023/workspace/todaysMenu/src/main/resources/static/upload/";
         //새로 업로드된 이미지(new 1.png), 현재 DB에 있는 이미지(old 4.png)
-        log.info("=================dataSeq================={}",dataSeq);
         MemFileDTO dataSeqDTO = new MemFileDTO();
         dataSeqDTO.setTmft_seq(dataSeq);
 
-        if(dataSeq > 0) {
-            String oldFileName = memFileRepository.list(dataSeqDTO).getTmft_change_fine_name();
-            log.info("=========oldFileName========={}",oldFileName);
-            File oldFile = new File(savePath + "/" + oldFileName);
-            if (oldFile.exists()) {
-                oldFile.delete();
+        if (memFile != null) {//업로드가 된 상태(png. jpg, gif)
+            //이미지 파일 여부를 체크 -> 만약 이미지 파일이 아니면 삭제
+            String ext = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+            ext = ext.toUpperCase();
+            if (ext.equals("PNG") || ext.equals("GIF") || ext.equals("JPG")|| ext.equals("JPEG")) {
+                if(memFileSize > fileSize) {
+                    throw new FileSizeExaption("이미지 첨부 용량은 3MB를 넘을 수 없습니다");
+                }
+                if (dataSeq > 0) {
+                    String oldFileName = memFileRepository.list(dataSeqDTO).getTmft_change_fine_name();
+                    log.info("=========oldFileName========={}", oldFileName);
+                    File oldFile = new File(savePath + "/" + oldFileName);
+                    if (oldFile.exists()) {
+                        oldFile.delete();
+                    }
+                }
+            }else {
+                throw new FileExtensionExaption("이미지만 첨부 가능하며 PNG,GIF,JPG,JPEG의 확장자만 첨부 가능합니다.");
             }
         }
 
 
-
         try {
-            boardFile.transferTo(new File(savePath+storedFileName));
+            memFile.transferTo(new File(savePath+storedFileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

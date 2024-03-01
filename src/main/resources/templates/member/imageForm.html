@@ -4,7 +4,7 @@
         <input type="hidden" id="tmt_seq" name="tmt_seq"
                th:value="${session.memberDTO != null ? session.memberDTO.tmt_seq : ''}">
         <th:block th:if="${not #strings.isEmpty(memFile)}" >
-            <input type="text" name="tmft_seq" th:value="${memFile.tmft_seq}">
+            <input type="hidden" name="tmft_seq" th:value="${memFile.tmft_seq}">
         </th:block>
 
         <table class="table table-bordered" style="text-align: center; border: 1px solid #dddddd;">
