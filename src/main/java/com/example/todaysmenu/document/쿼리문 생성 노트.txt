@@ -253,3 +253,16 @@ html
 바뀐 파일이름         :CHANGE_FINE_NAME
 
 
+-----------------------------------------------------------------------------
+컨트롤러명 : CommonFileController
+서비스명  : CommonFileService
+리포지토리 : CommonFileRepository
+마이바티스 : oracle-CommonFile-mapper
+테이블명  : TM_COMMON_FILE_TBL
+=================컬럼=================
+번호             :   TCFT_SEQ
+부모번호           :  TCFT_PARENT_SEQ
+부모테이블타입        : TCFT_PARENT_TABLE_TYPE
+오리지널파일이름      :  TCFT_ORIGIN_FILE_NAME
+바뀐 파일이름         : TCFT_CHANGE_FINE_NAME
+

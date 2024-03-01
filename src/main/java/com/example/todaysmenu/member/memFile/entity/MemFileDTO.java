@@ -1,4 +1,4 @@
-package com.example.todaysmenu.member.entity.file;
+package com.example.todaysmenu.member.memFile.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

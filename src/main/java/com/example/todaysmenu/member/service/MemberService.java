@@ -2,7 +2,7 @@ package com.example.todaysmenu.member.service;
 
 import com.example.todaysmenu.common.customExaption.FileExtensionExaption;
 import com.example.todaysmenu.common.customExaption.FileSizeExaption;
-import com.example.todaysmenu.member.entity.file.MemFileDTO;
+import com.example.todaysmenu.member.memFile.entity.MemFileDTO;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import jakarta.servlet.http.HttpServletRequest;

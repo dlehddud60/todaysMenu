@@ -1,7 +1,6 @@
 package com.example.todaysmenu.restaurant.star.controller;
 
 import com.example.todaysmenu.member.entity.MemberDTO;
-import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
 import com.example.todaysmenu.restaurant.star.entity.RestStarDTO;
 import com.example.todaysmenu.restaurant.star.service.RestStarService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,8 +9,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 
 @Log4j2
