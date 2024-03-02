@@ -9,22 +9,23 @@
 
     <select id="list" resultType="com.example.todaysmenu.common.commonFile.entity.CommonFileDTO">
         /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.registerCheck[중복확인]*/
-        SELECT TCFT.TCFT_SEQ
-        , TCFT.TCFT_PARENT_SEQ
-        , TCFT.TCFT_PARENT_TABLE_TYPE
-        , TCFT.TCFT_ORIGIN_FILE_NAME
-        , TCFT.TCFT_CHANGE_FINE_NAME
-        , TCFT.TCFT_INPUT_TY
-        , TCFT.TCFT_INPUT_NM
-        , TCFT.TCFT_INPUT_ID
-        , TCFT.TCFT_INPUT_IP
-        , TO_CHAR(TCFT.TCFT_INPUT_DT,'YYYY-MM-dd') AS TCFT_INPUT_DT
-        , TCFT.TCFT_MODER_TY
-        , TCFT.TCFT_MODER_NM
-        , TCFT.TCFT_MODER_ID
-        , TCFT.TCFT_MODER_IP
-        , TO_CHAR(TCFT.TCFT_MODER_DT,'YYYY-MM-dd') AS TCFT_MODER_DT
+        SELECT  TCFT.TCFT_SEQ
+        ,       TCFT.TCFT_PARENT_SEQ
+        ,       TCFT.TCFT_PARENT_TABLE_TYPE
+        ,       TCFT.TCFT_ORIGIN_FILE_NAME
+        ,       TCFT.TCFT_CHANGE_FINE_NAME
+        ,       TCFT.TCFT_INPUT_TY
+        ,       TCFT.TCFT_INPUT_NM
+        ,       TCFT.TCFT_INPUT_ID
+        ,       TCFT.TCFT_INPUT_IP
+        ,       TO_CHAR(TCFT.TCFT_INPUT_DT,'YYYY-MM-dd') AS TCFT_INPUT_DT
+        ,       TCFT.TCFT_MODER_TY
+        ,       TCFT.TCFT_MODER_NM
+        ,       TCFT.TCFT_MODER_ID
+        ,       TCFT.TCFT_MODER_IP
+        ,       TO_CHAR(TCFT.TCFT_MODER_DT,'YYYY-MM-dd') AS TCFT_MODER_DT
         FROM TM_COMMON_FILE_TBL TCFT
+        WHERE   TCFT_PARENT_SEQ = #{tcft_parent_seq}
     </select>
 
 
@@ -47,17 +48,17 @@
         )
         VALUES
         (   TM_TCFT_SEQ.nextval
-        ,   #{tmft_parent_seq}
+        ,   #{tcft_parent_seq}
         ,   #{tcft_parent_table_type}
-        ,   #{tmft_origin_file_name}
-        ,   #{tmft_change_fine_name}
-        ,   #{tmft_input_ty}
-        ,   #{tmft_input_nm}
-        ,   #{tmft_input_id}
-        ,   #{tmft_input_ip}
+        ,   #{tcft_origin_file_name}
+        ,   #{tcft_change_fine_name}
+        ,   #{tcft_input_ty}
+        ,   #{tcft_input_nm}
+        ,   #{tcft_input_id}
+        ,   #{tcft_input_ip}
         ,   SYSDATE
         )
-        <selectKey keyProperty="tmft_seq" resultType="int" order="AFTER">SELECT TM_TCFT_SEQ.CURRVAL FROM DUAL</selectKey>
+        <selectKey keyProperty="tcft_seq" resultType="int" order="AFTER">SELECT TM_TCFT_SEQ.CURRVAL FROM DUAL</selectKey>
     </insert>
 
     <update id="update"  parameterType="com.example.todaysmenu.common.commonFile.entity.CommonFileDTO">

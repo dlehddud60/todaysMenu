@@ -22,6 +22,12 @@
             </tr>
             </tbody>
         </table>
+
+        <th:block th:each="list : ${commonFileList}">
+            <img th:src="@{|/upload/${list.tcft_parent_table_type}|}">
+
+        </th:block>
+
         <a class="btn btn-success" th:href="@{board/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
         <a class="btn btn-info" th:href="@{board/write.do(tfb_seq = ${info.tfb_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>
         <div th:replace="~{include/modal/deleteModal::globalDel(board,tfb_seq,${info.tfb_seq})}"></div>

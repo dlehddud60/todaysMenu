@@ -74,7 +74,7 @@
         <include refid="pagination.footer"/>
     </select>
 
-    <insert id="insert" parameterType="com.example.todaysmenu.board.entity.BoardDTO">
+    <insert  id="insert" parameterType="com.example.todaysmenu.board.entity.BoardDTO" >
         /*com.example.todaysmenu.board.repository.BoardRepository.insert[등록]*/
         INSERT INTO TM_FREE_BOARD
         (   TFB_SEQ
@@ -94,6 +94,7 @@
         ,   SYSDATE
         ,   #{tfb_input_ip}
         )
+        <selectKey keyProperty="tfb_seq" resultType="int" order="AFTER">SELECT TM_TFB_SEQ.CURRVAL FROM DUAL</selectKey>
     </insert>
 
     <update id="update">

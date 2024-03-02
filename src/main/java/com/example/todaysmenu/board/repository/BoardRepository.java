@@ -8,11 +8,11 @@ import java.util.List;
 
 @Mapper
 public interface BoardRepository {
-    public int count(Criteria cri);
-    public List<BoardDTO> list();
-    public List<BoardDTO> listPaging(Criteria cri);
-    public BoardDTO info(int tfb_seq);
-    public void insert(BoardDTO freeboarddto);
-    public void update(BoardDTO freeboarddto);
-    public void delete(int tfb_seq);
+    int count(Criteria cri);
+    List<BoardDTO> list();
+    List<BoardDTO> listPaging(Criteria cri);
+    BoardDTO info(int tfb_seq);
+    int insert(BoardDTO freeboarddto);
+    void update(BoardDTO freeboarddto);
+    void delete(int tfb_seq);
 }

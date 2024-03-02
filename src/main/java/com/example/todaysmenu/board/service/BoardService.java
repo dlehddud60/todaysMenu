@@ -1,16 +1,21 @@
 package com.example.todaysmenu.board.service;
 
 import com.example.todaysmenu.board.entity.BoardDTO;
+import com.example.todaysmenu.common.commonFile.entity.CommonFileDTO;
+import com.example.todaysmenu.common.customExaption.FileExtensionExaption;
+import com.example.todaysmenu.common.customExaption.FileSizeExaption;
 import com.example.todaysmenu.pagination.entity.Criteria;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
 public interface BoardService {
 //    public List<RestaurantDTO> list();
-    public int count(Criteria cri);
-    public List<BoardDTO> list(Criteria cri);
-    public BoardDTO info(int tfb_seq);
-    public void insert(BoardDTO freeboarddto);
-    public void update(BoardDTO freeboarddto);
-    public void delete(int tfb_seq);
+    int count(Criteria cri);
+    List<BoardDTO> list(Criteria cri);
+    BoardDTO info(int tfb_seq);
+    void insert(BoardDTO freeboarddto);
+    void insert(BoardDTO freeboarddto, CommonFileDTO commonFileDTO, HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption;
+    void update(BoardDTO freeboarddto);
+    void delete(int tfb_seq);
 }
