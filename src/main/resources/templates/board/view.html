@@ -12,13 +12,12 @@
     }
     .slideImgBaseArea .slideImg , .slideImgBaseArea .slideImg li{
         position: absolute;
-        width: 10px; height: 100%;
+        width: 0; height: 100%;
         top: 0; left: 0;
         display: flex;
     }
     .slideImgBaseArea .slideImg li img{
-        background: #200080;
-        width: 700px; height: 100%;
+        width: 100%; height: 100%;
     }
 
     .slideBtn {
@@ -73,9 +72,15 @@
 
         });
 
+        $(".plusFileDel").removeAttr("href","").on("click",function () {
+            $("#frm").attr("action","/board/delete.do").submit();
+
+
+        });
     });
 </script>
-<form method="get">
+<form method="get" id="frm" >
+    <input type="hidden" name="tfb_seq" th:value="${info.tfb_seq}">
     <div class="container mt-3">
         <h2>자유게시판</h2>
         <table class="table">
@@ -103,7 +108,8 @@
             <ul class="slideImg" style="margin: 0; padding: 0;">
                 <li>
                     <th:block th:each="list : ${commonFileList}">
-                        <img th:src="@{|/upload/${list.tcft_parent_table_type}|}" style="width: 100%; height: 100%">
+                        <img th:src="@{|/upload/${list.tcft_change_fine_name}|}" style="width: 100%; height: 100%">
+                        <input type="hidden" name="tcft_change_fine_nameArr" th:value="${list.tcft_change_fine_name}">
                     </th:block>
                 </li>
             </ul>
@@ -115,7 +121,7 @@
 
             </ul>
 
-        <a class="btn btn-success" th:href="@{board/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
+        <a class="btn btn-success" th:href="@{/board/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
         <a class="btn btn-info" th:href="@{board/write.do(tfb_seq = ${info.tfb_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>
         <div th:replace="~{include/modal/deleteModal::globalDel(board,tfb_seq,${info.tfb_seq})}"></div>
 

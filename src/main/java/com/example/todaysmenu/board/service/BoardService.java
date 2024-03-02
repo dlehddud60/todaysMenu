@@ -18,4 +18,5 @@ public interface BoardService {
     void insert(BoardDTO freeboarddto, CommonFileDTO commonFileDTO, HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption;
     void update(BoardDTO freeboarddto);
     void delete(int tfb_seq);
+    void delete(int tfb_seq, CommonFileDTO commonFileDTO);
 }

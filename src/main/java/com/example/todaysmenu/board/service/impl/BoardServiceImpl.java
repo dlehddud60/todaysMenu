@@ -78,14 +78,14 @@ public class BoardServiceImpl implements BoardService {
 
 
         // 파일만 따로 가져오기
-        List<MultipartFile> memFile = commonFileDTO.getTcft_multi_file();
-        for (int i = 0; i < memFile.size(); i++) {
+        List<MultipartFile> comFileList = commonFileDTO.getTcft_multi_file();
+        for (int i = 0; i < comFileList.size(); i++) {
 
-            long memFileSize = memFile.get(i).getSize();
+            long memFileSize = comFileList.get(i).getSize();
             int fileSize = 3145728;
 
             // 파일 이름 가져오기
-            String originalFilename = memFile.get(i).getOriginalFilename();
+            String originalFilename = comFileList.get(i).getOriginalFilename();
 
             // 저장용 이름 만들기
             System.out.println(System.currentTimeMillis());
@@ -93,14 +93,14 @@ public class BoardServiceImpl implements BoardService {
 
             // FileDTO 세팅
             commonFileDTO.setTcft_origin_file_name(originalFilename);
-            commonFileDTO.setTcft_parent_table_type(storedFileName);
+            commonFileDTO.setTcft_change_fine_name(storedFileName);
+            commonFileDTO.setTcft_parent_table_type("TM_FREE_BOARD");
 
             commonFileDTO.setTcft_input_ty(memberSession.getTmt_user_type());
             commonFileDTO.setTcft_input_nm(memberSession.getTmt_memb_name());
             commonFileDTO.setTcft_input_id(memberSession.getTmt_login_id());
             commonFileDTO.setTcft_input_ip(request.getRemoteAddr());
             commonFileDTO.setTcft_parent_seq(freeboarddto.getTfb_seq());
-            commonFileDTO.setTcft_change_fine_name("TM_FREE_BOARD");
 
             log.info("===============commonFileDTO================={}",commonFileDTO);
 
@@ -110,7 +110,7 @@ public class BoardServiceImpl implements BoardService {
             CommonFileDTO dataSeqDTO = new CommonFileDTO();
             dataSeqDTO.setTcft_seq(dataSeq);
 
-            if (memFile != null) {//업로드가 된 상태(png. jpg, gif)
+            if (comFileList != null) {//업로드가 된 상태(png. jpg, gif)
                 //이미지 파일 여부를 체크 -> 만약 이미지 파일이 아니면 삭제
                 String ext = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
                 ext = ext.toUpperCase();
@@ -122,7 +122,7 @@ public class BoardServiceImpl implements BoardService {
                         String oldFileName = commonFileRepository.list(dataSeqDTO).get(i).getTcft_change_fine_name();
                         log.info("=========oldFileName========={}", oldFileName);
                         File oldFile = new File(savePath + "/" + oldFileName);
-                        if (oldFile.exists()) {
+                        if (oldFile.exists()) { //upload경로에 파일이 존재하는지 확인하는 메서드
                             oldFile.delete();
                         }
                     }
@@ -133,7 +133,7 @@ public class BoardServiceImpl implements BoardService {
 
 
             try {
-                memFile.get(i).transferTo(new File(savePath+storedFileName));
+                comFileList.get(i).transferTo(new File(savePath+storedFileName));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -170,5 +170,25 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.delete(tfb_seq);
     }
 
+    @Override
+    public void delete(int tfb_seq, CommonFileDTO commonFileDTO) {
 
+        log.info("============Service commonFileDTO==============={}",commonFileDTO);
+        String savePath = "C:/project/todaysMenu/src/main/resources/static/upload/";
+
+        List<String> commonFileDTOArr = commonFileDTO.getTcft_change_fine_nameArr();
+        for (int i = 0; i < commonFileDTOArr.size(); i++) {
+            String oldFileName = commonFileDTOArr.get(i);
+            log.info("==============countOldFileName============{}",i);
+            log.info("====================oldFileName==================={}",oldFileName);
+
+            File oldFile = new File(savePath + "/" + oldFileName);
+            if (oldFile.exists()) { //upload경로에 파일이 존재하는지 확인하는 메서드
+                log.info("====================exists==================={}",oldFile.exists());
+
+                oldFile.delete();
+            }
+        }
+        boardRepository.delete(tfb_seq);
+    }
 }

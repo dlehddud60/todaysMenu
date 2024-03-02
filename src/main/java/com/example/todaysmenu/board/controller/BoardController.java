@@ -142,7 +142,8 @@ public class BoardController {
     }
 
     @GetMapping("/delete.do")
-    public String  delete(BoardDTO boardDTO, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr, HttpServletRequest request){
+    public String  delete(@ModelAttribute CommonFileDTO commonFileDTO,@ModelAttribute BoardDTO boardDTO, @ModelAttribute Criteria cri, RedirectAttributes rttr, HttpServletRequest request){
+        log.info("============Controller commonFileDTO========={}",commonFileDTO);
         int tfb_seq = boardDTO.getTfb_seq();
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
@@ -160,7 +161,7 @@ public class BoardController {
 
 
         if(memberWriter.equals(boardWriter)){
-            boardService.delete(tfb_seq);
+            boardService.delete(tfb_seq,commonFileDTO);
         }else{
             return redirect("board/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
         }

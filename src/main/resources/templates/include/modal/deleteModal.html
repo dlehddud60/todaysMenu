@@ -1,5 +1,4 @@
 <div th:fragment="globalDel(p1,p2,p3)" id="globalDel" data-bs-backdrop="static"  tabindex="-1" aria-labelledby="staticBackdropLabel" style="display: inline">
-
 <a class="btn btn-danger" th:text="삭제" id="showDelModal"></a>
 <div class="modal" id="delModal">
     <div class="modal-dialog" role="document">
@@ -16,8 +15,7 @@
             <div class="modal-footer">
 <!--                <a class="btn btn-danger" th:href="@{/restaurant/delete.do(trt_seq = ${info.trt_seq})}" th:text="삭제"></a>-->
 <!--                <a class="btn btn-danger" th:href="@{/${p1}/delete.do(${p2} = ${p3})}" th:text="삭제"></a>-->
-                <a class="btn btn-danger" th:href="@{'/' + ${p1} + '/delete.do?' + ${p2} + '=' + ${p3} + ''}" th:text="삭제"></a>
-
+                <a class="btn btn-danger plusFileDel" th:href="@{'/' + ${p1} + '/delete.do?' + ${p2} + '=' + ${p3} + ''}" th:text="삭제"></a>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
             </div>
         </div>

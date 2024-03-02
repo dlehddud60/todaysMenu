@@ -19,6 +19,7 @@ public class CommonFileDTO {
     private String tcft_parent_table_type;
     private String tcft_origin_file_name;
     private String tcft_change_fine_name;
+    private List<String>tcft_change_fine_nameArr;
 
     private String tcft_input_ty;
     private String tcft_input_nm;
