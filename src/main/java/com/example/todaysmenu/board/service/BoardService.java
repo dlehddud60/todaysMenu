@@ -15,8 +15,10 @@ public interface BoardService {
     List<BoardDTO> list(Criteria cri);
     BoardDTO info(int tfb_seq);
     void insert(BoardDTO freeboarddto);
-    void insert(BoardDTO freeboarddto, CommonFileDTO commonFileDTO, HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption;
-    void update(BoardDTO freeboarddto);
+    void insert(BoardDTO boardDTO, CommonFileDTO commonFileDTO, HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption;
+    void update(BoardDTO boardDTO);
+
+    void update(BoardDTO boardDTO, CommonFileDTO commonFileDTO, HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption;
     void delete(int tfb_seq);
     void delete(int tfb_seq, CommonFileDTO commonFileDTO);
 }

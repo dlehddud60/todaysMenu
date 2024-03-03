@@ -219,7 +219,8 @@ public class MemberServiceImpl implements MemberService {
         memFileDTO.setTmft_change_fine_name(storedFileName);
         memFileDTO.setTmft_parent_seq(Integer.parseInt( memberSession.getTmt_seq()));
         // 파일 저장용 폴더에 파일 저장 처리
-        String savePath = "/Users/leedongyoung/app/2023/workspace/todaysMenu/src/main/resources/static/upload/";
+//        String savePath = "/Users/leedongyoung/app/2023/workspace/todaysMenu/src/main/resources/static/upload/";
+        String savePath = "C:/project/todaysMenu/src/main/resources/static/upload/";
         //새로 업로드된 이미지(new 1.png), 현재 DB에 있는 이미지(old 4.png)
         MemFileDTO dataSeqDTO = new MemFileDTO();
         dataSeqDTO.setTmft_seq(dataSeq);

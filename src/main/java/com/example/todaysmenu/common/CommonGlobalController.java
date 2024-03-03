@@ -30,7 +30,8 @@ public class CommonGlobalController {
             MemFileDTO memFileDTO = new MemFileDTO(memberSeq);
             model.addAttribute("memFile",fileRepository.list(memFileDTO));
         }catch (NullPointerException e) {
-            e.printStackTrace();
+            log.info("NullPointerException");
+            log.info("비로그인 유저 접속");
         }
     }
 }

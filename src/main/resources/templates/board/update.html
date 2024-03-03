@@ -1,5 +1,5 @@
 <div th:insert="~{include/Header.html}" th:remove="tag"></div>
-<form method="post" action="/board/proc.do">
+<form method="post" action="/board/proc.do"  enctype="multipart/form-data">
     <input type="hidden" name="tfb_seq" th:value="${info.tfb_seq}">
     <input type="hidden" name="pageNum" th:value="${param.pageNum}">
     <input type="hidden" name="amount" th:value="${param.amount}">
@@ -14,6 +14,11 @@
             <textarea class="form-control" id="" rows="10" placeholder="내용을 입력해주세요" name="tfb_text"
                       th:text="${info.tfb_text}"></textarea>
         </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupFile01">이미지 첨부</label>
+            <input type="file" class="form-control" id="inputGroupFile01"  name="tcft_multi_file" multiple>
+        </div>
+
         <br>
         <div th:replace="~{include/modal/procModal::globalProcBtn(${info.tfb_seq},board)}"></div>
     </div>

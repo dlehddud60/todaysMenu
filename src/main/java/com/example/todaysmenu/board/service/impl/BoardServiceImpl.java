@@ -64,15 +64,27 @@ public class BoardServiceImpl implements BoardService {
     }
     @Override
     public void insert(BoardDTO freeboarddto, CommonFileDTO commonFileDTO, HttpServletRequest request)throws FileExtensionExaption, FileSizeExaption {
+
+
         int resut = boardRepository.insert(freeboarddto);
+
+
         commonFileMethod(freeboarddto, commonFileDTO,commonFileRepository, request);
     }
 
 
 
     @Override
-    public void update(BoardDTO freeboarddto) {
-        boardRepository.update(freeboarddto);
+    public void update(BoardDTO boardDTO) {
+        boardRepository.update(boardDTO);
+    }
+
+    @Override
+    public void update(BoardDTO boardDTO, CommonFileDTO commonFileDTO, HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
+        log.info("=================update호출====================");
+        boardRepository.update(boardDTO);
+        commonFileMethod(boardDTO, commonFileDTO,commonFileRepository, request);
+
     }
 
     @Override

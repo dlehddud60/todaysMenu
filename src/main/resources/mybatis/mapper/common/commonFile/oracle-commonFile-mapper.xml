@@ -8,7 +8,7 @@
     </sql>
 
     <select id="list" resultType="com.example.todaysmenu.common.commonFile.entity.CommonFileDTO">
-        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.registerCheck[중복확인]*/
+        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.registerCheck[파일 리스트]*/
         SELECT  TCFT.TCFT_SEQ
         ,       TCFT.TCFT_PARENT_SEQ
         ,       TCFT.TCFT_PARENT_TABLE_TYPE
@@ -33,7 +33,7 @@
 
 
     <insert id="insert" parameterType="com.example.todaysmenu.common.commonFile.entity.CommonFileDTO">
-        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.register[회원가입]*/
+        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.register[파일 업로드]*/
         INSERT INTO TM_COMMON_FILE_TBL
         (   TCFT_SEQ
         ,   TCFT_PARENT_SEQ
@@ -62,7 +62,7 @@
     </insert>
 
     <update id="update"  parameterType="com.example.todaysmenu.common.commonFile.entity.CommonFileDTO">
-        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.memberUpdate[회원정보수정]*/
+        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.memberUpdate[파일 정보 수정]*/
         UPDATE TM_COMMON_FILE_TBL
         SET TCFT_MODER_TY = #{tmft_moder_ty}
         , TCFT_MODER_NM = #{tmft_moder_nm}
@@ -76,6 +76,12 @@
         WHERE TCFT_SEQ = #{tmft_seq}
     </update>
 
+    <delete id="delete">
+        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.memberUpdate[회원정보수정]*/
+        DELETE FROM	TM_COMMON_FILE_TBL
+        WHERE	1 = 1
+        AND		TCFT_PARENT_SEQ = #{tcft_parent_seq}
+    </delete>
 
 
 

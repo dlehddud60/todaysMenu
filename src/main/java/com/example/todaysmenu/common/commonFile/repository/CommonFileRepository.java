@@ -10,5 +10,6 @@ public interface CommonFileRepository {
     List<CommonFileDTO> list(CommonFileDTO commonFileDTO);
     int insert(CommonFileDTO commonFileDTO);
     int update(CommonFileDTO commonFileDTO);
+    int delete(int tcft_parent_seq);
 
 }

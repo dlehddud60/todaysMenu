@@ -92,10 +92,6 @@ public class BoardController {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
 
-        log.info("================memberSession==============={}",memberSession);
-
-
-        log.info("=============proc.tfb_seq============{}",tfb_seq);
 
         if(tfb_seq == 0){
             boardDTO.setTfb_input_ty(memberSession.getTmt_user_type());
@@ -107,10 +103,7 @@ public class BoardController {
                 return redirect("",rttr,"실패",e.getMessage(),DANGER);
 
             }
-
-
             return redirect("board/index.do",rttr,"성공 메세지","게시물을 작성하였습니다.",SUCCESS);
-
         }else{
             boardDTO.setTfb_moder_ty(memberSession.getTmt_user_type());
             boardDTO.setTfb_moder_nm(memberSession.getTmt_memb_name());
@@ -120,7 +113,12 @@ public class BoardController {
             BoardDTO boardInfo = boardService.info(dataSeq);
             String boardWriter = boardInfo.getTfb_input_nm();
             if(memberWriter.equals(boardWriter)){
-                boardService.update(boardDTO);
+                try {
+                    boardService.update(boardDTO,commonFileDTO,request);
+                } catch (FileExtensionExaption | FileSizeExaption e) {
+                    return redirect("",rttr,"실패",e.getMessage(),DANGER);
+
+                }
             }else{
                 return redirect("board/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
             }
@@ -161,7 +159,13 @@ public class BoardController {
 
 
         if(memberWriter.equals(boardWriter)){
-            boardService.delete(tfb_seq,commonFileDTO);
+            try {
+                boardService.delete(tfb_seq,commonFileDTO);
+
+            }catch (NullPointerException e) {
+                boardService.delete(tfb_seq);
+
+            }
         }else{
             return redirect("board/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
         }
