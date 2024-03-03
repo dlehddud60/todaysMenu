@@ -183,7 +183,7 @@ public class BoardController {
         try {
             userSessionName = memberSession.getTmt_memb_name();
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            log.info("세션 객체 없음");
         }
 
             for (int i = 0; i < tfb_seq.size(); i++) {
