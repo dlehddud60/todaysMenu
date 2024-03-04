@@ -103,7 +103,7 @@
             </tr>
             </tbody>
         </table>
-
+        <th:block th:if="${not #lists.isEmpty(commonFileList)}">
         <div class="slideImgBaseArea">
             <ul class="slideImg" style="margin: 0; padding: 0;">
                 <li>
@@ -114,13 +114,13 @@
                 </li>
             </ul>
         </div>
-            <ul class="slideBtn">
-                <li class="prev"><</li>
-                <li class="slideCountArea">1/4</li>
-                <li class="next">></li>
+        <ul class="slideBtn">
+            <li class="prev"><</li>
+            <li class="slideCountArea">1/4</li>
+            <li class="next">></li>
 
-            </ul>
-
+        </ul>
+        </th:block>
         <a class="btn btn-success" th:href="@{/board/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
         <a class="btn btn-info" th:href="@{/board/write.do(tfb_seq = ${info.tfb_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>
         <div th:replace="~{include/modal/deleteModal::globalDel(board,tfb_seq,${info.tfb_seq})}"></div>
