@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.todaysmenu.restaurant.file.repository.RestFileRepository">
+    <sql id="where">
+        WHERE 1 = 1
+    </sql>
+
+    <select id="list" resultType="com.example.todaysmenu.restaurant.file.entity.RestFileDTO">
+        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.registerCheck[파일 리스트]*/
+        SELECT  TRFT.TRFT_SEQ
+        ,       TRFT.TRFT_PARENT_SEQ
+        ,       TRFT.TRFT_PARENT_TABLE_TYPE
+        ,       TRFT.TRFT_ORIGIN_FILE_NAME
+        ,       TRFT.TRFT_CHANGE_FILE_NAME
+        ,       TRFT.TRFT_INPUT_TY
+        ,       TRFT.TRFT_INPUT_NM
+        ,       TRFT.TRFT_INPUT_ID
+        ,       TRFT.TRFT_INPUT_IP
+        ,       TO_CHAR(TRFT.TRFT_INPUT_DT,'YYYY-MM-dd') AS TRFT_INPUT_DT
+        ,       TRFT.TRFT_MODER_TY
+        ,       TRFT.TRFT_MODER_NM
+        ,       TRFT.TRFT_MODER_ID
+        ,       TRFT.TRFT_MODER_IP
+        ,       TO_CHAR(TRFT.TRFT_MODER_DT,'YYYY-MM-dd') AS TRFT_MODER_DT
+        FROM TM_REST_FILE_TBL TRFT
+        WHERE   TRFT_PARENT_SEQ = #{trft_parent_seq}
+    </select>
+
+
+
+
+
+    <insert id="insert" parameterType="com.example.todaysmenu.restaurant.file.entity.RestFileDTO">
+        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.register[파일 업로드]*/
+        INSERT INTO TM_REST_FILE_TBL
+        (   TRFT_SEQ
+        ,   TRFT_PARENT_SEQ
+        ,   TRFT_PARENT_TABLE_TYPE
+        ,   TRFT_ORIGIN_FILE_NAME
+        ,   TRFT_CHANGE_FILE_NAME
+        ,   TRFT_INPUT_TY
+        ,   TRFT_INPUT_NM
+        ,   TRFT_INPUT_ID
+        ,   TRFT_INPUT_IP
+        ,   TRFT_INPUT_DT
+        )
+        VALUES
+        (   TM_TRFT_SEQ.nextval
+        ,   #{trft_parent_seq}
+        ,   #{trft_parent_table_type}
+        ,   #{trft_origin_file_name}
+        ,   #{trft_change_file_name}
+        ,   #{trft_input_ty}
+        ,   #{trft_input_nm}
+        ,   #{trft_input_id}
+        ,   #{trft_input_ip}
+        ,   SYSDATE
+        )
+        <selectKey keyProperty="trft_seq" resultType="int" order="AFTER">SELECT TM_TRFT_SEQ.CURRVAL FROM DUAL</selectKey>
+    </insert>
+
+    <update id="update"  parameterType="com.example.todaysmenu.restaurant.file.entity.RestFileDTO">
+        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.memberUpdate[파일 정보 수정]*/
+        UPDATE TM_REST_FILE_TBL
+        SET TRFT_MODER_TY = #{tmft_moder_ty}
+        , TRFT_MODER_NM = #{tmft_moder_nm}
+        , TRFT_MODER_ID = #{tmft_moder_id}
+        , TRFT_MODER_IP = #{tmft_moder_ip}
+        , TRFT_MODER_DT = SYSDATE
+        , TRFT_PARENT_SEQ = #{tmft_parent_seq}
+        , TRFT_PARENT_TABLE_TYPE = #{trft_parent_table_type}
+        , TRFT_ORIGIN_FILE_NAME = #{tmft_origin_file_name}
+        , TRFT_CHANGE_FILE_NAME = #{tmft_change_file_name}
+        WHERE TRFT_SEQ = #{tmft_seq}
+    </update>
+
+    <delete id="delete">
+        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.memberUpdate[회원정보수정]*/
+        DELETE FROM	TM_REST_FILE_TBL
+        WHERE	1 = 1
+        AND		TRFT_PARENT_SEQ = #{trft_parent_seq}
+    </delete>
+
+
+
+</mapper>

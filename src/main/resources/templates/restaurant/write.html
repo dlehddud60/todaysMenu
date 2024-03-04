@@ -120,7 +120,7 @@
         $(".menuCopyAreaShow").show();
     }
 </script>
-<form method="post" action="/restaurant/proc.do">
+<form method="post" action="/restaurant/proc.do" enctype="multipart/form-data">
     <div class="container pt-5 restArea">
         <p class="restAreaTitle">식당 등록</p>
         <div class="form-group">
@@ -152,6 +152,10 @@
             <textarea class="form-control" id="" rows="10" placeholder="내용을 입력해주세요" name="trt_rest_text"></textarea>
         </div>
         <br>
+        <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupFile01">이미지 첨부</label>
+            <input type="file" class="form-control" id="inputGroupFile01"  name="trft_multi_file" multiple>
+        </div>
 
     </div>
     <div id="menuArea">

@@ -1,14 +1,22 @@
 package com.example.todaysmenu.restaurant.service.impl;
 
+import com.example.todaysmenu.common.customExaption.FileExtensionExaption;
+import com.example.todaysmenu.common.customExaption.FileSizeExaption;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
+import com.example.todaysmenu.restaurant.file.entity.RestFileDTO;
+import com.example.todaysmenu.restaurant.file.repository.RestFileRepository;
+import com.example.todaysmenu.restaurant.file.util.RestFile;
 import com.example.todaysmenu.restaurant.repository.RestaurantRepository;
 import com.example.todaysmenu.restaurant.service.RestaurantService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.example.todaysmenu.restaurant.file.util.RestFile.*;
 
 @Service
 @Log4j2
@@ -16,6 +24,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Autowired
     RestaurantRepository restaurantRepository;
+
+    @Autowired
+    RestFileRepository restFileRepository;
 
     @Override
     public int count(Criteria cri) {
@@ -42,13 +53,39 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public int insert(RestaurantDTO restaurantDTO, RestFileDTO restFileDTO, HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
+        boolean fileResult = restFileDTO.getTrft_multi_file().get(0).isEmpty();
+        int result = restaurantRepository.insert(restaurantDTO);
+        if(!fileResult) {
+            restFileMethod(restaurantDTO,restFileDTO,restFileRepository,request);
+        }
+        return result;
+    }
+
+    @Override
     public int update(RestaurantDTO restaurantDTO) {
         return restaurantRepository.update(restaurantDTO);
+    }
+    @Override
+    public int update(RestaurantDTO restaurantDTO, RestFileDTO restFileDTO, HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
+        boolean fileResult = restFileDTO.getTrft_multi_file().get(0).isEmpty();
+        int result = restaurantRepository.update(restaurantDTO);
+        if(!fileResult) {
+            restFileMethod(restaurantDTO,restFileDTO,restFileRepository,request);
+        }
+        return result;
     }
 
     @Override
     public int delete(int trt_seq) {
         return restaurantRepository.delete(trt_seq);
+    }
+
+    @Override
+    public int delete(int trt_seq, RestFileDTO restFileDTO) {
+        restFileDelMethod(restFileDTO);
+        return restaurantRepository.delete(trt_seq);
+
     }
 
     @Override

@@ -1,6 +1,7 @@
 <div th:insert="~{include/Header.html}" th:remove="tag"></div>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d7c247130688fc47e72341dd6fa5081c"></script>
 <script>
+
     $(function () {
         let restAddress = "[[${info.trt_addr}]]"
         $.ajax({
@@ -16,6 +17,46 @@
 
 
         });
+
+        var slidePxNum = 0;
+        var slideCount = 1;
+        var imgSize = "[[${#lists.size(restFileList)}]]";
+        $(".slideImgBaseArea .slideImg , .slideImgBaseArea .slideImg li").css("width",(700 * imgSize));
+        $(".slideCountArea").text(slideCount + "/" + imgSize);
+        $(".slideBtn .next").on("click", function () {
+            slideCount += 1;
+            if(slideCount > imgSize) {
+                slideCount = 1;
+            }
+            $(".slideCountArea").text(slideCount + "/" + imgSize);
+            slidePxNum -= 700;
+            if(slidePxNum <= (-700 * imgSize)){
+                slidePxNum = 0;
+            }
+            $(".slideImg").stop().animate({"left" : "" + slidePxNum+"px"},700);
+        });
+
+        $(".slideBtn .prev").on("click", function () {
+            slideCount -= 1;
+            if(slideCount < 1) {
+                slideCount = imgSize;
+            }
+            $(".slideCountArea").text(slideCount + "/" + imgSize);
+            if(slidePxNum == 0) {
+                slidePxNum = (-700 * (imgSize-1));
+            }else {
+                slidePxNum += 700
+            }
+            $(".slideImg").stop().animate({"left" : "" + slidePxNum+"px"},700);
+
+        });
+
+        $(".plusFileDel").removeAttr("href","").on("click",function () {
+            $("#frm").attr("action","/restaurant/delete.do").submit();
+
+
+        });
+
     });
     function mapView(data) {
 
@@ -110,9 +151,46 @@
     }
 
 
+    *{
+        text-decoration: none;
+        list-style: none;
+    }
+    .slideImgBaseArea {
+        position: relative;
+        margin: auto;
+        width: 700px; height: 400px;
+        overflow: hidden;
+    }
+    .slideImgBaseArea .slideImg , .slideImgBaseArea .slideImg li{
+        position: absolute;
+        width: 0; height: 100%;
+        top: 0; left: 0;
+        display: flex;
+    }
+    .slideImgBaseArea .slideImg li img{
+        width: 100%; height: 100%;
+    }
+
+    .slideBtn {
+        margin:  auto;
+        padding: 0;
+        background: #766cff;
+        opacity: 80%;
+        border-radius: 10px;
+        width: 700px; height: 50px;
+        display: flex;
+        justify-content: space-between;
+    }
+    .slideBtn li{
+        font-size: 1.8rem;
+        color: white;
+        line-height: 50px;
+        cursor: pointer;
+    }
 
 </style>
-<form method="get">
+<form method="get" id="frm">
+    <input type="hidden" name="trt_seq" th:value="${info.trt_seq}">
    <div class="container mt-3">
         <h2>식당 상세보기</h2>
         <table class="table">
@@ -153,6 +231,29 @@
             <tr style="height: 300px; ">
                 <td style="line-height: 300px; ">식당 내용</td>
                 <td colspan="5"><span  th:text="${info.trt_rest_text}"></span></td>
+            </tr>
+            <tr style="height: 300px; " class="trImg">
+                <td style="line-height: 300px; ">식당 사진</td>
+                <td colspan="5">
+                    <th:block th:if="${not #lists.isEmpty(restFileList)}">
+                        <div class="slideImgBaseArea">
+                            <ul class="slideImg" style="margin: 0; padding: 0;">
+                                <li>
+                                    <th:block th:each="list : ${restFileList}">
+                                        <img th:src="@{|/upload/${list.trft_change_file_name}|}" style="width: 100%; height: 100%">
+                                        <input type="hidden" name="trft_change_file_nameArr" th:value="${list.trft_change_file_name}">
+                                    </th:block>
+                                </li>
+                            </ul>
+                        </div>
+                        <ul class="slideBtn">
+                            <li class="prev"><</li>
+                            <li class="slideCountArea">1/4</li>
+                            <li class="next">></li>
+
+                        </ul>
+                    </th:block>
+                </td>
             </tr>
             <tr>
                 <td>작성자</td>

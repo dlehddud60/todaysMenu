@@ -1,9 +1,13 @@
 package com.example.todaysmenu.restaurant.controller;
 
+import com.example.todaysmenu.common.customExaption.FileExtensionExaption;
+import com.example.todaysmenu.common.customExaption.FileSizeExaption;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.pagination.entity.PageDTO;
 import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
+import com.example.todaysmenu.restaurant.file.entity.RestFileDTO;
+import com.example.todaysmenu.restaurant.file.service.RestFileService;
 import com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO;
 import com.example.todaysmenu.restaurant.menu.service.impl.RestMenuServiceImpl;
 import com.example.todaysmenu.restaurant.service.RestaurantService;
@@ -34,6 +38,8 @@ public class RestaurantController {
     RestMenuServiceImpl restMenuService;
     @Autowired
     RestStarService restStarService;
+    @Autowired
+    RestFileService restFileService;
 
     @GetMapping("/index.do")
     public String list(Criteria cri, Model model) {
@@ -91,10 +97,11 @@ public class RestaurantController {
 
     @PostMapping("/proc.do")
     public String proc(@ModelAttribute RestaurantDTO restaurantDTO
-                    ,  @ModelAttribute RestMenuDTO restMenuDTO
-                    ,  @ModelAttribute Criteria cri
-                    ,  RedirectAttributes rttr
-                    ,  HttpServletRequest request) {
+                    , @ModelAttribute RestMenuDTO restMenuDTO
+                    , @ModelAttribute RestFileDTO restFileDTO
+                    , @ModelAttribute Criteria cri
+                    , RedirectAttributes rttr
+                    , HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
         int trt_seq = restaurantDTO.getTrt_seq();
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
@@ -106,13 +113,11 @@ public class RestaurantController {
         restaurantDTO.setTrt_moder_nm(memberSession.getTmt_memb_name());
         restaurantDTO.setTrt_moder_id(memberSession.getTmt_login_id());
         restaurantDTO.setTrt_moder_ip(request.getRemoteAddr());
-        log.info("=============procTrt_seq=============={}",trt_seq);
         if(trt_seq == 0){
-           int dataSeq =  restaurantService.insert(restaurantDTO);
+           int dataSeq =  restaurantService.insert(restaurantDTO,restFileDTO,request);
             restInsertMeth(restaurantDTO, restMenuDTO, request, memberSession);
             return redirect("restaurant/index.do",rttr,"성공 메세지","게시글 작성을 완료하였습니다.",SUCCESS);
         }else{
-//            int dataSeq = restaurantDTO.getTrt_seq();
             String memberWriter = memberSession.getTmt_memb_name();
             RestaurantDTO restaurantDTOInfo = new RestaurantDTO();
             restaurantDTOInfo.setTmt_login_id(memberSession.getTmt_login_id());
@@ -121,7 +126,7 @@ public class RestaurantController {
             restaurantService.info(restaurantDTOInfo);
             String restInputNm = restaurantDTO.getTrt_input_nm();
             if(memberWriter.equals(restInputNm)){
-                restaurantService.update(restaurantDTO);
+                restaurantService.update(restaurantDTO,restFileDTO,request);
                 restInsertMeth(restaurantDTO, restMenuDTO, request, memberSession);
             }else{
                 return redirect("restaurant/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
@@ -142,18 +147,22 @@ public class RestaurantController {
         }catch (NullPointerException e) {
             return redirect("",rttr,"실패 메세지","비로그인 유저는 진입하실 수 없습니다.",DANGER);
         }
+        RestFileDTO restFileDTO = new RestFileDTO();
         RestMenuDTO restMenuDTO = new RestMenuDTO();
         int trt_seq = restaurantDTO.getTrt_seq();
         restMenuDTO.setTrt_seq(trt_seq);
         restaurantService.updateCount(trt_seq);
+        restFileDTO.setTrft_parent_seq(trt_seq);
 //        log.info("==========restaurantDTO=========={}",restaㅌurantDTO);
         model.addAttribute("info", restaurantService.info(restaurantDTO));
         model.addAttribute("rentMenuList", restMenuService.rentMenuList(restMenuDTO));
+        model.addAttribute("restFileList", restFileService.list(restFileDTO));
         return "restaurant/view";
     }
 
     @GetMapping("/delete.do")
-    public String delete(RestaurantDTO restaurantDTO, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr, HttpServletRequest request){
+    public String delete(@ModelAttribute RestaurantDTO restaurantDTO,@ModelAttribute RestFileDTO restFileDTO,  @ModelAttribute Criteria cri, RedirectAttributes rttr, HttpServletRequest request){
+
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         RestStarDTO restStarDTO = new RestStarDTO();
@@ -170,8 +179,16 @@ public class RestaurantController {
         } catch (NullPointerException e) {
             return redirect("restaurant/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
         }
+
+        int dataSeq;
         if(memberWriter.equals(restaurant)){
-            int dataSeq = restaurantService.delete(trt_seq); //식당 부모 게시글 삭제1
+            try {
+                dataSeq = restaurantService.delete(trt_seq,restFileDTO); //식당 부모 게시글 삭제1
+
+            }catch (NullPointerException e) {
+                dataSeq = restaurantService.delete(trt_seq); //식당 부모 게시글 삭제1
+
+            }
             restStarService.delete(restStarDTO);  //식당을 부모로 갖는 별점 삭제
             if(dataSeq == 1) {
                 RestMenuDTO dataRestMenuDTO = new RestMenuDTO();
@@ -197,40 +214,40 @@ public class RestaurantController {
         return redirect("restaurant/index.do",rttr,"성공 메세지","게시물을 삭제하였습니다.",SUCCESS);
     }
 
-    @GetMapping("/delChk.do")
-    public String delChk(@RequestParam(value = "trt_seq",required=false)List<Integer> trt_seq,Criteria cri,RedirectAttributes rttr,HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-        RestaurantDTO restaurantInfo = new RestaurantDTO();
-        String userSessionName = "";
-        String statusMsg = "";
-        String userName;
-        try {
-            userSessionName = memberSession.getTmt_memb_name();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-            for (int i = 0; i < trt_seq.size(); i++) {
-                restaurantInfo.setTrt_seq(trt_seq.get(i));
-                restaurantInfo.setTmt_login_id(memberSession.getTmt_login_id()); //서브쿼리용
-                restaurantInfo = restaurantService.info(restaurantInfo);
-                userName = restaurantInfo.getTrt_input_nm();
-                if(userName.equals(userSessionName) && memberSession != null) {
-                    delete(restaurantInfo, cri,rttr,request);
-                } else {
-                    if(memberSession == null) {
-                        statusMsg = "로그인을 해주시길 바랍니다.";
-                    }else {
-                        statusMsg = "본인글만 수정 삭제 가능합니다.";
-                    }
-                    return redirect("restaurant/index.do",rttr,"실패 메세지",statusMsg,DANGER);
-                }
-            }
-        rttr.addFlashAttribute("result","success");
-        rttr.addAttribute("pageNum",cri.getPageNum());
-        rttr.addAttribute("amount",cri.getAmount());
-        return redirect("restaurant/index.do",rttr,"성공 메세지","게시물을 삭제하였습니다.",SUCCESS);
-    }
+//    @GetMapping("/delChk.do")
+//    public String delChk(@RequestParam(value = "trt_seq",required=false)List<Integer> trt_seq,Criteria cri,RedirectAttributes rttr,HttpServletRequest request) {
+//        HttpSession session = request.getSession();
+//        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+//        RestaurantDTO restaurantInfo = new RestaurantDTO();
+//        String userSessionName = "";
+//        String statusMsg = "";
+//        String userName;
+//        try {
+//            userSessionName = memberSession.getTmt_memb_name();
+//        } catch (NullPointerException e) {
+//            e.printStackTrace();
+//        }
+//            for (int i = 0; i < trt_seq.size(); i++) {
+//                restaurantInfo.setTrt_seq(trt_seq.get(i));
+//                restaurantInfo.setTmt_login_id(memberSession.getTmt_login_id()); //서브쿼리용
+//                restaurantInfo = restaurantService.info(restaurantInfo);
+//                userName = restaurantInfo.getTrt_input_nm();
+//                if(userName.equals(userSessionName) && memberSession != null) {
+//                    delete(restaurantInfo, cri,rttr,request);
+//                } else {
+//                    if(memberSession == null) {
+//                        statusMsg = "로그인을 해주시길 바랍니다.";
+//                    }else {
+//                        statusMsg = "본인글만 수정 삭제 가능합니다.";
+//                    }
+//                    return redirect("restaurant/index.do",rttr,"실패 메세지",statusMsg,DANGER);
+//                }
+//            }
+//        rttr.addFlashAttribute("result","success");
+//        rttr.addAttribute("pageNum",cri.getPageNum());
+//        rttr.addAttribute("amount",cri.getAmount());
+//        return redirect("restaurant/index.do",rttr,"성공 메세지","게시물을 삭제하였습니다.",SUCCESS);
+//    }
     private void restInsertMeth(@ModelAttribute RestaurantDTO restaurantDTO, @ModelAttribute RestMenuDTO restMenuDTO, HttpServletRequest request, MemberDTO memberSession) {
         List<String> insert = restMenuDTO.getTrmt_menu_nameArr();
         List<String> update = restMenuDTO.getTrmt_menu_nameArrUpdate();
