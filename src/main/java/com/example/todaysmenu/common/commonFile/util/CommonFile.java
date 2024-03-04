@@ -93,4 +93,21 @@ public abstract class CommonFile {
             commonFileRepository.insert(commonFileDTO);
         }
     }
+
+
+
+    public static void commonFileDelMethod(CommonFileDTO commonFileDTO) {
+        log.info("=============commonFileDelMethod 호출==============");
+        String savePath = "C:/project/todaysMenu/src/main/resources/static/upload/";
+        List<String> commonFileDTOArr = commonFileDTO.getTcft_change_fine_nameArr();
+        for (int i = 0; i < commonFileDTOArr.size(); i++) {
+            String oldFileName = commonFileDTOArr.get(i);
+            File oldFile = new File(savePath + "/" + oldFileName);
+            if (oldFile.exists()) { //upload경로에 파일이 존재하는지 확인하는 메서드
+                oldFile.delete();
+            }
+        }
+    }
+
+
 }

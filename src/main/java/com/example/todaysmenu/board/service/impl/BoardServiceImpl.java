@@ -94,22 +94,9 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public void delete(int tfb_seq, CommonFileDTO commonFileDTO) {
 
-        log.info("============Service commonFileDTO==============={}",commonFileDTO);
-        String savePath = "C:/project/todaysMenu/src/main/resources/static/upload/";
-
-        List<String> commonFileDTOArr = commonFileDTO.getTcft_change_fine_nameArr();
-        for (int i = 0; i < commonFileDTOArr.size(); i++) {
-            String oldFileName = commonFileDTOArr.get(i);
-            log.info("==============countOldFileName============{}",i);
-            log.info("====================oldFileName==================={}",oldFileName);
-
-            File oldFile = new File(savePath + "/" + oldFileName);
-            if (oldFile.exists()) { //upload경로에 파일이 존재하는지 확인하는 메서드
-                log.info("====================exists==================={}",oldFile.exists());
-
-                oldFile.delete();
-            }
-        }
+        commonFileDelMethod(commonFileDTO);
         boardRepository.delete(tfb_seq);
     }
+
+
 }
