@@ -9,12 +9,16 @@ import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
 import com.example.todaysmenu.restaurant.file.entity.RestFileDTO;
 import com.example.todaysmenu.restaurant.file.service.RestFileService;
 import com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO;
+import com.example.todaysmenu.restaurant.menu.keyword.domain.Keyword;
+import com.example.todaysmenu.restaurant.menu.keyword.service.KeywordService;
 import com.example.todaysmenu.restaurant.menu.service.impl.RestMenuServiceImpl;
 import com.example.todaysmenu.restaurant.service.RestaurantService;
 import com.example.todaysmenu.restaurant.star.entity.RestStarDTO;
 import com.example.todaysmenu.restaurant.star.service.RestStarService;
+import com.example.todaysmenu.restaurant.util.RestMenuUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,24 +26,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.*;
+import static com.example.todaysmenu.restaurant.util.RestMenuUtil.*;
 
 
 @Log4j2
 @Controller
 @RequestMapping("/restaurant/*")
+@RequiredArgsConstructor
 public class RestaurantController {
 
-    @Autowired
-    RestaurantService restaurantService;
-    @Autowired
-    RestMenuServiceImpl restMenuService;
-    @Autowired
-    RestStarService restStarService;
-    @Autowired
-    RestFileService restFileService;
+    private final RestaurantService restaurantService;
+    private final RestMenuServiceImpl restMenuService;
+    private final RestStarService restStarService;
+    private final RestFileService restFileService;
+    private final KeywordService keywordService;
 
     @GetMapping("/index.do")
     public String list(Criteria cri, Model model) {
@@ -99,9 +103,11 @@ public class RestaurantController {
     public String proc(@ModelAttribute RestaurantDTO restaurantDTO
                     , @ModelAttribute RestMenuDTO restMenuDTO
                     , @ModelAttribute RestFileDTO restFileDTO
+                    , @ModelAttribute Keyword keyword
                     , @ModelAttribute Criteria cri
-                    , RedirectAttributes rttr
-                    , HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
+                    , @RequestParam List<LinkedHashMap<String,String>> keywordMap
+            , RedirectAttributes rttr
+            , HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
         int trt_seq = restaurantDTO.getTrt_seq();
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
@@ -115,7 +121,7 @@ public class RestaurantController {
         restaurantDTO.setTrt_moder_ip(request.getRemoteAddr());
         if(trt_seq == 0){
            int dataSeq =  restaurantService.insert(restaurantDTO,restFileDTO,request);
-            restInsertMeth(restaurantDTO, restMenuDTO, request, memberSession);
+            restInsertMeth(restaurantDTO, restMenuDTO,keyword,keywordMap,request, memberSession,restMenuService,keywordService);
             return redirect("restaurant/index.do",rttr,"성공 메세지","게시글 작성을 완료하였습니다.",SUCCESS);
         }else{
             String memberWriter = memberSession.getTmt_memb_name();
@@ -127,7 +133,7 @@ public class RestaurantController {
             String restInputNm = restaurantDTO.getTrt_input_nm();
             if(memberWriter.equals(restInputNm)){
                 restaurantService.update(restaurantDTO,restFileDTO,request);
-                restInsertMeth(restaurantDTO, restMenuDTO, request, memberSession);
+                restInsertMeth(restaurantDTO, restMenuDTO,keyword,keywordMap, request, memberSession,restMenuService,keywordService);
             }else{
                 return redirect("restaurant/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
             }
@@ -248,49 +254,5 @@ public class RestaurantController {
 //        rttr.addAttribute("amount",cri.getAmount());
 //        return redirect("restaurant/index.do",rttr,"성공 메세지","게시물을 삭제하였습니다.",SUCCESS);
 //    }
-    private void restInsertMeth(@ModelAttribute RestaurantDTO restaurantDTO, @ModelAttribute RestMenuDTO restMenuDTO, HttpServletRequest request, MemberDTO memberSession) {
-        List<String> insert = restMenuDTO.getTrmt_menu_nameArr();
-        List<String> update = restMenuDTO.getTrmt_menu_nameArrUpdate();
-        List<Integer> delete = restMenuDTO.getTrmt_seqArrDelete();
 
-        if(update != null) {
-            for (int i = 0; i < update.size(); i++) {
-                restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArrUpdate().get(i));
-                restMenuDTO.setTrmt_price(restMenuDTO.getTrmt_priceArrUpdate().get(i));
-                restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArrUpdate().get(i));
-                restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
-
-                restMenuDTO.setTrmt_moder_ty(memberSession.getTmt_user_type());
-                restMenuDTO.setTrmt_moder_nm(memberSession.getTmt_memb_name());
-                restMenuDTO.setTrmt_moder_id(memberSession.getTmt_login_id());
-                restMenuDTO.setTrmt_moder_ip(request.getRemoteAddr());
-            restMenuService.update(restMenuDTO);
-            }
-        }
-        if(delete != null) {
-            for (int i = 0; i < delete.size(); i++) {
-                 restMenuDTO.setTrmt_seq(delete.get(i));
-                 int deleteSeq = restMenuDTO.getTrmt_seq();
-            restMenuService.delete(deleteSeq);
-            }
-        }
-        if(insert != null) {
-            for (int i = 0; i < insert.size(); i++) {
-                restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArr().get(i)); ;
-                restMenuDTO.setTrmt_price(restMenuDTO.getTrmt_priceArr().get(i)); ;
-                restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArr().get(i)); ;
-                restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
-                restMenuDTO.setTrmt_input_ty(memberSession.getTmt_user_type());
-                restMenuDTO.setTrmt_input_nm(memberSession.getTmt_memb_name());
-                restMenuDTO.setTrmt_input_id(memberSession.getTmt_login_id());
-                restMenuDTO.setTrmt_input_ip(request.getRemoteAddr());
-                restMenuDTO.setTrmt_moder_ty(memberSession.getTmt_user_type());
-                restMenuDTO.setTrmt_moder_nm(memberSession.getTmt_memb_name());
-                restMenuDTO.setTrmt_moder_id(memberSession.getTmt_login_id());
-                restMenuDTO.setTrmt_moder_ip(request.getRemoteAddr());
-                restMenuService.insert(restMenuDTO);
-            }
-        }
-
-    }
 }

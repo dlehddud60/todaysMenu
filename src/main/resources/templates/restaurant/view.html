@@ -232,10 +232,11 @@
                 <td style="line-height: 300px; ">식당 내용</td>
                 <td colspan="5"><span  th:text="${info.trt_rest_text}"></span></td>
             </tr>
+            <th:block th:if="${not #lists.isEmpty(restFileList)}">
             <tr style="height: 300px; " class="trImg">
                 <td style="line-height: 300px; ">식당 사진</td>
                 <td colspan="5">
-                    <th:block th:if="${not #lists.isEmpty(restFileList)}">
+
                         <div class="slideImgBaseArea">
                             <ul class="slideImg" style="margin: 0; padding: 0;">
                                 <li>
@@ -252,9 +253,10 @@
                             <li class="next">></li>
 
                         </ul>
-                    </th:block>
+
                 </td>
             </tr>
+            </th:block>
             <tr>
                 <td>작성자</td>
                 <td colspan="5"><span th:text="${info.trt_input_nm}"></span></td>

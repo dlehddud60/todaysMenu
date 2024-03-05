@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.CompletionService;
 
@@ -86,7 +87,7 @@ public class BoardController {
     }
 
     @PostMapping("/proc.do")
-    public String proc(@ModelAttribute CommonFileDTO commonFileDTO, @ModelAttribute BoardDTO boardDTO, @ModelAttribute Criteria cri, RedirectAttributes rttr, HttpServletRequest request) {
+    public String proc(@ModelAttribute CommonFileDTO commonFileDTO, @ModelAttribute BoardDTO boardDTO, @ModelAttribute Criteria cri,  RedirectAttributes rttr, HttpServletRequest request) {
 
         int  tfb_seq = boardDTO.getTfb_seq();
         HttpSession session = request.getSession();
