@@ -1,9 +1,6 @@
 package com.example.todaysmenu.restaurant.menu.keyword.service.impl;
 
-import com.example.todaysmenu.restaurant.menu.keyword.model.FindRequestKeywordListModel;
-import com.example.todaysmenu.restaurant.menu.keyword.model.FindResponseKeywordListModel;
-import com.example.todaysmenu.restaurant.menu.keyword.model.InsertRequsetKeywordModel;
-import com.example.todaysmenu.restaurant.menu.keyword.model.UpdateRequsetKeywordModel;
+import com.example.todaysmenu.restaurant.menu.keyword.model.*;
 import com.example.todaysmenu.restaurant.menu.keyword.repository.KeywordRepository;
 import com.example.todaysmenu.restaurant.menu.keyword.service.KeywordService;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +29,10 @@ public class KeywordServiceImpl implements KeywordService {
     @Override
     public int update(UpdateRequsetKeywordModel updateRequsetKeywordModel) {
         return keywordRepository.update(updateRequsetKeywordModel);
+    }
+
+    @Override
+    public int delete(DeleteRequsetKeywordModel deleteRequsetKeywordModel) {
+        return keywordRepository.delete(deleteRequsetKeywordModel);
     }
 }

@@ -59,4 +59,10 @@
         ,       TRMKW_KEY_WORD   =         #{trmkw_key_word}
         WHERE	TRMKW_SEQ	     =         #{trmkw_seq}
     </update>
+
+    <delete id="delete">
+        /*com.example.todaysmenu.restaurant.menu.keyword.repository.KeywordRepository.delete[삭제]*/
+        DELETE  FROM   TM_REST_MENU_KEY_WORD
+        WHERE	TRMKW_PARENT_SEQ = #{trmt_seq}
+    </delete>
 </mapper>

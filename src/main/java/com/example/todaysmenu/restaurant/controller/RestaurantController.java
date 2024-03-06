@@ -88,7 +88,22 @@ public class RestaurantController {
             return redirect("restaurant/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
         }
         if(trt_seq != null){
+            log.info("==================updatRestMenuDTO================={}",restMenuDTO);
+            log.info("==================trt_seq================={}",trt_seq);
             restMenuDTO.setTrt_seq(trt_seq);
+            List<RestMenuDTO> restMenuDTOList = restMenuService.rentMenuList(restMenuDTO);
+            log.info("=============restMenuDTOList============{}",restMenuDTOList);
+            for (int i = 0; i < restMenuDTOList.size(); i++) {
+                int trmtSeq = restMenuDTOList.get(i).getTrmt_seq();
+                log.info("=================trmtSeq================={}",trmtSeq);
+                FindRequestKeywordListModel findRequestKeywordListModel = new FindRequestKeywordListModel(trmtSeq);
+                List<FindResponseKeywordListModel> keywordDetailList = keywordService.list(findRequestKeywordListModel);
+                log.info("================keywordDetailList==================={}",keywordDetailList);
+                model.addAttribute("keywordList" + i,keywordDetailList);
+            }
+
+
+
             model.addAttribute("info",restaurantService.info(restaurantDTOInfo));
             model.addAttribute("menuList",restaurantService.info(restaurantDTOInfo));
 

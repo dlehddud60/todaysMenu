@@ -4,6 +4,7 @@ import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
 import com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO;
 import com.example.todaysmenu.restaurant.menu.keyword.domain.Keyword;
+import com.example.todaysmenu.restaurant.menu.keyword.model.DeleteRequsetKeywordModel;
 import com.example.todaysmenu.restaurant.menu.keyword.model.InsertRequsetKeywordModel;
 import com.example.todaysmenu.restaurant.menu.keyword.repository.KeywordRepository;
 import com.example.todaysmenu.restaurant.menu.keyword.service.KeywordService;
@@ -23,7 +24,9 @@ public abstract class RestMenuUtil {
         List<String> insert = restMenuDTO.getTrmt_menu_nameArr();
         List<String> update = restMenuDTO.getTrmt_menu_nameArrUpdate();
         List<Integer> delete = restMenuDTO.getTrmt_seqArrDelete();
-        List<Integer> trmtSeqArr = restMenuDTO.getTrmt_seqArr();
+        List<Keyword> keywordList = keyword.getList();
+        log.info("==============keywordList{}===============",keywordList);
+        log.info("===============keyword============{}",keyword);
         log.info("================delete==================={}",delete);
         if(update != null) {
             for (int i = 0; i < update.size(); i++) {
@@ -38,6 +41,11 @@ public abstract class RestMenuUtil {
                 restMenuDTO.setTrmt_moder_id(memberSession.getTmt_login_id());
                 restMenuDTO.setTrmt_moder_ip(request.getRemoteAddr());
                 restMenuService.update(restMenuDTO);
+                log.info("============setTrmt_seq=============={}",restMenuDTO.getTrmt_seq());
+                DeleteRequsetKeywordModel deleteRequsetKeywordModel = new DeleteRequsetKeywordModel(restMenuDTO.getTrmt_seq());
+                log.info("===========deleteRequsetKeywordModel============{}",deleteRequsetKeywordModel);
+                keywordService.delete(deleteRequsetKeywordModel);
+                keywordInsertMethod(restMenuDTO, request, memberSession, keywordService, keywordList, i);
             }
         }
         if(delete != null) {
@@ -62,16 +70,19 @@ public abstract class RestMenuUtil {
                 restMenuDTO.setTrmt_moder_id(memberSession.getTmt_login_id());
                 restMenuDTO.setTrmt_moder_ip(request.getRemoteAddr());
                 restMenuService.insert(restMenuDTO);
-                List<Keyword> keywordList = keyword.getList();
-                for (int j = 0; j < 1; j++) {
-                    List<String> trmkwKeyWord = keywordList.get(i).getTrmkw_key_word();
-                    for (int k = 0; k < trmkwKeyWord.size(); k++) {
-                        InsertRequsetKeywordModel keywordModel =  new InsertRequsetKeywordModel(restMenuDTO.getTrmt_seq(),trmkwKeyWord.get(k),memberSession.getTmt_user_type(),memberSession.getTmt_memb_name(),memberSession.getTmt_login_id(),request.getRemoteAddr());
-                    keywordService.insert(keywordModel);
-                    }
-                }
+                keywordInsertMethod(restMenuDTO, request, memberSession, keywordService, keywordList, i);
             }
         }
 
+    }
+
+    private static void keywordInsertMethod(RestMenuDTO restMenuDTO, HttpServletRequest request, MemberDTO memberSession, KeywordService keywordService, List<Keyword> keywordList, int i) {
+        for (int j = 0; j < 1; j++) {
+            List<String> trmkwKeyWord = keywordList.get(i).getTrmkw_key_word();
+            for (int k = 0; k < trmkwKeyWord.size(); k++) {
+                InsertRequsetKeywordModel keywordModel =  new InsertRequsetKeywordModel(restMenuDTO.getTrmt_seq(),trmkwKeyWord.get(k),memberSession.getTmt_user_type(),memberSession.getTmt_memb_name(),memberSession.getTmt_login_id(),request.getRemoteAddr());
+            keywordService.insert(keywordModel);
+            }
+        }
     }
 }

@@ -123,11 +123,11 @@
 <script>
     let menuAreaHeight = 300;
     $(function () {
-        // $(document).on("keydown","input[type=text]", function() {
-        //     if (event.keyCode === 13) {
-        //         event.preventDefault();
-        //     }
-        // });
+        $(document).on("keydown","input[type=text]", function() {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+            }
+        });
         let menuShowLength = $(".menuCopyAreaShow").length;
         let menuName =  $(".menuCopyAreaShow input[name=trmt_menu_nameArr]");
         let menuPrice =  $(".menuCopyAreaShow input[name=trmt_priceArr]");
@@ -215,6 +215,7 @@
 
 
 <form method="post" action="/restaurant/proc.do" enctype="multipart/form-data">
+    [[${keywordList1}]]
     <input type="hidden" name="trt_seq" th:value="${param.trt_seq}">
     <input type="hidden" name="pageNum" th:value="${param.pageNum}">
     <input type="hidden" name="amount" th:value="${param.amount}">
@@ -258,7 +259,31 @@
     <div id="menuArea">
         <p class="menuText">메뉴 등록</p>
 
-        <th:block th:each="list : ${rentMenuList}">
+
+
+
+
+<!--        <th:block th:each="list, listState : ${rentMenuList}">-->
+<!--            <tr>-->
+<!--                <td style="width: 150px" th:text="${list.trmt_menu_name}"></td>-->
+<!--                <td style="width: 150px" th:text="${list.trmt_price_comma}"></td>-->
+<!--                <td th:text="${list.trmt_menu_text}"></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--                <td style="background: #e3e3e3">해시태그</td>-->
+<!--                <td colspan="2" style="background: #e3e3e3">-->
+<!--                    <th:block th:with="keywordList='keywordList' + ${listState.index}">-->
+<!--                        <span th:each="keyword : ${#vars[keywordList]}">#<span th:text="${keyword.trmkw_key_word}+' ' "></span></span>-->
+<!--                    </th:block>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--        </th:block>        -->
+
+
+
+
+
+        <th:block th:each="list, listState : ${rentMenuList}">
             <div class="menuCopyAreaShow" style="display: none">
                 <table class="menuTable">
                     <tr class="menuTitleTr">
@@ -288,10 +313,22 @@
                     </tr>
                     <tr class="hashTagTr">
                         <td>해시태그</td>
-                        <td><input type="text" class="form-control keyword" placeholder="해시태그 입력" >
+                        <td>
+                            <input type="text" class="form-control keyword" placeholder="해시태그 입력" >
                         </td>
                         <td colspan="2"  class="hashTagTd">
-                            <ul></ul>
+                            <ul>
+                                <th:block th:with="keywordList='keywordList' + ${listState.index}">
+                                    <span th:each="keyword: ${#vars[keywordList]}">
+                                        <li>
+                                            <span class="xBtn"  th:text="'❌' + '#' +${keyword.trmkw_key_word}"/>
+                                            <input type="hidden" th:name="list+'['+${listState.index}+']'+.trmkw_key_word" th:value="${keyword.trmkw_key_word}">
+                                        </li>
+                                    </span>
+                                </th:block>
+
+
+                            </ul>
                         </td>
                     </tr>
                 </table>
