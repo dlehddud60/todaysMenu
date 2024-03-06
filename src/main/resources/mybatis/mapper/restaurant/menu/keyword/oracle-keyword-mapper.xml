@@ -8,7 +8,7 @@
     </sql>
     
 
-    <select id="list" resultType="com.example.todaysmenu.restaurant.menu.keyword.model.FindKeywordListModel">
+    <select id="list" resultType="com.example.todaysmenu.restaurant.menu.keyword.model.FindResponseKeywordListModel">
         /*com.example.todaysmenu.restaurant.menu.keyword.repository.KeywordRepository.list[목록]*/
         SELECT  ROWNUM AS data_seq,T1.*
         FROM (

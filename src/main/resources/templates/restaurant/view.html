@@ -280,13 +280,22 @@
                     <th style="width: 150px">가격</th>
                     <th>상세내용</th>
                 </tr>
-                <th:blcok th:each="list : ${rentMenuList}">
+
+                <th:block th:each="list, listState : ${rentMenuList}">
                     <tr>
                         <td style="width: 150px" th:text="${list.trmt_menu_name}"></td>
                         <td style="width: 150px" th:text="${list.trmt_price_comma}"></td>
                         <td th:text="${list.trmt_menu_text}"></td>
                     </tr>
-                </th:blcok>
+                    <tr>
+                        <td style="background: #e3e3e3">해시태그</td>
+                        <td colspan="2" style="background: #e3e3e3">
+                            <th:block th:with="keywordList='keywordList' + ${listState.index}">
+                                <span th:each="keyword : ${#vars[keywordList]}">#<span th:text="${keyword.trmkw_key_word}+' ' "></span></span>
+                            </th:block>
+                        </td>
+                    </tr>
+                </th:block>
 
             </table>
         </th:block>

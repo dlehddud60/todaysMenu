@@ -10,17 +10,17 @@ import com.example.todaysmenu.restaurant.file.entity.RestFileDTO;
 import com.example.todaysmenu.restaurant.file.service.RestFileService;
 import com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO;
 import com.example.todaysmenu.restaurant.menu.keyword.domain.Keyword;
+import com.example.todaysmenu.restaurant.menu.keyword.model.FindRequestKeywordListModel;
+import com.example.todaysmenu.restaurant.menu.keyword.model.FindResponseKeywordListModel;
 import com.example.todaysmenu.restaurant.menu.keyword.service.KeywordService;
 import com.example.todaysmenu.restaurant.menu.service.impl.RestMenuServiceImpl;
 import com.example.todaysmenu.restaurant.service.RestaurantService;
 import com.example.todaysmenu.restaurant.star.entity.RestStarDTO;
 import com.example.todaysmenu.restaurant.star.service.RestStarService;
-import com.example.todaysmenu.restaurant.util.RestMenuUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -156,12 +156,18 @@ public class RestaurantController {
         RestMenuDTO restMenuDTO = new RestMenuDTO();
         int trt_seq = restaurantDTO.getTrt_seq();
         restMenuDTO.setTrt_seq(trt_seq);
+        List<RestMenuDTO> restMenuDTOList = restMenuService.rentMenuList(restMenuDTO);
+        for (int i = 0; i < restMenuDTOList.size(); i++) {
+            int trmtSeq = restMenuDTOList.get(i).getTrmt_seq();
+            FindRequestKeywordListModel findRequestKeywordListModel = new FindRequestKeywordListModel(trmtSeq);
+            List<FindResponseKeywordListModel> keywordDetailList = keywordService.list(findRequestKeywordListModel);
+            model.addAttribute("keywordList" + i,keywordDetailList);
+        }
         restaurantService.updateCount(trt_seq);
         restFileDTO.setTrft_parent_seq(trt_seq);
-//        log.info("==========restaurantDTO=========={}",restaㅌurantDTO);
         model.addAttribute("info", restaurantService.info(restaurantDTO));
-        model.addAttribute("rentMenuList", restMenuService.rentMenuList(restMenuDTO));
         model.addAttribute("restFileList", restFileService.list(restFileDTO));
+        model.addAttribute("rentMenuList", restMenuDTOList);
         return "restaurant/view";
     }
 
