@@ -23,11 +23,13 @@ public abstract class RestMenuUtil {
         List<String> insert = restMenuDTO.getTrmt_menu_nameArr();
         List<String> update = restMenuDTO.getTrmt_menu_nameArrUpdate();
         List<Integer> delete = restMenuDTO.getTrmt_seqArrDelete();
+        List<Integer> trmtSeqArr = restMenuDTO.getTrmt_seqArr();
         if(update != null) {
             for (int i = 0; i < update.size(); i++) {
                 restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArrUpdate().get(i));
                 restMenuDTO.setTrmt_price(restMenuDTO.getTrmt_priceArrUpdate().get(i));
                 restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArrUpdate().get(i));
+                restMenuDTO.setTrmt_seq(restMenuDTO.getTrmt_seqArr().get(i));
                 restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
 
                 restMenuDTO.setTrmt_moder_ty(memberSession.getTmt_user_type());

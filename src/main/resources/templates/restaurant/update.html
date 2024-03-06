@@ -14,7 +14,6 @@
     .restAreaTitle{
         font-size: 3.5rem;
         text-align: center;
-        font-family: D2Coding;
 
     }
     #menuArea {
@@ -27,16 +26,16 @@
 
 
     }
+
     .menuText {
         font-size: 3rem;
-        font-family: "Apple Braille";
         text-align: center;
     }
     .menuTable {
-        border: 1px solid black;
         width: 80%; height: 60px;
         margin: auto;
         border-radius: 20px;
+
 
     }
     .procBtnArea {
@@ -50,8 +49,8 @@
     }
     .menuTable tr{
         border-radius: 20px;
-        border: 1px solid black;
         height: 40px;
+
     }
     .menuTable tr td{
 
@@ -61,9 +60,12 @@
     }
     .menuBtnArea {
         display: flex;
-        border: 0px solid black;
 
     }
+    .menuTable tr{
+        border: 1px solid black;
+    }
+
     .menuTable tr td div{
         width: 80px; height: 40px;
         border-radius: 20px;
@@ -72,30 +74,60 @@
     }
     .menuTable tr td div:first-child {
         background: #766cff;
-        color: #000000;
     }
     .menuTable tr td div:first-child:hover {
         transition: all 0.3s;
         background: #8CFF85;
-        color: #000000;
 
     }
     .menuTable tr td div:last-child {
         background: #fc5069;
-        color: #000000;
     }
     .menuTable tr td div:last-child:hover {
         transition: all 0.3s;
         background: #ff8585;
-        color: #000000;
 
     }
 
+    .hashTagTr td , .menuTitleTr td{
+        border: 1px solid black;
+    }
+
+    .hashTagTd ul{
+        top: 10px;
+        margin: 0 auto;
+        display: flex;
+        height: 100%;
+        line-height: 40px;
+
+    }
+    .hashTagTd ul li{
+        margin-top: 3px;
+        padding-right: 10px;
+        width: auto; height: 40px;
+        background: #cccccc;
+        border-radius: 15px;
+        text-align: center;
+        line-height: 40px;
+    }
+    .hashTagTd ul li .xBtn{
+        margin-left: 5px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .hashTagTd ul li .xBtn:hover{
+        font-size: 1.4rem;
+    }
 
 </style>
 <script>
     let menuAreaHeight = 300;
     $(function () {
+        $(document).on("keydown","input[type=text]", function() {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+            }
+        });
         let menuShowLength = $(".menuCopyAreaShow").length;
         let menuName =  $(".menuCopyAreaShow input[name=trmt_menu_nameArr]");
         let menuPrice =  $(".menuCopyAreaShow input[name=trmt_priceArr]");
@@ -123,7 +155,7 @@
 
         $(document).on("click",".menuPlusBtn",function () {
             menuAreaCopyFunc();
-            menuAreaHeight += 100;
+            menuAreaHeight += 150;
             $("#menuArea").css("height",menuAreaHeight)
             console.log($(".menuCopyAreaShow").index())
         });
@@ -149,6 +181,28 @@
             }
 
         });
+
+        $(document).on("keyup",".keyword",function () {
+
+            if (window.event.keyCode == 13) {
+                let inputVal = $(this).parent().parent().find("input");
+                let keywordIdx = $(this).parent().closest("div").index() -1;
+                console.log(keywordIdx)
+                if(!inputVal.val() == "") {
+                    $(this).parent().parent().find("ul").append("<input type=\"hidden\" name=\"list["+keywordIdx+"].trmkw_key_word\" value=\""+inputVal.val()+"\">")
+                    $(this).parent().parent().find("ul").append(" <li><span class=\"xBtn\">❌</span>#"+inputVal.val()+"</li>")
+                }
+                $(".keyword").val("")
+
+            }
+
+        })
+        $(document).on("click",".xBtn",function () {
+            $(this).parent().prev().remove();
+            $(this).parent().remove();
+
+        });
+
 
 
     });
@@ -207,7 +261,7 @@
         <th:block th:each="list : ${rentMenuList}">
             <div class="menuCopyAreaShow" style="display: none">
                 <table class="menuTable">
-                    <tr>
+                    <tr class="menuTitleTr">
                         <td style="width: 150px">메뉴명</td>
                         <td style="width: 150px">가격</td>
                         <td>상세내용</td>
@@ -216,7 +270,7 @@
                     <tr>
                         <td>
                             <input type="text" class="form-control" placeholder="메뉴" name="trmt_menu_nameArr" th:value="${list.trmt_menu_name}">
-                            <input type="hidden" class="form-control" name="trmt_seq" th:value="${list.trmt_seq}">
+                            <input type="hidden" class="form-control" name="trmt_seqArr" th:value="${list.trmt_seq}">
 
                         </td>
                         <td>
@@ -229,6 +283,14 @@
                         <td class="menuBtnArea">
                             <div class="menuPlusBtn">추가</div>
                             <div class="menuRemoveBtn">제거</div>
+                        </td>
+                    </tr>
+                    <tr class="hashTagTr">
+                        <td>해시태그</td>
+                        <td><input type="text" class="form-control keyword" placeholder="해시태그 입력" >
+                        </td>
+                        <td colspan="2"  class="hashTagTd">
+                            <ul></ul>
                         </td>
                     </tr>
                 </table>
@@ -245,7 +307,7 @@
 </form>
 <div class="menuCopyAreaHide" style="display: none">
     <table class="menuTable">
-        <tr>
+        <tr class="menuTitleTr">
             <td style="width: 150px">메뉴명</td>
             <td style="width: 150px">가격</td>
             <td>상세내용</td>
@@ -267,6 +329,15 @@
                 <div class="menuPlusBtn">추가</div>
                 <div class="menuRemoveBtn">제거</div>
             </td>
+        </tr>
+        <tr class="hashTagTr">
+            <td>해시태그</td>
+            <td><input type="text" class="form-control keyword" placeholder="해시태그 입력" >
+            </td>
+            <td colspan="2"  class="hashTagTd">
+                <ul></ul>
+            </td>
+
         </tr>
     </table>
 </div>
