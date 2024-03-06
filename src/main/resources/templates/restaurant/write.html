@@ -158,7 +158,7 @@
                 let keywordIdx = $(this).parent().closest("div").index() -1;
                 console.log(keywordIdx)
                 if(!inputVal.val() == "") {
-                    $(this).parent().parent().find("ul").append("<input type=\"hidden\" name=\"trmkw_key_word"+keywordIdx+"\" value=\""+inputVal.val()+"\">")
+                    $(this).parent().parent().find("ul").append("<input type=\"hidden\" name=\"list["+keywordIdx+"].trmkw_key_word\" value=\""+inputVal.val()+"\">")
                     $(this).parent().parent().find("ul").append(" <li><span class=\"xBtn\">❌</span>#"+inputVal.val()+"</li>")
                 }
                 $(".keyword").val("")

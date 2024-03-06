@@ -13,5 +13,6 @@ import java.util.List;
 @ToString
 public class Keyword {
     List<String> trmkw_key_word;
+    List<Keyword> list;
 
 }

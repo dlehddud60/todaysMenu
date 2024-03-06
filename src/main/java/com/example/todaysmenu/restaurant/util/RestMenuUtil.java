@@ -19,11 +19,10 @@ import java.util.Objects;
 
 @Log4j2
 public abstract class RestMenuUtil {
-    public static void restInsertMeth(RestaurantDTO restaurantDTO, RestMenuDTO restMenuDTO, Keyword keywor, List<LinkedHashMap<String , String>> keywordMap, HttpServletRequest request, MemberDTO memberSession, RestMenuService restMenuService, KeywordService keywordService) {
+    public static void restInsertMeth(RestaurantDTO restaurantDTO, RestMenuDTO restMenuDTO, Keyword keyword, HttpServletRequest request, MemberDTO memberSession, RestMenuService restMenuService, KeywordService keywordService) {
         List<String> insert = restMenuDTO.getTrmt_menu_nameArr();
         List<String> update = restMenuDTO.getTrmt_menu_nameArrUpdate();
         List<Integer> delete = restMenuDTO.getTrmt_seqArrDelete();
-        List<String> keyWordInsertArr = keywor.getTrmkw_key_word();
         if(update != null) {
             for (int i = 0; i < update.size(); i++) {
                 restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArrUpdate().get(i));
@@ -47,7 +46,6 @@ public abstract class RestMenuUtil {
         }
         if(insert != null) {
             for (int i = 0; i < insert.size(); i++) {
-                log.info("============restMenuDTO=============={}",restMenuDTO);
                 restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArr().get(i)); ;
                 restMenuDTO.setTrmt_price(restMenuDTO.getTrmt_priceArr().get(i)); ;
                 restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArr().get(i)); ;
@@ -61,15 +59,13 @@ public abstract class RestMenuUtil {
                 restMenuDTO.setTrmt_moder_id(memberSession.getTmt_login_id());
                 restMenuDTO.setTrmt_moder_ip(request.getRemoteAddr());
                 restMenuService.insert(restMenuDTO);
-                log.info("===============restMenuDTO============={}",restMenuDTO.getTrmt_seq());
-                log.info("===================keywor===================={}",keywor);
-                log.info("===================keywordMap===================={}",keywordMap);
-
-                for (int j = 0; j < keyWordInsertArr.size(); j++) {
-                    log.info("================keyWordInsertArr================={}",j);
-                    InsertRequsetKeywordModel keywordModel =  new InsertRequsetKeywordModel(restMenuDTO.getTrmt_seq(),keywor.getTrmkw_key_word().get(j),memberSession.getTmt_user_type(),memberSession.getTmt_memb_name(),memberSession.getTmt_login_id(),request.getRemoteAddr());
+                List<Keyword> keywordList = keyword.getList();
+                for (int j = 0; j < 1; j++) {
+                    List<String> trmkwKeyWord = keywordList.get(i).getTrmkw_key_word();
+                    for (int k = 0; k < trmkwKeyWord.size(); k++) {
+                        InsertRequsetKeywordModel keywordModel =  new InsertRequsetKeywordModel(restMenuDTO.getTrmt_seq(),trmkwKeyWord.get(k),memberSession.getTmt_user_type(),memberSession.getTmt_memb_name(),memberSession.getTmt_login_id(),request.getRemoteAddr());
                     keywordService.insert(keywordModel);
-                    log.info("==================keywordModel================{}",keywordModel);
+                    }
                 }
             }
         }

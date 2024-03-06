@@ -26,7 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.LinkedHashMap;
+
 import java.util.List;
 
 import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.*;
@@ -105,7 +105,6 @@ public class RestaurantController {
                     , @ModelAttribute RestFileDTO restFileDTO
                     , @ModelAttribute Keyword keyword
                     , @ModelAttribute Criteria cri
-                    , @RequestParam List<LinkedHashMap<String,String>> keywordMap
             , RedirectAttributes rttr
             , HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
         int trt_seq = restaurantDTO.getTrt_seq();
@@ -121,7 +120,7 @@ public class RestaurantController {
         restaurantDTO.setTrt_moder_ip(request.getRemoteAddr());
         if(trt_seq == 0){
            int dataSeq =  restaurantService.insert(restaurantDTO,restFileDTO,request);
-            restInsertMeth(restaurantDTO, restMenuDTO,keyword,keywordMap,request, memberSession,restMenuService,keywordService);
+            restInsertMeth(restaurantDTO, restMenuDTO,keyword,request, memberSession,restMenuService,keywordService);
             return redirect("restaurant/index.do",rttr,"성공 메세지","게시글 작성을 완료하였습니다.",SUCCESS);
         }else{
             String memberWriter = memberSession.getTmt_memb_name();
@@ -133,7 +132,7 @@ public class RestaurantController {
             String restInputNm = restaurantDTO.getTrt_input_nm();
             if(memberWriter.equals(restInputNm)){
                 restaurantService.update(restaurantDTO,restFileDTO,request);
-                restInsertMeth(restaurantDTO, restMenuDTO,keyword,keywordMap, request, memberSession,restMenuService,keywordService);
+                restInsertMeth(restaurantDTO, restMenuDTO,keyword, request, memberSession,restMenuService,keywordService);
             }else{
                 return redirect("restaurant/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
             }
