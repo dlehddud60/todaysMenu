@@ -24,6 +24,9 @@ public abstract class RestMenuUtil {
         List<String> update = restMenuDTO.getTrmt_menu_nameArrUpdate();
         List<Integer> delete = restMenuDTO.getTrmt_seqArrDelete();
         List<Integer> trmtSeqArr = restMenuDTO.getTrmt_seqArr();
+        log.info("==============restMenuDTO================={}",restMenuDTO);
+        log.info("================update==================={}",update);
+        log.info("================trmtSeqArr==================={}",trmtSeqArr);
         if(update != null) {
             for (int i = 0; i < update.size(); i++) {
                 restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArrUpdate().get(i));
