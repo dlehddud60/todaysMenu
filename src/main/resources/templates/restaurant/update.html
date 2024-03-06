@@ -123,11 +123,11 @@
 <script>
     let menuAreaHeight = 300;
     $(function () {
-        $(document).on("keydown","input[type=text]", function() {
-            if (event.keyCode === 13) {
-                event.preventDefault();
-            }
-        });
+        // $(document).on("keydown","input[type=text]", function() {
+        //     if (event.keyCode === 13) {
+        //         event.preventDefault();
+        //     }
+        // });
         let menuShowLength = $(".menuCopyAreaShow").length;
         let menuName =  $(".menuCopyAreaShow input[name=trmt_menu_nameArr]");
         let menuPrice =  $(".menuCopyAreaShow input[name=trmt_priceArr]");
@@ -271,6 +271,7 @@
                         <td>
                             <input type="text" class="form-control" placeholder="메뉴" name="trmt_menu_nameArr" th:value="${list.trmt_menu_name}">
                             <input type="hidden" class="form-control" name="trmt_seqArr" th:value="${list.trmt_seq}">
+                            <input type="hidden" class="form-control" name="trmt_seq" th:value="${list.trmt_seq}">
 
                         </td>
                         <td>
