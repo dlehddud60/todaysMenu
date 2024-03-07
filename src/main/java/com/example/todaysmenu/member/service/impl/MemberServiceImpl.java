@@ -67,7 +67,7 @@ public class MemberServiceImpl implements MemberService {
             , HttpSession session
             , String tmt_seq
             ) {
-
+        log.info("===============register1====================");
         String loginId = memberDTO.getTmt_login_id();
         if(loginId == null || loginId.equals("")) {
             MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
@@ -142,7 +142,6 @@ public class MemberServiceImpl implements MemberService {
                 return redirect("join.do",rttr,"실패 메시지","이미 존재하는 회원입니다.", DANGER);
             }
             // 무결성 제약 조건 위배 예외 처리
-            String errorMessage = e.getMessage(); // 예외 메시지를 가져올 수 있습니다.
         }
         return "redirect:/";
     }

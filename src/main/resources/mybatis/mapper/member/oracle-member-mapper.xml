@@ -84,9 +84,7 @@
         ,   TMT_MEMB_GENDER
         ,   TMT_MEMB_EMAIL
         ,   TMT_MEMB_BIRTH_DAY
-        ,   TMT_MEMB_FILE
         ,   TMT_INPUT_DATE
-        ,   TMT_USER_TYPE
         )
         VALUES
         (   TM_TMT_SEQ.nextval
@@ -97,10 +95,9 @@
         ,   #{tmt_memb_gender}
         ,   #{tmt_memb_email}
         ,   SYSDATE
-        ,   #{tmt_memb_file}
         ,   SYSDATE
-        ,   'user'
         )
+        <selectKey keyProperty="tmt_seq" resultType="String" order="AFTER">SELECT TM_TMT_SEQ.CURRVAL FROM DUAL</selectKey>
     </insert>
 
     <update id="memberUpdate"  parameterType="com.example.todaysmenu.member.entity.MemberDTO">
