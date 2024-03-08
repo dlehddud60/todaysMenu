@@ -324,7 +324,9 @@
                                                             ON      TRMT.TRT_SEQ = TRT.TRT_SEQ
                                                     ) T1
                                 )T1
-                                WHERE 1 = 1
+                                WHERE   1 = 1
+                                AND T1.TRST_MENU_AVG_SCORE NOT BETWEEN 1 AND 2.9
+                                AND T1.TRST_REST_AVG_SCORE NOT BETWEEN 1 AND 2.9
                                     <if test='trmt_seqArr != null'>
                                         AND T1.TRMT_SEQ NOT IN
                                         <foreach collection="trmt_seqArr" item="item" index="index" separator="," open="(" close=")">
@@ -339,15 +341,15 @@
                                     </if>
                                 <choose>
                                     <when test="status == 0">
-                                        AND TO_CHAR(SYSDATE-3 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD
-                                        AND	T1.TRST_STAR_SCORE >= 3
-                                        AND T1.TRST_MENU_AVG_SCORE >= 3
-                                        AND T1.TRST_REST_AVG_SCORE >= 3
+                                        AND TO_CHAR(SYSDATE-7 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD
+                                        AND	T1.TRST_STAR_SCORE >= 5
+                                        AND T1.TRST_MENU_AVG_SCORE >= 5
+                                        AND T1.TRST_REST_AVG_SCORE >= 5
                                     </when>
                                     <when test="status == 1">
-                                        AND TO_CHAR(SYSDATE-3 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD
-                                        AND	T1.TRST_STAR_SCORE >= 3
-                                        AND T1.TRST_MENU_AVG_SCORE >= 3
+                                        AND TO_CHAR(SYSDATE-7 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD
+                                        AND	T1.TRST_STAR_SCORE >= 4
+                                        AND T1.TRST_MENU_AVG_SCORE >= 4
                                     </when>
                                     <when test="status == 2">
                                         AND	T1.TRST_STAR_SCORE >= 3

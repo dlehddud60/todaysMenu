@@ -56,12 +56,14 @@ public class BoardController {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         BoardDTO boardInfo;
-        String memberWriter;
-        String boardWriter;
+        String loginId;
+        String memberId;
+        String memberType;
         try{
             boardInfo = boardService.info(tfb_seq);
-            memberWriter = memberSession.getTmt_memb_name();
-            boardWriter = boardInfo.getTfb_input_nm();
+            loginId = memberSession.getTmt_memb_name();
+            memberId = boardInfo.getTfb_input_nm();
+            memberType = memberSession.getTmt_user_type();
         } catch (NullPointerException e) {
             if(memberSession == null) {
                 return redirect("board/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
@@ -69,7 +71,7 @@ public class BoardController {
                 return "board/write";
             }
         }
-        if(memberWriter.equals(boardWriter) ) {
+        if(loginId.equals(memberId)|| memberType.equals("master") ) {
             log.info("test");
         }else{
             return redirect("board/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
@@ -113,7 +115,9 @@ public class BoardController {
             String memberWriter = memberSession.getTmt_memb_name();
             BoardDTO boardInfo = boardService.info(dataSeq);
             String boardWriter = boardInfo.getTfb_input_nm();
-            if(memberWriter.equals(boardWriter)){
+            String memberType = memberSession.getTmt_user_type();
+
+            if(memberWriter.equals(boardWriter) || memberType.equals("master")){
                 try {
                     boardService.update(boardDTO,commonFileDTO,request);
                 } catch (FileExtensionExaption | FileSizeExaption e) {
@@ -150,16 +154,20 @@ public class BoardController {
         BoardDTO boardInfo;
         String memberWriter;
         String boardWriter;
+        String memberType;
+
         try{
             boardInfo = boardService.info(tfb_seq);
             memberWriter = memberSession.getTmt_memb_name();
             boardWriter = boardInfo.getTfb_input_nm();
+            memberType = memberSession.getTmt_user_type();
+
         } catch (NullPointerException e) {
             return redirect("board/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
         }
 
 
-        if(memberWriter.equals(boardWriter)){
+        if(memberWriter.equals(boardWriter) || memberType.equals("master")){
             try {
                 boardService.delete(tfb_seq,commonFileDTO);
 
@@ -185,8 +193,11 @@ public class BoardController {
         String userSessionName = "";
         String statusMsg = "";
         String userName;
+        String memberType = "";
         try {
             userSessionName = memberSession.getTmt_memb_name();
+            memberType = memberSession.getTmt_user_type();
+            
         } catch (NullPointerException e) {
             log.info("세션 객체 없음");
         }
@@ -194,7 +205,7 @@ public class BoardController {
             for (int i = 0; i < tfb_seq.size(); i++) {
                 boardInfo = boardService.info(tfb_seq.get(i));
                 userName = boardInfo.getTfb_input_nm();
-                if(userName.equals(userSessionName) && memberSession != null) {
+                if(userName.equals(userSessionName) && memberSession != null || memberType.equals("master")) {
                 boardService.delete(tfb_seq.get(i));
                 } else {
                     if(memberSession == null) {
@@ -211,7 +222,7 @@ public class BoardController {
         rttr.addFlashAttribute("result","success");
         rttr.addAttribute("pageNum",cri.getPageNum());
         rttr.addAttribute("amount",cri.getAmount());
-        return redirect("restaurant/index.do",rttr,"성공 메세지","게시물을 삭제하였습니다.",SUCCESS);
+        return redirect("board/index.do",rttr,"성공 메세지","게시물을 삭제하였습니다.",SUCCESS);
     }
 
 

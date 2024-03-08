@@ -64,14 +64,16 @@ public class RestaurantController {
         RestaurantDTO restaurantDTO;
         RestaurantDTO restaurantDTOInfo = new RestaurantDTO();
         RestMenuDTO restMenuDTO = new RestMenuDTO();
-        String memberWriter;
-        String restaurant;
+        String loginId;
+        String memberId;
+        String memberType;
         try{
             restaurantDTOInfo.setTmt_login_id(memberSession.getTmt_login_id());
             restaurantDTOInfo.setTrt_seq(trt_seq);
             restaurantDTO = restaurantService.info(restaurantDTOInfo);
-            memberWriter = memberSession.getTmt_memb_name();
-            restaurant = restaurantDTO.getTrt_input_nm();
+            loginId = memberSession.getTmt_login_id();
+            memberType = memberSession.getTmt_user_type();
+            memberId = restaurantDTO.getTrt_input_id();
         } catch (NullPointerException e) {
             if(memberSession == null) {
                 return redirect("restaurant/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
@@ -79,7 +81,7 @@ public class RestaurantController {
                 return "restaurant/write";
             }
         }
-        if(memberWriter.equals(restaurant) ) {
+        if(loginId.equals(memberId) || memberType.equals("master")) {
             log.info("test");
         }else{
             return redirect("restaurant/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
@@ -139,13 +141,14 @@ public class RestaurantController {
             return redirect("restaurant/index.do",rttr,"성공 메세지","게시글 작성을 완료하였습니다.",SUCCESS);
         }else{
             String memberId = memberSession.getTmt_login_id();
+            String memberType = memberSession.getTmt_user_type();
             RestaurantDTO restaurantDTOInfo = new RestaurantDTO();
             restaurantDTOInfo.setTmt_login_id(memberSession.getTmt_login_id());
             restaurantDTOInfo.setTrt_seq(trt_seq);
 
             restaurantService.info(restaurantDTOInfo);
             String restInputId = restaurantDTO.getTrt_input_id();
-            if(memberId.equals(restInputId)){
+            if(memberId.equals(restInputId) || memberType.equals("master")){
                 restaurantService.update(restaurantDTO,restFileDTO,request);
                 restInsertMeth(restaurantDTO, restMenuDTO,keyword, request, memberSession,restMenuService,keywordService);
             }else{
@@ -198,16 +201,19 @@ public class RestaurantController {
         RestaurantDTO restaurantInfo;
         String memberWriter;
         String restaurant;
+        String memberType;
         try{
             restaurantInfo = restaurantService.info(restaurantDTO);
             memberWriter = memberSession.getTmt_memb_name();
             restaurant = restaurantInfo.getTrt_input_nm();
+            memberType = memberSession.getTmt_user_type();
+
         } catch (NullPointerException e) {
             return redirect("restaurant/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
         }
 
         int dataSeq;
-        if(memberWriter.equals(restaurant)){
+        if(memberWriter.equals(restaurant) || memberType.equals("master")){
             try {
                 dataSeq = restaurantService.delete(trt_seq,restFileDTO); //식당 부모 게시글 삭제1
 
