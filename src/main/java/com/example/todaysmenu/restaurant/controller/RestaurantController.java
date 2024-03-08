@@ -88,17 +88,12 @@ public class RestaurantController {
             return redirect("restaurant/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
         }
         if(trt_seq != null){
-            log.info("==================updatRestMenuDTO================={}",restMenuDTO);
-            log.info("==================trt_seq================={}",trt_seq);
             restMenuDTO.setTrt_seq(trt_seq);
             List<RestMenuDTO> restMenuDTOList = restMenuService.rentMenuList(restMenuDTO);
-            log.info("=============restMenuDTOList============{}",restMenuDTOList);
             for (int i = 0; i < restMenuDTOList.size(); i++) {
                 int trmtSeq = restMenuDTOList.get(i).getTrmt_seq();
-                log.info("=================trmtSeq================={}",trmtSeq);
                 FindRequestKeywordListModel findRequestKeywordListModel = new FindRequestKeywordListModel(trmtSeq);
                 List<FindResponseKeywordListModel> keywordDetailList = keywordService.list(findRequestKeywordListModel);
-                log.info("================keywordDetailList==================={}",keywordDetailList);
                 model.addAttribute("keywordList" + i,keywordDetailList);
             }
 
@@ -124,6 +119,7 @@ public class RestaurantController {
             , HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
         int trt_seq = restaurantDTO.getTrt_seq();
         HttpSession session = request.getSession();
+//        String referer = request.getHeader("Referer");
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         restaurantDTO.setTrt_input_ty(memberSession.getTmt_user_type());
         restaurantDTO.setTrt_input_nm(memberSession.getTmt_memb_name());
@@ -134,18 +130,22 @@ public class RestaurantController {
         restaurantDTO.setTrt_moder_id(memberSession.getTmt_login_id());
         restaurantDTO.setTrt_moder_ip(request.getRemoteAddr());
         if(trt_seq == 0){
-           int dataSeq =  restaurantService.insert(restaurantDTO,restFileDTO,request);
-            restInsertMeth(restaurantDTO, restMenuDTO,keyword,request, memberSession,restMenuService,keywordService);
+            try{
+                restaurantService.insert(restaurantDTO,restFileDTO,request);
+                restInsertMeth(restaurantDTO, restMenuDTO,keyword,request, memberSession,restMenuService,keywordService);
+            }catch (Exception e) {
+                return redirect("restaurant/write.do",rttr,"실패 메시지","게시글을 전부 작성해주시길 바랍니다..",DANGER);
+            }
             return redirect("restaurant/index.do",rttr,"성공 메세지","게시글 작성을 완료하였습니다.",SUCCESS);
         }else{
-            String memberWriter = memberSession.getTmt_memb_name();
+            String memberId = memberSession.getTmt_login_id();
             RestaurantDTO restaurantDTOInfo = new RestaurantDTO();
             restaurantDTOInfo.setTmt_login_id(memberSession.getTmt_login_id());
             restaurantDTOInfo.setTrt_seq(trt_seq);
 
             restaurantService.info(restaurantDTOInfo);
-            String restInputNm = restaurantDTO.getTrt_input_nm();
-            if(memberWriter.equals(restInputNm)){
+            String restInputId = restaurantDTO.getTrt_input_id();
+            if(memberId.equals(restInputId)){
                 restaurantService.update(restaurantDTO,restFileDTO,request);
                 restInsertMeth(restaurantDTO, restMenuDTO,keyword, request, memberSession,restMenuService,keywordService);
             }else{
