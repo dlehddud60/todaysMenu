@@ -181,7 +181,7 @@
                 </tbody>
             </table>
             <br>
-            <div th:replace="~{include/pagination/pageMain::globalPagingSet(list)}"></div>
+            <div th:replace="~{include/pagination/pageMain::globalPagingSet(${list})}"></div>
         </div>
     </div>
 </form>

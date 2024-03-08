@@ -139,7 +139,7 @@
                 </tbody>
             </table>
             <br>
-            <div th:replace="~{include/pagination/pageMain::globalPagingSet(list)}"></div>
+            <div th:replace="~{include/pagination/pageMain::globalPagingSet(${list})}"></div>
             <a class="btn btn-success" href="/restaurant/write.do" role="button" style="float:right;">등록</a>
             <div th:replace="~{include/modal/delChkModal::globalChkBtn(restaurant)}" th:remove="tag"></div>
         </div>
