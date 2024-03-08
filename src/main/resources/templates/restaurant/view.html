@@ -297,9 +297,9 @@
 
             </table>
         </th:block>
-        <a class="btn btn-success" th:href="@{/restaurant/index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
-        <a class="btn btn-info" th:href="@{/restaurant/write.do(trt_seq = ${info.trt_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>
-        <div th:replace="~{/include/modal/deleteModal::globalDel(restaurant,trt_seq,${info.trt_seq})}"></div>
+        <a class="btn btn-success" th:href="@{index.do(pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="목록"></a>
+        <a class="btn btn-info" th:href="@{write.do(trt_seq = ${info.trt_seq},pageNum = ${param.pageNum },amount = ${param.amount})}" th:text="수정" ></a>
+        <div th:replace="~{include/modal/deleteModal::globalDel(restaurant,trt_seq,${info.trt_seq})}"></div>
 
 
     </div>

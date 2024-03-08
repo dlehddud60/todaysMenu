@@ -133,7 +133,7 @@
         let menuPrice =  $(".menuCopyAreaShow input[name=trmt_priceArr]");
         let menuTextArr =  $(".menuCopyAreaShow input[name=trmt_menu_textArr]");
         menuAreaCopyFunc();
-        menuAreaHeight += (menuShowLength * 50);
+        menuAreaHeight += (menuShowLength * 110);
         if(menuName.val() != null) {
             menuName.attr("name","trmt_menu_nameArrUpdate");
         }
@@ -215,7 +215,6 @@
 
 
 <form method="post" action="/restaurant/proc.do" enctype="multipart/form-data">
-    [[${keywordList1}]]
     <input type="hidden" name="trt_seq" th:value="${param.trt_seq}">
     <input type="hidden" name="pageNum" th:value="${param.pageNum}">
     <input type="hidden" name="amount" th:value="${param.amount}">
@@ -252,36 +251,9 @@
             <label class="input-group-text" for="inputGroupFile01">이미지 첨부</label>
             <input type="file" class="form-control" id="inputGroupFile01"  name="trft_multi_file" multiple>
         </div>
-
-
-
     </div>
     <div id="menuArea">
         <p class="menuText">메뉴 등록</p>
-
-
-
-
-
-<!--        <th:block th:each="list, listState : ${rentMenuList}">-->
-<!--            <tr>-->
-<!--                <td style="width: 150px" th:text="${list.trmt_menu_name}"></td>-->
-<!--                <td style="width: 150px" th:text="${list.trmt_price_comma}"></td>-->
-<!--                <td th:text="${list.trmt_menu_text}"></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--                <td style="background: #e3e3e3">해시태그</td>-->
-<!--                <td colspan="2" style="background: #e3e3e3">-->
-<!--                    <th:block th:with="keywordList='keywordList' + ${listState.index}">-->
-<!--                        <span th:each="keyword : ${#vars[keywordList]}">#<span th:text="${keyword.trmkw_key_word}+' ' "></span></span>-->
-<!--                    </th:block>-->
-<!--                </td>-->
-<!--            </tr>-->
-<!--        </th:block>        -->
-
-
-
-
 
         <th:block th:each="list, listState : ${rentMenuList}">
             <div class="menuCopyAreaShow" style="display: none">
@@ -326,22 +298,16 @@
                                         </li>
                                     </span>
                                 </th:block>
-
-
                             </ul>
                         </td>
                     </tr>
                 </table>
             </div>
         </th:block>
-
     </div>
     <div class="procBtnArea">
-        <div th:replace="~{/include/modal/procModal::globalProcBtn(${info.trt_seq},restaurant)}"></div>
+        <div th:replace="~{include/modal/procModal::globalProcBtn(${info.trt_seq},restaurant)}"></div>
     </div>
-
-
-
 </form>
 <div class="menuCopyAreaHide" style="display: none">
     <table class="menuTable">
