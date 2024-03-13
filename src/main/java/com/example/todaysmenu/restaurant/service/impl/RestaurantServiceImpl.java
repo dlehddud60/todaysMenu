@@ -1,12 +1,11 @@
 package com.example.todaysmenu.restaurant.service.impl;
 
-import com.example.todaysmenu.common.customExaption.FileExtensionExaption;
-import com.example.todaysmenu.common.customExaption.FileSizeExaption;
+import com.example.todaysmenu.exception.FileExtensionExaption;
+import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
 import com.example.todaysmenu.restaurant.file.entity.RestFileDTO;
 import com.example.todaysmenu.restaurant.file.repository.RestFileRepository;
-import com.example.todaysmenu.restaurant.file.util.RestFile;
 import com.example.todaysmenu.restaurant.repository.RestaurantRepository;
 import com.example.todaysmenu.restaurant.service.RestaurantService;
 import jakarta.servlet.http.HttpServletRequest;

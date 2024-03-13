@@ -1,4 +1,4 @@
-package com.example.todaysmenu.common.customExaption;
+package com.example.todaysmenu.exception;
 
 public class FileExtensionExaption extends Exception{
     public FileExtensionExaption() {

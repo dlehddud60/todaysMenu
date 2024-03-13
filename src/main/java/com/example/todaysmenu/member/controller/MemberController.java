@@ -1,7 +1,7 @@
 package com.example.todaysmenu.member.controller;
 
-import com.example.todaysmenu.common.customExaption.FileExtensionExaption;
-import com.example.todaysmenu.common.customExaption.FileSizeExaption;
+import com.example.todaysmenu.exception.FileExtensionExaption;
+import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.member.memFile.entity.MemFileDTO;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.pagination.entity.PageDTO;

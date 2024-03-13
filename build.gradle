@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '3.1.2'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.2'
     compileOnly 'org.projectlombok:lombok'
@@ -31,34 +31,19 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.2'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    //오라클 클라우드에 접속하기 위한 라이브러리
-// https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc11
-    implementation group: 'com.oracle.database.jdbc', name: 'ojdbc11', version: '23.2.0.0'
+    runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
     implementation 'com.oracle.database.security:osdt_cert'
     implementation 'com.oracle.database.security:oraclepki'
     implementation 'com.oracle.database.security:osdt_core'
-    // 마이바티스 쿼리 로그
-    implementation group: 'org.bgee.log4jdbc-log4j2', name: 'log4jdbc-log4j2-jdbc4.1', version: '1.16'
-
-    // https://mvnrepository.com/artifact/com.servlets/cos
+    implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
     implementation group: 'com.servlets', name: 'cos', version: '09May2002'
-
-    // https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api
     compileOnly group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
-
-    // 스프링 시큐리티
-//    implementation 'org.springframework.boot:spring-boot-starter-security'	// spring security
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security'
-
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
-
     compileOnly 'org.projectlombok:lombok:1.18.20'
     annotationProcessor 'org.projectlombok:lombok:1.18.20'
-
     testCompileOnly 'org.projectlombok:lombok:1.18.20'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
-
 
 }
 

@@ -3,8 +3,8 @@ package com.example.todaysmenu.board.controller;
 import com.example.todaysmenu.board.entity.BoardDTO;
 import com.example.todaysmenu.common.commonFile.entity.CommonFileDTO;
 import com.example.todaysmenu.common.commonFile.service.CommonFileService;
-import com.example.todaysmenu.common.customExaption.FileExtensionExaption;
-import com.example.todaysmenu.common.customExaption.FileSizeExaption;
+import com.example.todaysmenu.exception.FileExtensionExaption;
+import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.pagination.entity.PageDTO;
 import com.example.todaysmenu.board.service.BoardService;
@@ -18,9 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.concurrent.CompletionService;
 
 import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.*;
 
@@ -88,50 +86,57 @@ public class BoardController {
         }
     }
 
-    @PostMapping("/proc.do")
-    public String proc(@ModelAttribute CommonFileDTO commonFileDTO, @ModelAttribute BoardDTO boardDTO, @ModelAttribute Criteria cri,  RedirectAttributes rttr, HttpServletRequest request) {
-
-        int  tfb_seq = boardDTO.getTfb_seq();
+    @PostMapping("/insert.do")
+    public String insert(@ModelAttribute CommonFileDTO commonFileDTO
+                   ,    @ModelAttribute BoardDTO boardDTO
+                   ,    @ModelAttribute Criteria cri
+                   ,    RedirectAttributes rttr
+                   ,    HttpServletRequest request) {
+        log.info("=============insert.do================");
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        int  tfb_seq = boardDTO.getTfb_seq();
+        boardDTO.setTfb_input_ty(memberSession.getTmt_user_type());
+        boardDTO.setTfb_input_nm(memberSession.getTmt_memb_name());
+        boardDTO.setTfb_input_ip(request.getRemoteAddr());
+        try {
+            boardService.insert(boardDTO,commonFileDTO,request);
+        } catch (FileExtensionExaption | FileSizeExaption e) {
+            return redirect("",rttr,"실패",e.getMessage(),DANGER);
+        }
+        return redirect("board/index.do",rttr,"성공 메세지","게시물을 작성하였습니다.",SUCCESS);
+    }
 
 
-        if(tfb_seq == 0){
-            boardDTO.setTfb_input_ty(memberSession.getTmt_user_type());
-            boardDTO.setTfb_input_nm(memberSession.getTmt_memb_name());
-            boardDTO.setTfb_input_ip(request.getRemoteAddr());
+    @PostMapping("/update.do")
+    public String update(@ModelAttribute CommonFileDTO commonFileDTO
+            ,    @ModelAttribute BoardDTO boardDTO
+            ,    @ModelAttribute Criteria cri
+            ,    RedirectAttributes rttr
+            ,    HttpServletRequest request) {
+        log.info("=============update.do================");
+        HttpSession session = request.getSession();
+        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        boardDTO.setTfb_moder_ty(memberSession.getTmt_user_type());
+        boardDTO.setTfb_moder_nm(memberSession.getTmt_memb_name());
+        boardDTO.setTfb_moder_ip(request.getRemoteAddr());
+        int dataSeq = boardDTO.getTfb_seq();
+        String memberWriter = memberSession.getTmt_memb_name();
+        BoardDTO boardInfo = boardService.info(dataSeq);
+        String boardWriter = boardInfo.getTfb_input_nm();
+        String memberType = memberSession.getTmt_user_type();
+        if(memberWriter.equals(boardWriter) || memberType.equals("master")){
             try {
-                boardService.insert(boardDTO,commonFileDTO,request);
+                boardService.update(boardDTO,commonFileDTO,request);
             } catch (FileExtensionExaption | FileSizeExaption e) {
                 return redirect("",rttr,"실패",e.getMessage(),DANGER);
-
             }
-            return redirect("board/index.do",rttr,"성공 메세지","게시물을 작성하였습니다.",SUCCESS);
         }else{
-            boardDTO.setTfb_moder_ty(memberSession.getTmt_user_type());
-            boardDTO.setTfb_moder_nm(memberSession.getTmt_memb_name());
-            boardDTO.setTfb_moder_ip(request.getRemoteAddr());
-            int dataSeq = boardDTO.getTfb_seq();
-            String memberWriter = memberSession.getTmt_memb_name();
-            BoardDTO boardInfo = boardService.info(dataSeq);
-            String boardWriter = boardInfo.getTfb_input_nm();
-            String memberType = memberSession.getTmt_user_type();
-
-            if(memberWriter.equals(boardWriter) || memberType.equals("master")){
-                try {
-                    boardService.update(boardDTO,commonFileDTO,request);
-                } catch (FileExtensionExaption | FileSizeExaption e) {
-                    return redirect("",rttr,"실패",e.getMessage(),DANGER);
-
-                }
-            }else{
-                return redirect("board/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
-            }
+            return redirect("board/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
+        }
             rttr.addFlashAttribute("result","success");
             rttr.addAttribute("pageNum",cri.getPageNum());
             rttr.addAttribute("amount",cri.getAmount());
-
-        }
         return redirect("board/index.do",rttr,"성공 메세지","게시물을 수정하였습니다.",SUCCESS);
     }
 

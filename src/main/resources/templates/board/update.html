@@ -1,5 +1,5 @@
 <div th:insert="~{include/Header.html}" th:remove="tag"></div>
-<form method="post" action="/board/proc.do"  enctype="multipart/form-data">
+<form method="post" action="/board/update.do"  enctype="multipart/form-data">
     <input type="hidden" name="tfb_seq" th:value="${info.tfb_seq}">
     <input type="hidden" name="pageNum" th:value="${param.pageNum}">
     <input type="hidden" name="amount" th:value="${param.amount}">

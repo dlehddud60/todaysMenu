@@ -3,14 +3,12 @@ package com.example.todaysmenu.common.commonFile.util;
 import com.example.todaysmenu.board.entity.BoardDTO;
 import com.example.todaysmenu.common.commonFile.entity.CommonFileDTO;
 import com.example.todaysmenu.common.commonFile.repository.CommonFileRepository;
-import com.example.todaysmenu.common.customExaption.FileExtensionExaption;
-import com.example.todaysmenu.common.customExaption.FileSizeExaption;
+import com.example.todaysmenu.exception.FileExtensionExaption;
+import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.member.entity.MemberDTO;
-import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

@@ -3,23 +3,16 @@ package com.example.todaysmenu.board.service.impl;
 import com.example.todaysmenu.board.entity.BoardDTO;
 import com.example.todaysmenu.common.commonFile.entity.CommonFileDTO;
 import com.example.todaysmenu.common.commonFile.repository.CommonFileRepository;
-import com.example.todaysmenu.common.commonFile.util.CommonFile;
-import com.example.todaysmenu.common.customExaption.FileExtensionExaption;
-import com.example.todaysmenu.common.customExaption.FileSizeExaption;
-import com.example.todaysmenu.member.entity.MemberDTO;
-import com.example.todaysmenu.member.memFile.entity.MemFileDTO;
+import com.example.todaysmenu.exception.FileExtensionExaption;
+import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.pagination.entity.Criteria;
 import com.example.todaysmenu.board.repository.BoardRepository;
 import com.example.todaysmenu.board.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import static com.example.todaysmenu.common.commonFile.util.CommonFile.*;
