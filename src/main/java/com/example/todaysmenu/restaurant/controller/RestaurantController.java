@@ -111,55 +111,62 @@ public class RestaurantController {
         }
     }
 
-    @PostMapping("/proc.do")
-    public String proc(@ModelAttribute RestaurantDTO restaurantDTO
+    @PostMapping("/insert.do")
+    public String insert(@ModelAttribute RestaurantDTO restaurantDTO
                     , @ModelAttribute RestMenuDTO restMenuDTO
                     , @ModelAttribute RestFileDTO restFileDTO
                     , @ModelAttribute Keyword keyword
                     , @ModelAttribute Criteria cri
             , RedirectAttributes rttr
             , HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
-        int trt_seq = restaurantDTO.getTrt_seq();
-        HttpSession session = request.getSession();
-//        String referer = request.getHeader("Referer");
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-        restaurantDTO.setTrt_input_ty(memberSession.getTmt_user_type());
-        restaurantDTO.setTrt_input_nm(memberSession.getTmt_memb_name());
-        restaurantDTO.setTrt_input_id(memberSession.getTmt_login_id());
-        restaurantDTO.setTrt_input_ip(request.getRemoteAddr());
-        restaurantDTO.setTrt_moder_ty(memberSession.getTmt_user_type());
-        restaurantDTO.setTrt_moder_nm(memberSession.getTmt_memb_name());
-        restaurantDTO.setTrt_moder_id(memberSession.getTmt_login_id());
-        restaurantDTO.setTrt_moder_ip(request.getRemoteAddr());
-        if(trt_seq == 0){
-            try{
+        log.info("=======================insert========================");
+        MemberDTO memberSession = getMemberDTO(restaurantDTO, request);
+        try{
                 restaurantService.insert(restaurantDTO,restFileDTO,request);
                 restInsertMeth(restaurantDTO, restMenuDTO,keyword,request, memberSession,restMenuService,keywordService);
             }catch (Exception e) {
                 return redirect("restaurant/write.do",rttr,"실패 메시지","게시글을 전부 작성해주시길 바랍니다..",DANGER);
             }
-            return redirect("restaurant/index.do",rttr,"성공 메세지","게시글 작성을 완료하였습니다.",SUCCESS);
-        }else{
-            String memberId = memberSession.getTmt_login_id();
-            String memberType = memberSession.getTmt_user_type();
-            RestaurantDTO restaurantDTOInfo = new RestaurantDTO();
-            restaurantDTOInfo.setTmt_login_id(memberSession.getTmt_login_id());
-            restaurantDTOInfo.setTrt_seq(trt_seq);
+        rttr.addFlashAttribute("result","success");
+        rttr.addAttribute("pageNum",cri.getPageNum());
+        rttr.addAttribute("amount",cri.getAmount());
+        return redirect("restaurant/index.do",rttr,"성공 메세지","게시글 작성을 완료하였습니다.",SUCCESS);
+    }
 
-            restaurantService.info(restaurantDTOInfo);
-            String restInputId = restaurantDTO.getTrt_input_id();
-            if(memberId.equals(restInputId) || memberType.equals("master")){
-                restaurantService.update(restaurantDTO,restFileDTO,request);
-                restInsertMeth(restaurantDTO, restMenuDTO,keyword, request, memberSession,restMenuService,keywordService);
-            }else{
-                return redirect("restaurant/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
-            }
-            rttr.addFlashAttribute("result","success");
-            rttr.addAttribute("pageNum",cri.getPageNum());
-            rttr.addAttribute("amount",cri.getAmount());
+
+
+
+    @PostMapping("/update.do")
+    public String update(@ModelAttribute RestaurantDTO restaurantDTO
+            , @ModelAttribute RestMenuDTO restMenuDTO
+            , @ModelAttribute RestFileDTO restFileDTO
+            , @ModelAttribute Keyword keyword
+            , @ModelAttribute Criteria cri
+            , RedirectAttributes rttr
+            , HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
+        log.info("=======================update========================");
+        int trt_seq = restaurantDTO.getTrt_seq();
+        MemberDTO memberSession = getMemberDTO(restaurantDTO, request);
+        String memberId = memberSession.getTmt_login_id();
+        String memberType = memberSession.getTmt_user_type();
+        RestaurantDTO restaurantDTOInfo = new RestaurantDTO();
+        restaurantDTOInfo.setTmt_login_id(memberSession.getTmt_login_id());
+        restaurantDTOInfo.setTrt_seq(trt_seq);
+        restaurantService.info(restaurantDTOInfo);
+        String restInputId = restaurantDTO.getTrt_input_id();
+        if(memberId.equals(restInputId) || memberType.equals("master")){
+            restaurantService.update(restaurantDTO,restFileDTO,request);
+            restInsertMeth(restaurantDTO, restMenuDTO,keyword, request, memberSession,restMenuService,keywordService);
+        }else{
+            return redirect("restaurant/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
         }
+        rttr.addFlashAttribute("result","success");
+        rttr.addAttribute("pageNum",cri.getPageNum());
+        rttr.addAttribute("amount",cri.getAmount());
         return redirect("restaurant/index.do",rttr,"성공 메세지","수정을 완료하였습니다.",SUCCESS);
     }
+
+
 
     @GetMapping("/view.do")
     public String view(@ModelAttribute RestaurantDTO restaurantDTO,@ModelAttribute Criteria cri,  Model model, HttpServletRequest request, RedirectAttributes rttr) {
@@ -244,6 +251,21 @@ public class RestaurantController {
         rttr.addAttribute("pageNum",cri.getPageNum());
         rttr.addAttribute("amount",cri.getAmount());
         return redirect("restaurant/index.do",rttr,"성공 메세지","게시물을 삭제하였습니다.",SUCCESS);
+    }
+
+
+    private static MemberDTO getMemberDTO(RestaurantDTO restaurantDTO, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        restaurantDTO.setTrt_input_ty(memberSession.getTmt_user_type());
+        restaurantDTO.setTrt_input_nm(memberSession.getTmt_memb_name());
+        restaurantDTO.setTrt_input_id(memberSession.getTmt_login_id());
+        restaurantDTO.setTrt_input_ip(request.getRemoteAddr());
+        restaurantDTO.setTrt_moder_ty(memberSession.getTmt_user_type());
+        restaurantDTO.setTrt_moder_nm(memberSession.getTmt_memb_name());
+        restaurantDTO.setTrt_moder_id(memberSession.getTmt_login_id());
+        restaurantDTO.setTrt_moder_ip(request.getRemoteAddr());
+        return memberSession;
     }
 
 //    @GetMapping("/delChk.do")

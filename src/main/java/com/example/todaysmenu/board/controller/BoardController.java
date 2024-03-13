@@ -92,7 +92,6 @@ public class BoardController {
                    ,    @ModelAttribute Criteria cri
                    ,    RedirectAttributes rttr
                    ,    HttpServletRequest request) {
-        log.info("=============insert.do================");
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         int  tfb_seq = boardDTO.getTfb_seq();
@@ -104,6 +103,9 @@ public class BoardController {
         } catch (FileExtensionExaption | FileSizeExaption e) {
             return redirect("",rttr,"실패",e.getMessage(),DANGER);
         }
+        rttr.addFlashAttribute("result","success");
+        rttr.addAttribute("pageNum",cri.getPageNum());
+        rttr.addAttribute("amount",cri.getAmount());
         return redirect("board/index.do",rttr,"성공 메세지","게시물을 작성하였습니다.",SUCCESS);
     }
 
@@ -114,7 +116,6 @@ public class BoardController {
             ,    @ModelAttribute Criteria cri
             ,    RedirectAttributes rttr
             ,    HttpServletRequest request) {
-        log.info("=============update.do================");
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         boardDTO.setTfb_moder_ty(memberSession.getTmt_user_type());
