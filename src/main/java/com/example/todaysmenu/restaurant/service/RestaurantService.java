@@ -2,9 +2,9 @@ package com.example.todaysmenu.restaurant.service;
 
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
-import com.example.todaysmenu.pagination.entity.Criteria;
+import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
-import com.example.todaysmenu.restaurant.file.entity.RestFileDTO;
+import com.example.todaysmenu.restFile.entity.RestFileDTO;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;

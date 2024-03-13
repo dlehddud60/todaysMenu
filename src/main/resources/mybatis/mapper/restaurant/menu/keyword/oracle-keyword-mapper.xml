@@ -2,28 +2,28 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.todaysmenu.restaurant.menu.keyword.repository.KeywordRepository">
+<mapper namespace="com.example.todaysmenu.menu.keyword.repository.KeywordRepository">
     <sql id="where">
         WHERE 1 = 1
     </sql>
     
 
-    <select id="list" resultType="com.example.todaysmenu.restaurant.menu.keyword.model.FindResponseKeywordListModel">
-        /*com.example.todaysmenu.restaurant.menu.keyword.repository.KeywordRepository.list[목록]*/
-        SELECT  ROWNUM AS data_seq,T1.*
+    <select id="list" resultType="com.example.todaysmenu.menu.keyword.model.FindResponseKeywordListModel">
+        /*com.example.todaysmenu.menu.keyword.repository.KeywordRepository.list[목록]*/
+        SELECT ROWNUM AS data_seq,T1.*
         FROM (
-                SELECT  TRMKW.TRMKW_SEQ
-                ,       TRMKW.TRMKW_PARENT_SEQ
-                ,       TRMKW.TRMKW_KEY_WORD
-                FROM    TM_REST_MENU_KEY_WORD TRMKW
-                WHERE   TRMKW_PARENT_SEQ = #{trmkw_parent_seq}
-                ORDER BY TRMKW_SEQ DESC
-            ) T1
+        SELECT TRMKW.TRMKW_SEQ
+        , TRMKW.TRMKW_PARENT_SEQ
+        , TRMKW.TRMKW_KEY_WORD
+        FROM TM_REST_MENU_KEY_WORD TRMKW
+        WHERE TRMKW_PARENT_SEQ = #{trmkw_parent_seq}
+        ORDER BY TRMKW_SEQ DESC
+        ) T1
     </select>
 
     
     
-    <insert id="insert" parameterType="com.example.todaysmenu.restaurant.menu.keyword.model.InsertRequsetKeywordModel">
+    <insert id="insert" parameterType="com.example.todaysmenu.menu.keyword.model.InsertRequsetKeywordModel">
         /*com.example.todaysmenu.restaurant.menu.keyword.repository.KeywordRepository.insert[등록]*/
         INSERT INTO TM_REST_MENU_KEY_WORD
         (   TRMKW_SEQ
@@ -48,21 +48,21 @@
 <!--        <selectKey keyProperty="trmkw_seq" resultType="int" order="AFTER">SELECT TM_TRMKW_SEQ.CURRVAL FROM DUAL</selectKey>-->
     </insert>
 
-    <update id="update" parameterType="com.example.todaysmenu.restaurant.menu.keyword.model.UpdateRequsetKeywordModel">
-        /*com.example.todaysmenu.restaurant.menu.keyword.repository.KeywordRepository.update[수정]*/
-        UPDATE	TM_REST_MENU_KEY_WORD
-        SET		TRMKW_MODER_TY 	 =         #{trmkw_moder_ty}
-        ,		TRMKW_MODER_NM 	 =         #{trmkw_moder_nm}
-        ,		TRMKW_MODER_ID 	 =         #{trmkw_moder_id}
-        ,		TRMKW_MODER_IP	 =         #{trmkw_moder_ip}
-        ,		TRMKW_MODER_DT	 =         SYSDATE
-        ,       TRMKW_KEY_WORD   =         #{trmkw_key_word}
-        WHERE	TRMKW_SEQ	     =         #{trmkw_seq}
+    <update id="update" parameterType="com.example.todaysmenu.menu.keyword.model.UpdateRequsetKeywordModel">
+        /*com.example.todaysmenu.menu.keyword.repository.KeywordRepository.update[수정]*/
+        UPDATE TM_REST_MENU_KEY_WORD
+        SET TRMKW_MODER_TY = #{trmkw_moder_ty}
+        , TRMKW_MODER_NM = #{trmkw_moder_nm}
+        , TRMKW_MODER_ID = #{trmkw_moder_id}
+        , TRMKW_MODER_IP = #{trmkw_moder_ip}
+        , TRMKW_MODER_DT = SYSDATE
+        , TRMKW_KEY_WORD = #{trmkw_key_word}
+        WHERE TRMKW_SEQ = #{trmkw_seq}
     </update>
 
     <delete id="delete">
-        /*com.example.todaysmenu.restaurant.menu.keyword.repository.KeywordRepository.delete[삭제]*/
-        DELETE  FROM   TM_REST_MENU_KEY_WORD
-        WHERE	TRMKW_PARENT_SEQ = #{trmt_seq}
+        /*com.example.todaysmenu.menu.keyword.repository.KeywordRepository.delete[삭제]*/
+        DELETE FROM TM_REST_MENU_KEY_WORD
+        WHERE TRMKW_PARENT_SEQ = #{trmt_seq}
     </delete>
 </mapper>

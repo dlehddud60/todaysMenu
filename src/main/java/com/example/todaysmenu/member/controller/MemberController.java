@@ -2,9 +2,9 @@ package com.example.todaysmenu.member.controller;
 
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
-import com.example.todaysmenu.member.memFile.entity.MemFileDTO;
-import com.example.todaysmenu.pagination.entity.Criteria;
-import com.example.todaysmenu.pagination.entity.PageDTO;
+import com.example.todaysmenu.memFile.entity.MemFileDTO;
+import com.example.todaysmenu.pagination.DTO.Criteria;
+import com.example.todaysmenu.pagination.DTO.PageDTO;
 import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.member.repository.MemberRepository;
 import com.example.todaysmenu.member.service.MemberService;

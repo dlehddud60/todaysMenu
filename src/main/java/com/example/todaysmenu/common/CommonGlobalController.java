@@ -1,8 +1,8 @@
 package com.example.todaysmenu.common;
 
 import com.example.todaysmenu.member.entity.MemberDTO;
-import com.example.todaysmenu.member.memFile.entity.MemFileDTO;
-import com.example.todaysmenu.member.memFile.repository.MemFileRepository;
+import com.example.todaysmenu.memFile.entity.MemFileDTO;
+import com.example.todaysmenu.memFile.repository.MemFileRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;

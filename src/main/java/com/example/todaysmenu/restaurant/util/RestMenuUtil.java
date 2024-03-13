@@ -2,21 +2,16 @@ package com.example.todaysmenu.restaurant.util;
 
 import com.example.todaysmenu.member.entity.MemberDTO;
 import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
-import com.example.todaysmenu.restaurant.menu.entity.RestMenuDTO;
-import com.example.todaysmenu.restaurant.menu.keyword.domain.Keyword;
-import com.example.todaysmenu.restaurant.menu.keyword.model.DeleteRequsetKeywordModel;
-import com.example.todaysmenu.restaurant.menu.keyword.model.InsertRequsetKeywordModel;
-import com.example.todaysmenu.restaurant.menu.keyword.repository.KeywordRepository;
-import com.example.todaysmenu.restaurant.menu.keyword.service.KeywordService;
-import com.example.todaysmenu.restaurant.menu.service.RestMenuService;
+import com.example.todaysmenu.menu.entity.RestMenuDTO;
+import com.example.todaysmenu.menu.keyword.domain.Keyword;
+import com.example.todaysmenu.menu.keyword.model.DeleteRequsetKeywordModel;
+import com.example.todaysmenu.menu.keyword.model.InsertRequsetKeywordModel;
+import com.example.todaysmenu.menu.keyword.service.KeywordService;
+import com.example.todaysmenu.menu.service.RestMenuService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Objects;
 
 @Log4j2
 public abstract class RestMenuUtil {
@@ -25,9 +20,6 @@ public abstract class RestMenuUtil {
         List<String> update = restMenuDTO.getTrmt_menu_nameArrUpdate();
         List<Integer> delete = restMenuDTO.getTrmt_seqArrDelete();
         List<Keyword> keywordList = keyword.getList();
-        log.info("==============keywordList{}===============",keywordList);
-        log.info("===============keyword============{}",keyword);
-        log.info("================delete==================={}",delete);
         if(update != null) {
             for (int i = 0; i < update.size(); i++) {
                 restMenuDTO.setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArrUpdate().get(i));
@@ -35,15 +27,12 @@ public abstract class RestMenuUtil {
                 restMenuDTO.setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArrUpdate().get(i));
                 restMenuDTO.setTrmt_seq(restMenuDTO.getTrmt_seqArr().get(i));
                 restMenuDTO.setTrt_seq(restaurantDTO.getTrt_seq());
-
                 restMenuDTO.setTrmt_moder_ty(memberSession.getTmt_user_type());
                 restMenuDTO.setTrmt_moder_nm(memberSession.getTmt_memb_name());
                 restMenuDTO.setTrmt_moder_id(memberSession.getTmt_login_id());
                 restMenuDTO.setTrmt_moder_ip(request.getRemoteAddr());
                 restMenuService.update(restMenuDTO);
-                log.info("============setTrmt_seq=============={}",restMenuDTO.getTrmt_seq());
                 DeleteRequsetKeywordModel deleteRequsetKeywordModel = new DeleteRequsetKeywordModel(restMenuDTO.getTrmt_seq());
-                log.info("===========deleteRequsetKeywordModel============{}",deleteRequsetKeywordModel);
                 keywordService.delete(deleteRequsetKeywordModel);
                 keywordInsertMethod(restMenuDTO, request, memberSession, keywordService, keywordList, i);
             }

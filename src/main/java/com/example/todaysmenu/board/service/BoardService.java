@@ -4,7 +4,7 @@ import com.example.todaysmenu.board.entity.BoardDTO;
 import com.example.todaysmenu.common.commonFile.entity.CommonFileDTO;
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
-import com.example.todaysmenu.pagination.entity.Criteria;
+import com.example.todaysmenu.pagination.DTO.Criteria;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
