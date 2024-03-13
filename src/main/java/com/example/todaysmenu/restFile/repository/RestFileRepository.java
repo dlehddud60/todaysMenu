@@ -1,6 +1,6 @@
 package com.example.todaysmenu.restFile.repository;
 
-import com.example.todaysmenu.restFile.entity.RestFileDTO;
+import com.example.todaysmenu.restFile.DTO.RestFileDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

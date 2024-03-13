@@ -2,16 +2,16 @@ package com.example.todaysmenu.member.service.impl;
 
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
-import com.example.todaysmenu.memFile.entity.MemFileDTO;
+import com.example.todaysmenu.memFile.DTO.MemFileDTO;
 import com.example.todaysmenu.memFile.repository.MemFileRepository;
 import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.member.entity.MemberDTO;
+import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.repository.MemberRepository;
 import com.example.todaysmenu.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,20 +28,12 @@ import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.re
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-
-
-
-    @Autowired
-    MemberRepository memberRepository;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
-    MemFileRepository memFileRepository;
-
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final MemFileRepository memFileRepository;
     private boolean duplChek;
 
 

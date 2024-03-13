@@ -2,10 +2,10 @@ package com.example.todaysmenu.restFile.util;
 
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
-import com.example.todaysmenu.member.entity.MemberDTO;
-import com.example.todaysmenu.restFile.entity.RestFileDTO;
+import com.example.todaysmenu.member.DTO.MemberDTO;
+import com.example.todaysmenu.restFile.DTO.RestFileDTO;
 import com.example.todaysmenu.restFile.repository.RestFileRepository;
-import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
+import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;

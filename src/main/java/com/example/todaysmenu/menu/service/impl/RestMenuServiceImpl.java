@@ -1,14 +1,14 @@
 package com.example.todaysmenu.menu.service.impl;
 
-import com.example.todaysmenu.member.entity.MemberDTO;
+import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.menu.repository.RestMenuRepository;
 import com.example.todaysmenu.menu.service.RestMenuService;
 import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.menu.entity.RestMenuDTO;
+import com.example.todaysmenu.menu.DTO.RestMenuDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -18,10 +18,10 @@ import java.util.List;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class RestMenuServiceImpl implements RestMenuService {
 
-    @Autowired
-    RestMenuRepository restMenuRepository;
+    private final RestMenuRepository restMenuRepository;
     List<Integer> exceptSeq = new ArrayList<>();
 
 

@@ -23,7 +23,7 @@
         <include refid="where"/>
     </select>
 
-    <select id="list" resultType="com.example.todaysmenu.restaurant.entity.RestaurantDTO">
+    <select id="list" resultType="com.example.todaysmenu.restaurant.DTO.RestaurantDTO">
         /*com.example.todaysmenu.restaurant.repository.RestaurantRepository.list[목록]*/
         SELECT  ROWNUM AS data_seq,T1.*
         FROM (
@@ -49,7 +49,7 @@
             ) T1
     </select>
 
-    <select id="info" resultType="com.example.todaysmenu.restaurant.entity.RestaurantDTO">
+    <select id="info" resultType="com.example.todaysmenu.restaurant.DTO.RestaurantDTO">
         /*com.example.todaysmenu.restaurant.repository.RestaurantRepository.info[상세]*/
         <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(tmt_login_id)">
         SELECT T1.*
@@ -99,7 +99,7 @@
         </if>
     </select>
 
-    <select id="listPaging" resultType="com.example.todaysmenu.restaurant.entity.RestaurantDTO">
+    <select id="listPaging" resultType="com.example.todaysmenu.restaurant.DTO.RestaurantDTO">
         /*com.example.todaysmenu.restaurant.repository.RestaurantRepository.listPaging[목록페이징]*/
         <include refid="pagination.header"/>
         SELECT  T1.*
@@ -128,7 +128,7 @@
         <include refid="pagination.footer"/>
     </select>
 
-    <insert id="insert" parameterType="com.example.todaysmenu.restaurant.entity.RestaurantDTO">
+    <insert id="insert" parameterType="com.example.todaysmenu.restaurant.DTO.RestaurantDTO">
         /*com.example.todaysmenu.restaurant.repository.RestaurantRepository.insert[등록]*/
         INSERT INTO TM_REST_TBL
         (   TRT_SEQ

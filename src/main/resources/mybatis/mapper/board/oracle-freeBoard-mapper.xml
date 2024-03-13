@@ -17,7 +17,7 @@
         <include refid="where"/>
     </select>
 
-    <select id="list" resultType="com.example.todaysmenu.board.entity.BoardDTO">
+    <select id="list" resultType="com.example.todaysmenu.board.model.FindResponseBoardListModel">
         /*com.example.todaysmenu.board.repository.BoardRepository.list[목록]*/
         SELECT  ROWNUM AS data_seq,T1.*
         FROM (
@@ -37,7 +37,7 @@
             ) T1
     </select>
 
-    <select id="info" resultType="com.example.todaysmenu.board.entity.BoardDTO">
+    <select id="info" resultType="com.example.todaysmenu.board.model.FindResponseBoardInfoModel">
         /*com.example.todaysmenu.board.repository.BoardRepository.info[상세]*/
         SELECT  TFB.TFB_SEQ
         ,       TFB.TFB_TITLE_NM
@@ -54,7 +54,7 @@
         WHERE   TFB_SEQ = #{tfb_seq}
     </select>
 
-    <select id="listPaging" resultType="com.example.todaysmenu.board.entity.BoardDTO">
+    <select id="listPaging" resultType="com.example.todaysmenu.board.model.FindResponseBoardListModel">
         /*com.example.todaysmenu.board.repository.BoardRepository.listPaging[목록페이징]*/
         <include refid="pagination.header"/>
             SELECT  TFB.TFB_SEQ
@@ -74,7 +74,7 @@
         <include refid="pagination.footer"/>
     </select>
 
-    <insert  id="insert" parameterType="com.example.todaysmenu.board.entity.BoardDTO" >
+    <insert  id="insert" parameterType="com.example.todaysmenu.board.DTO.BoardDTO" >
         /*com.example.todaysmenu.board.repository.BoardRepository.insert[등록]*/
         INSERT INTO TM_FREE_BOARD
         (   TFB_SEQ

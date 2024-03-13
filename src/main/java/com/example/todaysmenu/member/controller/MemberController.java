@@ -2,18 +2,17 @@ package com.example.todaysmenu.member.controller;
 
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
-import com.example.todaysmenu.memFile.entity.MemFileDTO;
+import com.example.todaysmenu.memFile.DTO.MemFileDTO;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.pagination.DTO.PageDTO;
-import com.example.todaysmenu.member.entity.MemberDTO;
-import com.example.todaysmenu.member.repository.MemberRepository;
+import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.service.MemberService;
 
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,18 +24,10 @@ import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.re
 
 @Controller
 @Log4j2
+@RequiredArgsConstructor
 public class MemberController {
 
-
-
-    @Autowired
-    MemberRepository memberRepository;
-
-    @Autowired
-    MemberService memberService;
-
-
-
+   private final MemberService memberService;
     @RequestMapping("/join.do")
     public String join(HttpServletRequest request,RedirectAttributes rttr) {
         HttpSession session = request.getSession();

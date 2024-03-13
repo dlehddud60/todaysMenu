@@ -1,21 +1,21 @@
 package com.example.todaysmenu.star.service.impl;
 
 import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.star.entity.RestStarDTO;
+import com.example.todaysmenu.star.DTO.RestStarDTO;
 import com.example.todaysmenu.star.repository.RestStarRepository;
 import com.example.todaysmenu.star.service.RestStarService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class RestStarServiceImpl implements RestStarService {
 
-    @Autowired
-    RestStarRepository restStarRepository;
+    private final RestStarRepository restStarRepository;
 
     @Override
     public int count(Criteria cri) {

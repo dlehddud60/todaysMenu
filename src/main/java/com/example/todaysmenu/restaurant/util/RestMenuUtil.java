@@ -1,12 +1,12 @@
 package com.example.todaysmenu.restaurant.util;
 
-import com.example.todaysmenu.member.entity.MemberDTO;
-import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
-import com.example.todaysmenu.menu.entity.RestMenuDTO;
-import com.example.todaysmenu.menu.keyword.domain.Keyword;
-import com.example.todaysmenu.menu.keyword.model.DeleteRequsetKeywordModel;
-import com.example.todaysmenu.menu.keyword.model.InsertRequsetKeywordModel;
-import com.example.todaysmenu.menu.keyword.service.KeywordService;
+import com.example.todaysmenu.member.DTO.MemberDTO;
+import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
+import com.example.todaysmenu.menu.DTO.RestMenuDTO;
+import com.example.todaysmenu.keyword.DTO.Keyword;
+import com.example.todaysmenu.keyword.model.DeleteRequsetKeywordModel;
+import com.example.todaysmenu.keyword.model.InsertRequsetKeywordModel;
+import com.example.todaysmenu.keyword.service.KeywordService;
 import com.example.todaysmenu.menu.service.RestMenuService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.log4j.Log4j2;

@@ -1,6 +1,6 @@
 package com.example.todaysmenu.memFile.repository;
 
-import com.example.todaysmenu.memFile.entity.MemFileDTO;
+import com.example.todaysmenu.memFile.DTO.MemFileDTO;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import org.apache.ibatis.annotations.Mapper;
 

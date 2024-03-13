@@ -35,7 +35,7 @@
         <include refid="where"/>
     </select>
 
-    <select id="list" resultType="com.example.todaysmenu.menu.entity.RestMenuDTO">
+    <select id="list" resultType="com.example.todaysmenu.menu.DTO.RestMenuDTO">
         /*com.example.todaysmenu.menu.repository.RestMenuRepository.list[목록]*/
         SELECT T1.TRMT_SEQ
         , T1.TRT_SEQ
@@ -96,7 +96,7 @@
         ORDER BY TRMT_SEQ DESC
     </select>
 
-    <select id="rentMenuList" resultType="com.example.todaysmenu.menu.entity.RestMenuDTO">
+    <select id="rentMenuList" resultType="com.example.todaysmenu.menu.DTO.RestMenuDTO">
         /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.rentMenuList[식당메뉴리스트]*/
         SELECT  ROWNUM AS menu_row_num,T1.*
         FROM (
@@ -134,7 +134,7 @@
         ORDER BY TRMT_SEQ ASC
     </select>
 
-    <select id="listPaging" resultType="com.example.todaysmenu.menu.entity.RestMenuDTO">
+    <select id="listPaging" resultType="com.example.todaysmenu.menu.DTO.RestMenuDTO">
         /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.listPaging[목록페이징]*/
         <include refid="pagination.header"/>
         SELECT T1.*
@@ -185,7 +185,7 @@
         <include refid="pagination.footer"/>
     </select>
 
-    <insert id="insert" parameterType="com.example.todaysmenu.menu.entity.RestMenuDTO">
+    <insert id="insert" parameterType="com.example.todaysmenu.menu.DTO.RestMenuDTO">
         /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.insert[등록]*/
         INSERT INTO TM_REST_MENU_TBL
         (   TRMT_SEQ
@@ -256,7 +256,7 @@
 
 
 
-    <select id="userRecommendMenu" resultType="com.example.todaysmenu.menu.entity.RestMenuDTO">
+    <select id="userRecommendMenu" resultType="com.example.todaysmenu.menu.DTO.RestMenuDTO">
         /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.userRecommendMenu[사용자 메뉴 추천]*/
         SELECT	T1.*
         FROM(

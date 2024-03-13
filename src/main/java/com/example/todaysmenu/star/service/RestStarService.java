@@ -1,7 +1,7 @@
 package com.example.todaysmenu.star.service;
 
 import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.star.entity.RestStarDTO;
+import com.example.todaysmenu.star.DTO.RestStarDTO;
 
 import java.util.List;
 

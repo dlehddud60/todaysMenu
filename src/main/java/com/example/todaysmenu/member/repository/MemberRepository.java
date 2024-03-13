@@ -1,7 +1,7 @@
 package com.example.todaysmenu.member.repository;
 
 import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.member.entity.MemberDTO;
+import com.example.todaysmenu.member.DTO.MemberDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.example.todaysmenu.star.repository;
 
 import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.star.entity.RestStarDTO;
+import com.example.todaysmenu.star.DTO.RestStarDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

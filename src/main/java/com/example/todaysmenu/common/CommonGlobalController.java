@@ -1,12 +1,12 @@
 package com.example.todaysmenu.common;
 
-import com.example.todaysmenu.member.entity.MemberDTO;
-import com.example.todaysmenu.memFile.entity.MemFileDTO;
+import com.example.todaysmenu.member.DTO.MemberDTO;
+import com.example.todaysmenu.memFile.DTO.MemFileDTO;
 import com.example.todaysmenu.memFile.repository.MemFileRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Log4j2
 @ControllerAdvice
+@RequiredArgsConstructor
 public class CommonGlobalController {
 
-    @Autowired
-    MemFileRepository fileRepository;
+   private final MemFileRepository fileRepository;
 
     @ModelAttribute
     public void globalDataBind(HttpServletRequest request, Model model) {

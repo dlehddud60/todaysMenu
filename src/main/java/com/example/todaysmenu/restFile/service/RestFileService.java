@@ -1,6 +1,6 @@
 package com.example.todaysmenu.restFile.service;
 
-import com.example.todaysmenu.restFile.entity.RestFileDTO;
+import com.example.todaysmenu.restFile.DTO.RestFileDTO;
 
 import java.util.List;
 

@@ -29,7 +29,7 @@
         <include refid="where"/>
     </select>
 
-    <select id="registerCheck" resultType="com.example.todaysmenu.member.entity.MemberDTO">
+    <select id="registerCheck" resultType="com.example.todaysmenu.member.DTO.MemberDTO">
         /*com.example.todaysmenu.member.repository.MemberRepository.registerCheck[중복확인]*/
         SELECT  TMT_SEQ
         ,       TMT_LOGIN_ID
@@ -45,7 +45,7 @@
         WHERE   TMT_LOGIN_ID = #{tmt_login_id}
     </select>
 
-    <select id="memberList" resultType="com.example.todaysmenu.member.entity.MemberDTO">
+    <select id="memberList" resultType="com.example.todaysmenu.member.DTO.MemberDTO">
         /*com.example.todaysmenu.member.repository.MemberRepository.memberList[멤버정보]*/
         <include refid="pagination.header"/>
             SELECT  T1.*
@@ -73,7 +73,7 @@
     </select>
 
 
-    <insert id="register" parameterType="com.example.todaysmenu.member.entity.MemberDTO">
+    <insert id="register" parameterType="com.example.todaysmenu.member.DTO.MemberDTO">
         /*com.example.todaysmenu.member.repository.MemberRepository.register[회원가입]*/
         INSERT INTO TM_MEMBER_TBL
         (   TMT_SEQ
@@ -100,7 +100,7 @@
         <selectKey keyProperty="tmt_seq" resultType="String" order="AFTER">SELECT TM_TMT_SEQ.CURRVAL FROM DUAL</selectKey>
     </insert>
 
-    <update id="memberUpdate"  parameterType="com.example.todaysmenu.member.entity.MemberDTO">
+    <update id="memberUpdate"  parameterType="com.example.todaysmenu.member.DTO.MemberDTO">
         /*com.example.todaysmenu.member.repository.MemberRepository.memberUpdate[회원정보수정]*/
         UPDATE	TM_MEMBER_TBL
         SET		TMT_LOGIN_ID 	        = #{tmt_login_id}
@@ -114,14 +114,14 @@
         WHERE	TMT_SEQ			        = #{tmt_seq}
     </update>
 
-    <select id="login" resultType="com.example.todaysmenu.member.entity.MemberDTO" parameterType="com.example.todaysmenu.member.entity.MemberDTO">
+    <select id="login" resultType="com.example.todaysmenu.member.DTO.MemberDTO" parameterType="com.example.todaysmenu.member.DTO.MemberDTO">
         /*com.example.todaysmenu.member.repository.MemberRepository.login[로그인]*/
         SELECT  TMT.*
         FROM    TM_MEMBER_TBL TMT
         WHERE   TMT_LOGIN_ID = #{tmt_login_id}
     </select>
 
-    <update id="userTypeUpdate"  parameterType="com.example.todaysmenu.member.entity.MemberDTO">
+    <update id="userTypeUpdate"  parameterType="com.example.todaysmenu.member.DTO.MemberDTO">
         /*com.example.todaysmenu.member.repository.MemberRepository.userTypeUpdate[회원권한정보수정]*/
         UPDATE	TM_MEMBER_TBL
         SET		TMT_USER_TYPE 	        = #{tmt_user_type}

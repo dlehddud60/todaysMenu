@@ -2,13 +2,13 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.todaysmenu.common.commonFile.repository.CommonFileRepository">
+<mapper namespace="com.example.todaysmenu.boardFile.repository.BoardFileRepository">
     <sql id="where">
         WHERE 1 = 1
     </sql>
 
-    <select id="list" resultType="com.example.todaysmenu.common.commonFile.entity.CommonFileDTO">
-        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.registerCheck[파일 리스트]*/
+    <select id="list" resultType="com.example.todaysmenu.boardFile.DTO.BoardFileDTO">
+        /*com.example.todaysmenu.boardFile.repository.BoardFileRepository.registerCheck[파일 리스트]*/
         SELECT  TCFT.TCFT_SEQ
         ,       TCFT.TCFT_PARENT_SEQ
         ,       TCFT.TCFT_PARENT_TABLE_TYPE
@@ -32,8 +32,8 @@
 
 
 
-    <insert id="insert" parameterType="com.example.todaysmenu.common.commonFile.entity.CommonFileDTO">
-        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.register[파일 업로드]*/
+    <insert id="insert" parameterType="com.example.todaysmenu.boardFile.DTO.BoardFileDTO">
+        /*com.example.todaysmenu.boardFile.repository.BoardFileRepository.register[파일 업로드]*/
         INSERT INTO TM_COMMON_FILE_TBL
         (   TCFT_SEQ
         ,   TCFT_PARENT_SEQ
@@ -61,8 +61,8 @@
         <selectKey keyProperty="tcft_seq" resultType="int" order="AFTER">SELECT TM_TCFT_SEQ.CURRVAL FROM DUAL</selectKey>
     </insert>
 
-    <update id="update"  parameterType="com.example.todaysmenu.common.commonFile.entity.CommonFileDTO">
-        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.memberUpdate[파일 정보 수정]*/
+    <update id="update"  parameterType="com.example.todaysmenu.boardFile.DTO.BoardFileDTO">
+        /*com.example.todaysmenu.boardFile.repository.BoardFileRepository.memberUpdate[파일 정보 수정]*/
         UPDATE TM_COMMON_FILE_TBL
         SET TCFT_MODER_TY = #{tmft_moder_ty}
         , TCFT_MODER_NM = #{tmft_moder_nm}
@@ -77,7 +77,7 @@
     </update>
 
     <delete id="delete">
-        /*com.example.todaysmenu.common.commonFile.repository.CommonFileRepository.memberUpdate[회원정보수정]*/
+        /*com.example.todaysmenu.boardFile.repository.BoardFileRepository.memberUpdate[회원정보수정]*/
         DELETE FROM	TM_COMMON_FILE_TBL
         WHERE	1 = 1
         AND		TCFT_PARENT_SEQ = #{tcft_parent_seq}

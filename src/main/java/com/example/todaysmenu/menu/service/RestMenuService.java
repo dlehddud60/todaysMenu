@@ -1,7 +1,7 @@
 package com.example.todaysmenu.menu.service;
 
 import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.menu.entity.RestMenuDTO;
+import com.example.todaysmenu.menu.DTO.RestMenuDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;

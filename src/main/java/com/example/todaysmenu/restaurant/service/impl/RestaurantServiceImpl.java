@@ -3,14 +3,14 @@ package com.example.todaysmenu.restaurant.service.impl;
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.restaurant.entity.RestaurantDTO;
-import com.example.todaysmenu.restFile.entity.RestFileDTO;
+import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
+import com.example.todaysmenu.restFile.DTO.RestFileDTO;
 import com.example.todaysmenu.restFile.repository.RestFileRepository;
 import com.example.todaysmenu.restaurant.repository.RestaurantRepository;
 import com.example.todaysmenu.restaurant.service.RestaurantService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,14 +20,10 @@ import static com.example.todaysmenu.restFile.util.RestFile.restFileMethod;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class RestaurantServiceImpl implements RestaurantService {
-
-    @Autowired
-    RestaurantRepository restaurantRepository;
-
-    @Autowired
-    RestFileRepository restFileRepository;
-
+    private final RestaurantRepository restaurantRepository;
+    private final RestFileRepository restFileRepository;
     @Override
     public int count(Criteria cri) {
         return restaurantRepository.count(cri);

@@ -14,7 +14,7 @@
         <include refid="where"/>
     </select>
 
-    <select id="list" resultType="com.example.todaysmenu.star.entity.RestStarDTO">
+    <select id="list" resultType="com.example.todaysmenu.star.DTO.RestStarDTO">
         /*com.example.todaysmenu.star.repository.RestStarRepository.list[목록]*/
         SELECT ROWNUM AS data_seq,T1.*
         FROM (
@@ -37,7 +37,7 @@
         ) T1
     </select>
 
-    <select id="info" resultType="com.example.todaysmenu.star.entity.RestStarDTO">
+    <select id="info" resultType="com.example.todaysmenu.star.DTO.RestStarDTO">
         /*com.example.todaysmenu.star.repository.RestStarRepository.rentMenuList[식당메뉴리스트]*/
         SELECT TRST.SEQ
         , TRST.PARENT_SEQ
@@ -58,7 +58,7 @@
         ORDER BY TRST_SEQ DESC
     </select>
 
-    <select id="listPaging" resultType="com.example.todaysmenu.star.entity.RestStarDTO">
+    <select id="listPaging" resultType="com.example.todaysmenu.star.DTO.RestStarDTO">
         /*com.example.todaysmenu.restaurant.star.repository.RestStarRepository.listPaging[목록페이징]*/
         <include refid="pagination.header"/>
         SELECT  TRST.TRST_SEQ
@@ -84,7 +84,7 @@
         <include refid="pagination.footer"/>
     </select>
 
-    <insert id="insert" parameterType="com.example.todaysmenu.star.entity.RestStarDTO">
+    <insert id="insert" parameterType="com.example.todaysmenu.star.DTO.RestStarDTO">
         /*com.example.todaysmenu.restaurant.star.repository.RestStarRepository.insert[등록]*/
         INSERT INTO TM_REST_STAR_TBL
         (   TRST_SEQ

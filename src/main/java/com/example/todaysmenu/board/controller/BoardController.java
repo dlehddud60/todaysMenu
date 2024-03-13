@@ -1,14 +1,15 @@
 package com.example.todaysmenu.board.controller;
 
-import com.example.todaysmenu.board.entity.BoardDTO;
-import com.example.todaysmenu.common.commonFile.entity.CommonFileDTO;
-import com.example.todaysmenu.common.commonFile.service.CommonFileService;
+import com.example.todaysmenu.board.DTO.BoardDTO;
+import com.example.todaysmenu.board.model.FindResponseBoardInfoModel;
+import com.example.todaysmenu.boardFile.DTO.BoardFileDTO;
+import com.example.todaysmenu.boardFile.service.BoardFileService;
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
+import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.pagination.DTO.PageDTO;
 import com.example.todaysmenu.board.service.BoardService;
-import com.example.todaysmenu.member.entity.MemberDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -34,7 +35,7 @@ public class BoardController {
     BoardService boardService;
 
     @Autowired
-    CommonFileService commonFileService;
+    BoardFileService boardFileService;
 
 
     @GetMapping("/index.do")
@@ -53,14 +54,14 @@ public class BoardController {
             Integer tfb_seq, Model model,RedirectAttributes rttr, HttpServletRequest request) {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-        BoardDTO boardInfo;
+        FindResponseBoardInfoModel boardInfoModel;
         String loginId;
         String memberId;
         String memberType;
         try{
-            boardInfo = boardService.info(tfb_seq);
+            boardInfoModel = boardService.info(tfb_seq);
             loginId = memberSession.getTmt_memb_name();
-            memberId = boardInfo.getTfb_input_nm();
+            memberId = boardInfoModel.tfb_input_nm();
             memberType = memberSession.getTmt_user_type();
         } catch (NullPointerException e) {
             if(memberSession == null) {
@@ -87,11 +88,11 @@ public class BoardController {
     }
 
     @PostMapping("/insert.do")
-    public String insert(@ModelAttribute CommonFileDTO commonFileDTO
-                   ,    @ModelAttribute BoardDTO boardDTO
-                   ,    @ModelAttribute Criteria cri
-                   ,    RedirectAttributes rttr
-                   ,    HttpServletRequest request) {
+    public String insert(@ModelAttribute BoardFileDTO boardFileDTO
+            ,    @ModelAttribute BoardDTO boardDTO
+            ,    @ModelAttribute Criteria cri
+            ,    RedirectAttributes rttr
+            ,    HttpServletRequest request) {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
         int  tfb_seq = boardDTO.getTfb_seq();
@@ -99,7 +100,7 @@ public class BoardController {
         boardDTO.setTfb_input_nm(memberSession.getTmt_memb_name());
         boardDTO.setTfb_input_ip(request.getRemoteAddr());
         try {
-            boardService.insert(boardDTO,commonFileDTO,request);
+            boardService.insert(boardDTO,boardFileDTO,request);
         } catch (FileExtensionExaption | FileSizeExaption e) {
             return redirect("",rttr,"실패",e.getMessage(),DANGER);
         }
@@ -111,7 +112,7 @@ public class BoardController {
 
 
     @PostMapping("/update.do")
-    public String update(@ModelAttribute CommonFileDTO commonFileDTO
+    public String update(@ModelAttribute BoardFileDTO boardFileDTO
             ,    @ModelAttribute BoardDTO boardDTO
             ,    @ModelAttribute Criteria cri
             ,    RedirectAttributes rttr
@@ -123,49 +124,49 @@ public class BoardController {
         boardDTO.setTfb_moder_ip(request.getRemoteAddr());
         int dataSeq = boardDTO.getTfb_seq();
         String memberWriter = memberSession.getTmt_memb_name();
-        BoardDTO boardInfo = boardService.info(dataSeq);
-        String boardWriter = boardInfo.getTfb_input_nm();
+        FindResponseBoardInfoModel boardInfoModel = boardService.info(dataSeq);
+        String boardWriter = boardInfoModel.tfb_input_nm();
         String memberType = memberSession.getTmt_user_type();
         if(memberWriter.equals(boardWriter) || memberType.equals("master")){
             try {
-                boardService.update(boardDTO,commonFileDTO,request);
+                boardService.update(boardDTO,boardFileDTO,request);
             } catch (FileExtensionExaption | FileSizeExaption e) {
                 return redirect("",rttr,"실패",e.getMessage(),DANGER);
             }
         }else{
             return redirect("board/index.do",rttr,"실패 메세지","본인글만 수정 삭제 가능합니다.",DANGER);
         }
-            rttr.addFlashAttribute("result","success");
-            rttr.addAttribute("pageNum",cri.getPageNum());
-            rttr.addAttribute("amount",cri.getAmount());
+        rttr.addFlashAttribute("result","success");
+        rttr.addAttribute("pageNum",cri.getPageNum());
+        rttr.addAttribute("amount",cri.getAmount());
         return redirect("board/index.do",rttr,"성공 메세지","게시물을 수정하였습니다.",SUCCESS);
     }
 
     @GetMapping("/view.do")
     public String view(@RequestParam int tfb_seq, Model model, @ModelAttribute("cri") Criteria cri) {
-        CommonFileDTO commonFileDTO = new CommonFileDTO();
+        BoardFileDTO commonFileDTO = new BoardFileDTO();
         commonFileDTO.setTcft_parent_seq(tfb_seq);
-        model.addAttribute("commonFileList",commonFileService.list(commonFileDTO));
+        model.addAttribute("commonFileList",boardFileService.list(commonFileDTO));
         model.addAttribute("info", boardService.info(tfb_seq));
         return "board/view";
     }
 
     @GetMapping("/delete.do")
-    public String  delete(@ModelAttribute CommonFileDTO commonFileDTO,@ModelAttribute BoardDTO boardDTO, @ModelAttribute Criteria cri, RedirectAttributes rttr, HttpServletRequest request){
-        log.info("============Controller commonFileDTO========={}",commonFileDTO);
+    public String  delete(@ModelAttribute BoardFileDTO boardFileDTO,@ModelAttribute BoardDTO boardDTO, @ModelAttribute Criteria cri, RedirectAttributes rttr, HttpServletRequest request){
+        log.info("============Controller commonFileDTO========={}",boardFileDTO);
         int tfb_seq = boardDTO.getTfb_seq();
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
 
-        BoardDTO boardInfo;
+        FindResponseBoardInfoModel boardInfoModel;
         String memberWriter;
         String boardWriter;
         String memberType;
 
         try{
-            boardInfo = boardService.info(tfb_seq);
+            boardInfoModel = boardService.info(tfb_seq);
             memberWriter = memberSession.getTmt_memb_name();
-            boardWriter = boardInfo.getTfb_input_nm();
+            boardWriter = boardInfoModel.tfb_input_nm();
             memberType = memberSession.getTmt_user_type();
 
         } catch (NullPointerException e) {
@@ -175,7 +176,7 @@ public class BoardController {
 
         if(memberWriter.equals(boardWriter) || memberType.equals("master")){
             try {
-                boardService.delete(tfb_seq,commonFileDTO);
+                boardService.delete(tfb_seq,boardFileDTO);
 
             }catch (NullPointerException e) {
                 boardService.delete(tfb_seq);
@@ -195,7 +196,7 @@ public class BoardController {
     public String delChk(@RequestParam(value = "tfb_seq",required=false)List<Integer> tfb_seq,Criteria cri,RedirectAttributes rttr,HttpServletRequest request) {
         HttpSession session = request.getSession();
         MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-        BoardDTO boardInfo;
+        FindResponseBoardInfoModel boardInfoModel;
         String userSessionName = "";
         String statusMsg = "";
         String userName;
@@ -203,26 +204,26 @@ public class BoardController {
         try {
             userSessionName = memberSession.getTmt_memb_name();
             memberType = memberSession.getTmt_user_type();
-            
+
         } catch (NullPointerException e) {
             log.info("세션 객체 없음");
         }
 
-            for (int i = 0; i < tfb_seq.size(); i++) {
-                boardInfo = boardService.info(tfb_seq.get(i));
-                userName = boardInfo.getTfb_input_nm();
-                if(userName.equals(userSessionName) && memberSession != null || memberType.equals("master")) {
+        for (int i = 0; i < tfb_seq.size(); i++) {
+            boardInfoModel = boardService.info(tfb_seq.get(i));
+            userName = boardInfoModel.tfb_input_nm();
+            if(userName.equals(userSessionName) && memberSession != null || memberType.equals("master")) {
                 boardService.delete(tfb_seq.get(i));
-                } else {
-                    if(memberSession == null) {
-                        statusMsg = "로그인을 해주시길 바랍니다.";
-                    }else {
-                        statusMsg = "본인글만 수정 삭제 가능합니다.";
+            } else {
+                if(memberSession == null) {
+                    statusMsg = "로그인을 해주시길 바랍니다.";
+                }else {
+                    statusMsg = "본인글만 수정 삭제 가능합니다.";
 
-                    }
-                    return redirect("board/index.do",rttr,"실패 메세지",statusMsg,DANGER);
                 }
+                return redirect("board/index.do",rttr,"실패 메세지",statusMsg,DANGER);
             }
+        }
 
 
         rttr.addFlashAttribute("result","success");

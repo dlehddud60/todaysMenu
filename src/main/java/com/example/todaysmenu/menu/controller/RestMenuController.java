@@ -1,14 +1,14 @@
 package com.example.todaysmenu.menu.controller;
 
-import com.example.todaysmenu.member.entity.MemberDTO;
+import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.pagination.DTO.PageDTO;
-import com.example.todaysmenu.menu.entity.RestMenuDTO;
+import com.example.todaysmenu.menu.DTO.RestMenuDTO;
 import com.example.todaysmenu.menu.service.impl.RestMenuServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +20,13 @@ import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.re
 
 @Log4j2
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/restMenu/*")
 public class RestMenuController {
 
 
 
-    @Autowired
-    RestMenuServiceImpl restMenuService;
+    private final RestMenuServiceImpl restMenuService;
 
 
     @GetMapping("/index.do")

@@ -14,7 +14,7 @@
         <include refid="where"/>
     </select>
 
-    <select id="list" resultType="com.example.todaysmenu.memFile.entity.MemFileDTO">
+    <select id="list" resultType="com.example.todaysmenu.memFile.DTO.MemFileDTO">
         /*com.example.todaysmenu.member.repository.file.MemFileServiceRepository.registerCheck[중복확인]*/
         SELECT  TMFT.TMFT_SEQ
         ,       TMFT.TMFT_PARENT_SEQ
@@ -46,7 +46,7 @@
 
 
 
-    <insert id="insert" parameterType="com.example.todaysmenu.memFile.entity.MemFileDTO">
+    <insert id="insert" parameterType="com.example.todaysmenu.memFile.DTO.MemFileDTO">
         /*com.example.todaysmenu.member.repository.file.MemFileServiceRepository.register[회원가입]*/
         INSERT INTO TM_MEM_FILE_TBL
         (   TMFT_SEQ
@@ -73,7 +73,7 @@
         <selectKey keyProperty="tmft_seq" resultType="int" order="AFTER">SELECT TM_TMFT_SEQ.CURRVAL FROM DUAL</selectKey>
     </insert>
 
-    <update id="update"  parameterType="com.example.todaysmenu.memFile.entity.MemFileDTO">
+    <update id="update"  parameterType="com.example.todaysmenu.memFile.DTO.MemFileDTO">
         /*com.example.todaysmenu.member.repository.file.MemFileServiceRepository.memberUpdate[회원정보수정]*/
         UPDATE	TM_MEM_FILE_TBL
         SET		TMFT_MODER_TY 	              =         #{tmft_moder_ty}
