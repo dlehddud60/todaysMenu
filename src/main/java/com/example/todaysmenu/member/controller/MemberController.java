@@ -34,7 +34,7 @@ public class MemberController {
     @RequestMapping("/join.do")
     public String join(HttpServletRequest request,RedirectAttributes rttr) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         if(memberSession != null) {
             return redirect("",rttr,"실패 메세지","로그인 유저는 진입하실 수 없습니다.",DANGER);
         }else{
@@ -44,7 +44,7 @@ public class MemberController {
     @RequestMapping("/updateLogin.do")
     public String updateLogin(HttpServletRequest request,RedirectAttributes rttr) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         if(memberSession == null) {
             return redirect("",rttr,"실패 메세지","비로그인 유저는 진입하실 수 없습니다.",DANGER);
         }else{
@@ -84,7 +84,7 @@ public class MemberController {
     @RequestMapping("/imageForm.do")
     public String imageForm(HttpServletRequest request, RedirectAttributes rttr) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         if(memberSession == null) {
             return redirect("",rttr,"실패 메시지","로그인을 해주시길 바랍니다.", DANGER);
         }

@@ -6,6 +6,7 @@ import com.example.todaysmenu.boardFile.repository.BoardFileRepository;
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.member.DTO.MemberDTO;
+import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
@@ -21,14 +22,14 @@ public abstract class BoardUtil {
 
     public static void boardFileMethod(BoardDTO boardDTO, BoardFileDTO boardFileDTO, BoardFileRepository boardFileRepository, HttpServletRequest request) throws FileSizeExaption, FileExtensionExaption {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         String savePath = "C:/project/todaysMenu/src/main/resources/static/upload/";
         int tfb_seq = boardDTO.getTfb_seq();
         if(tfb_seq > 0) {
            ; boardFileDTO.setTcft_parent_seq(tfb_seq);
-            boardFileDTO.setTcft_moder_ty(memberSession.getTmt_user_type());
-            boardFileDTO.setTcft_moder_nm(memberSession.getTmt_memb_name());
-            boardFileDTO.setTcft_moder_id(memberSession.getTmt_login_id());
+            boardFileDTO.setTcft_moder_ty(memberSession.tmt_user_type());
+            boardFileDTO.setTcft_moder_nm(memberSession.tmt_memb_name());
+            boardFileDTO.setTcft_moder_id(memberSession.tmt_login_id());
             boardFileDTO.setTcft_moder_ip(request.getRemoteAddr());
             List<BoardFileDTO> fileList = boardFileRepository.list(boardFileDTO);
             for (int i = 0; i < fileList.size(); i++) {
@@ -61,9 +62,9 @@ public abstract class BoardUtil {
             boardFileDTO.setTcft_change_fine_name(storedFileName);
             boardFileDTO.setTcft_parent_table_type("TM_FREE_BOARD");
 
-            boardFileDTO.setTcft_input_ty(memberSession.getTmt_user_type());
-            boardFileDTO.setTcft_input_nm(memberSession.getTmt_memb_name());
-            boardFileDTO.setTcft_input_id(memberSession.getTmt_login_id());
+            boardFileDTO.setTcft_input_ty(memberSession.tmt_user_type());
+            boardFileDTO.setTcft_input_nm(memberSession.tmt_memb_name());
+            boardFileDTO.setTcft_input_id(memberSession.tmt_login_id());
             boardFileDTO.setTcft_input_ip(request.getRemoteAddr());
             boardFileDTO.setTcft_parent_seq(boardDTO.getTfb_seq());
 

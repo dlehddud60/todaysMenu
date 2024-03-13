@@ -109,7 +109,6 @@
         ,		TMT_MEMB_AGE	        = #{tmt_memb_age}
         ,       TMT_MEMB_GENDER         = #{tmt_memb_gender}
         ,       TMT_MEMB_EMAIL          = #{tmt_memb_email}
-        ,       TMT_MEMB_FILE           = #{tmt_memb_file}
         ,       TMT_MODER_DATE          = SYSDATE
         WHERE	TMT_SEQ			        = #{tmt_seq}
     </update>

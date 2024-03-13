@@ -1,6 +1,7 @@
 package com.example.todaysmenu.menu.service.impl;
 
 import com.example.todaysmenu.member.DTO.MemberDTO;
+import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import com.example.todaysmenu.menu.repository.RestMenuRepository;
 import com.example.todaysmenu.menu.service.RestMenuService;
 import com.example.todaysmenu.pagination.DTO.Criteria;
@@ -76,8 +77,8 @@ public class RestMenuServiceImpl implements RestMenuService {
     @Override
     public RestMenuDTO userRecommendMenu(RestMenuDTO restMenuDTO, HttpServletRequest request, RedirectAttributes rttr) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-        restMenuDTO.setTmt_login_id(memberSession.getTmt_login_id());
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
+        restMenuDTO.setTmt_login_id(memberSession.tmt_login_id());
 
         log.info("=============getTrmt_seqArr==============={}",restMenuDTO.getTrmt_seqArr());
         log.info("=============getTrt_seqArr==============={}",restMenuDTO.getTrt_seqArr());

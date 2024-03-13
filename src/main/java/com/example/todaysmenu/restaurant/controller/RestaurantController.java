@@ -3,6 +3,7 @@ package com.example.todaysmenu.restaurant.controller;
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.member.DTO.MemberDTO;
+import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.pagination.DTO.PageDTO;
 import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
@@ -60,7 +61,7 @@ public class RestaurantController {
             @RequestParam(value = "trt_seq",required = false)
             Integer trt_seq, Model model,RedirectAttributes rttr, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         RestaurantDTO restaurantDTO;
         RestaurantDTO restaurantDTOInfo = new RestaurantDTO();
         RestMenuDTO restMenuDTO = new RestMenuDTO();
@@ -68,11 +69,11 @@ public class RestaurantController {
         String memberId;
         String memberType;
         try{
-            restaurantDTOInfo.setTmt_login_id(memberSession.getTmt_login_id());
+            restaurantDTOInfo.setTmt_login_id(memberSession.tmt_login_id());
             restaurantDTOInfo.setTrt_seq(trt_seq);
             restaurantDTO = restaurantService.info(restaurantDTOInfo);
-            loginId = memberSession.getTmt_login_id();
-            memberType = memberSession.getTmt_user_type();
+            loginId = memberSession.tmt_login_id();
+            memberType = memberSession.tmt_user_type();
             memberId = restaurantDTO.getTrt_input_id();
         } catch (NullPointerException e) {
             if(memberSession == null) {
@@ -119,7 +120,7 @@ public class RestaurantController {
                     , @ModelAttribute Criteria cri
             , RedirectAttributes rttr
             , HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
-        MemberDTO memberSession = getMemberDTO(restaurantDTO, request);
+        FindResponseLoginModel memberSession = getMemberDTO(restaurantDTO, request);
         try{
                 restaurantService.insert(restaurantDTO,restFileDTO,request);
                 restInsertMeth(restaurantDTO, restMenuDTO,keyword,request, memberSession,restMenuService,keywordService);
@@ -144,11 +145,11 @@ public class RestaurantController {
             , RedirectAttributes rttr
             , HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
         int trt_seq = restaurantDTO.getTrt_seq();
-        MemberDTO memberSession = getMemberDTO(restaurantDTO, request);
-        String memberId = memberSession.getTmt_login_id();
-        String memberType = memberSession.getTmt_user_type();
+        FindResponseLoginModel memberSession = getMemberDTO(restaurantDTO, request);
+        String memberId = memberSession.tmt_login_id();
+        String memberType = memberSession.tmt_user_type();
         RestaurantDTO restaurantDTOInfo = new RestaurantDTO();
-        restaurantDTOInfo.setTmt_login_id(memberSession.getTmt_login_id());
+        restaurantDTOInfo.setTmt_login_id(memberSession.tmt_login_id());
         restaurantDTOInfo.setTrt_seq(trt_seq);
         restaurantService.info(restaurantDTOInfo);
         String restInputId = restaurantDTO.getTrt_input_id();
@@ -169,9 +170,9 @@ public class RestaurantController {
     @GetMapping("/view.do")
     public String view(@ModelAttribute RestaurantDTO restaurantDTO,@ModelAttribute Criteria cri,  Model model, HttpServletRequest request, RedirectAttributes rttr) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         try{
-            restaurantDTO.setTmt_login_id(memberSession.getTmt_login_id());
+            restaurantDTO.setTmt_login_id(memberSession.tmt_login_id());
         }catch (NullPointerException e) {
             return redirect("",rttr,"실패 메세지","비로그인 유저는 진입하실 수 없습니다.",DANGER);
         }
@@ -198,20 +199,20 @@ public class RestaurantController {
     public String delete(@ModelAttribute RestaurantDTO restaurantDTO,@ModelAttribute RestFileDTO restFileDTO,  @ModelAttribute Criteria cri, RedirectAttributes rttr, HttpServletRequest request){
 
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         RestStarDTO restStarDTO = new RestStarDTO();
         int trt_seq = restaurantDTO.getTrt_seq();
         restStarDTO.setTrt_seq(trt_seq);
-        restaurantDTO.setTmt_login_id(memberSession.getTmt_login_id());
+        restaurantDTO.setTmt_login_id(memberSession.tmt_login_id());
         RestaurantDTO restaurantInfo;
         String memberWriter;
         String restaurant;
         String memberType;
         try{
             restaurantInfo = restaurantService.info(restaurantDTO);
-            memberWriter = memberSession.getTmt_memb_name();
+            memberWriter = memberSession.tmt_memb_name();
             restaurant = restaurantInfo.getTrt_input_nm();
-            memberType = memberSession.getTmt_user_type();
+            memberType = memberSession.tmt_user_type();
 
         } catch (NullPointerException e) {
             return redirect("restaurant/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
@@ -252,16 +253,16 @@ public class RestaurantController {
     }
 
 
-    private static MemberDTO getMemberDTO(RestaurantDTO restaurantDTO, HttpServletRequest request) {
+    private static FindResponseLoginModel getMemberDTO(RestaurantDTO restaurantDTO, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-        restaurantDTO.setTrt_input_ty(memberSession.getTmt_user_type());
-        restaurantDTO.setTrt_input_nm(memberSession.getTmt_memb_name());
-        restaurantDTO.setTrt_input_id(memberSession.getTmt_login_id());
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
+        restaurantDTO.setTrt_input_ty(memberSession.tmt_user_type());
+        restaurantDTO.setTrt_input_nm(memberSession.tmt_memb_name());
+        restaurantDTO.setTrt_input_id(memberSession.tmt_login_id());
         restaurantDTO.setTrt_input_ip(request.getRemoteAddr());
-        restaurantDTO.setTrt_moder_ty(memberSession.getTmt_user_type());
-        restaurantDTO.setTrt_moder_nm(memberSession.getTmt_memb_name());
-        restaurantDTO.setTrt_moder_id(memberSession.getTmt_login_id());
+        restaurantDTO.setTrt_moder_ty(memberSession.tmt_user_type());
+        restaurantDTO.setTrt_moder_nm(memberSession.tmt_memb_name());
+        restaurantDTO.setTrt_moder_id(memberSession.tmt_login_id());
         restaurantDTO.setTrt_moder_ip(request.getRemoteAddr());
         return memberSession;
     }
@@ -269,19 +270,19 @@ public class RestaurantController {
 //    @GetMapping("/delChk.do")
 //    public String delChk(@RequestParam(value = "trt_seq",required=false)List<Integer> trt_seq,Criteria cri,RedirectAttributes rttr,HttpServletRequest request) {
 //        HttpSession session = request.getSession();
-//        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+//        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
 //        RestaurantDTO restaurantInfo = new RestaurantDTO();
 //        String userSessionName = "";
 //        String statusMsg = "";
 //        String userName;
 //        try {
-//            userSessionName = memberSession.getTmt_memb_name();
+//            userSessionName = memberSession.tmt_memb_name();
 //        } catch (NullPointerException e) {
 //            e.printStackTrace();
 //        }
 //            for (int i = 0; i < trt_seq.size(); i++) {
 //                restaurantInfo.setTrt_seq(trt_seq.get(i));
-//                restaurantInfo.setTmt_login_id(memberSession.getTmt_login_id()); //서브쿼리용
+//                restaurantInfo.setTmt_login_id(memberSession.tmt_login_id()); //서브쿼리용
 //                restaurantInfo = restaurantService.info(restaurantInfo);
 //                userName = restaurantInfo.getTrt_input_nm();
 //                if(userName.equals(userSessionName) && memberSession != null) {

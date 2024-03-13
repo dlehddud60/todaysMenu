@@ -7,6 +7,7 @@ import com.example.todaysmenu.boardFile.service.BoardFileService;
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.member.DTO.MemberDTO;
+import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.pagination.DTO.PageDTO;
 import com.example.todaysmenu.board.service.BoardService;
@@ -53,16 +54,16 @@ public class BoardController {
             @RequestParam(value = "tfb_seq",required = false)
             Integer tfb_seq, Model model,RedirectAttributes rttr, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         FindResponseBoardInfoModel boardInfoModel;
         String loginId;
         String memberId;
         String memberType;
         try{
             boardInfoModel = boardService.info(tfb_seq);
-            loginId = memberSession.getTmt_memb_name();
+            loginId = memberSession.tmt_memb_name();
             memberId = boardInfoModel.tfb_input_nm();
-            memberType = memberSession.getTmt_user_type();
+            memberType = memberSession.tmt_user_type();
         } catch (NullPointerException e) {
             if(memberSession == null) {
                 return redirect("board/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
@@ -94,10 +95,10 @@ public class BoardController {
             ,    RedirectAttributes rttr
             ,    HttpServletRequest request) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         int  tfb_seq = boardDTO.getTfb_seq();
-        boardDTO.setTfb_input_ty(memberSession.getTmt_user_type());
-        boardDTO.setTfb_input_nm(memberSession.getTmt_memb_name());
+        boardDTO.setTfb_input_ty(memberSession.tmt_user_type());
+        boardDTO.setTfb_input_nm(memberSession.tmt_memb_name());
         boardDTO.setTfb_input_ip(request.getRemoteAddr());
         try {
             boardService.insert(boardDTO,boardFileDTO,request);
@@ -118,15 +119,15 @@ public class BoardController {
             ,    RedirectAttributes rttr
             ,    HttpServletRequest request) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-        boardDTO.setTfb_moder_ty(memberSession.getTmt_user_type());
-        boardDTO.setTfb_moder_nm(memberSession.getTmt_memb_name());
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
+        boardDTO.setTfb_moder_ty(memberSession.tmt_user_type());
+        boardDTO.setTfb_moder_nm(memberSession.tmt_memb_name());
         boardDTO.setTfb_moder_ip(request.getRemoteAddr());
         int dataSeq = boardDTO.getTfb_seq();
-        String memberWriter = memberSession.getTmt_memb_name();
+        String memberWriter = memberSession.tmt_memb_name();
         FindResponseBoardInfoModel boardInfoModel = boardService.info(dataSeq);
         String boardWriter = boardInfoModel.tfb_input_nm();
-        String memberType = memberSession.getTmt_user_type();
+        String memberType = memberSession.tmt_user_type();
         if(memberWriter.equals(boardWriter) || memberType.equals("master")){
             try {
                 boardService.update(boardDTO,boardFileDTO,request);
@@ -156,7 +157,7 @@ public class BoardController {
         log.info("============Controller commonFileDTO========={}",boardFileDTO);
         int tfb_seq = boardDTO.getTfb_seq();
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
 
         FindResponseBoardInfoModel boardInfoModel;
         String memberWriter;
@@ -165,9 +166,9 @@ public class BoardController {
 
         try{
             boardInfoModel = boardService.info(tfb_seq);
-            memberWriter = memberSession.getTmt_memb_name();
+            memberWriter = memberSession.tmt_memb_name();
             boardWriter = boardInfoModel.tfb_input_nm();
-            memberType = memberSession.getTmt_user_type();
+            memberType = memberSession.tmt_user_type();
 
         } catch (NullPointerException e) {
             return redirect("board/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
@@ -195,15 +196,15 @@ public class BoardController {
     @GetMapping("/delChk.do")
     public String delChk(@RequestParam(value = "tfb_seq",required=false)List<Integer> tfb_seq,Criteria cri,RedirectAttributes rttr,HttpServletRequest request) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         FindResponseBoardInfoModel boardInfoModel;
         String userSessionName = "";
         String statusMsg = "";
         String userName;
         String memberType = "";
         try {
-            userSessionName = memberSession.getTmt_memb_name();
-            memberType = memberSession.getTmt_user_type();
+            userSessionName = memberSession.tmt_memb_name();
+            memberType = memberSession.tmt_user_type();
 
         } catch (NullPointerException e) {
             log.info("세션 객체 없음");

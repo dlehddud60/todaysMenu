@@ -3,6 +3,7 @@ package com.example.todaysmenu.restFile.util;
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.member.DTO.MemberDTO;
+import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import com.example.todaysmenu.restFile.DTO.RestFileDTO;
 import com.example.todaysmenu.restFile.repository.RestFileRepository;
 import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
@@ -21,14 +22,14 @@ public abstract class RestFile {
 
     public static void restFileMethod(RestaurantDTO restaurantDTO, RestFileDTO restFileDTO, RestFileRepository restFileRepository, HttpServletRequest request) throws FileSizeExaption, FileExtensionExaption {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         String savePath = "C:/project/todaysMenu/src/main/resources/static/upload/";
         int trt_seq = restaurantDTO.getTrt_seq();
         if(trt_seq > 0) {
            ; restFileDTO.setTrft_parent_seq(trt_seq);
-            restFileDTO.setTrft_moder_ty(memberSession.getTmt_user_type());
-            restFileDTO.setTrft_moder_nm(memberSession.getTmt_memb_name());
-            restFileDTO.setTrft_moder_id(memberSession.getTmt_login_id());
+            restFileDTO.setTrft_moder_ty(memberSession.tmt_user_type());
+            restFileDTO.setTrft_moder_nm(memberSession.tmt_memb_name());
+            restFileDTO.setTrft_moder_id(memberSession.tmt_login_id());
             restFileDTO.setTrft_moder_ip(request.getRemoteAddr());
             List<RestFileDTO> fileList = restFileRepository.list(restFileDTO);
             for (int i = 0; i < fileList.size(); i++) {
@@ -61,9 +62,9 @@ public abstract class RestFile {
             restFileDTO.setTrft_change_file_name(storedFileName);
             restFileDTO.setTrft_parent_table_type("TM_REST_TBL");
 
-            restFileDTO.setTrft_input_ty(memberSession.getTmt_user_type());
-            restFileDTO.setTrft_input_nm(memberSession.getTmt_memb_name());
-            restFileDTO.setTrft_input_id(memberSession.getTmt_login_id());
+            restFileDTO.setTrft_input_ty(memberSession.tmt_user_type());
+            restFileDTO.setTrft_input_nm(memberSession.tmt_memb_name());
+            restFileDTO.setTrft_input_id(memberSession.tmt_login_id());
             restFileDTO.setTrft_input_ip(request.getRemoteAddr());
             restFileDTO.setTrft_parent_seq(restaurantDTO.getTrt_seq());
 

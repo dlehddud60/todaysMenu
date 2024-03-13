@@ -1,6 +1,7 @@
 package com.example.todaysmenu.menu.controller;
 
 import com.example.todaysmenu.member.DTO.MemberDTO;
+import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.pagination.DTO.PageDTO;
 import com.example.todaysmenu.menu.DTO.RestMenuDTO;
@@ -32,9 +33,9 @@ public class RestMenuController {
     @GetMapping("/index.do")
     public String list(Criteria cri, Model model, HttpServletRequest request, RedirectAttributes rttr) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         try{
-            cri.setTmt_login_id(memberSession.getTmt_login_id());
+            cri.setTmt_login_id(memberSession.tmt_login_id());
         }catch (NullPointerException e) {
             return redirect("",rttr,"실패 메세지","비로그인 유저는 진입하실 수 없습니다.",DANGER);
         }
@@ -48,7 +49,7 @@ public class RestMenuController {
     @GetMapping("/recommendMenu.do")
     public String recommendMenu(@ModelAttribute RestMenuDTO restMenuDTO, Model model, HttpServletRequest request, RedirectAttributes rttr) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
 
 
         try{
@@ -57,7 +58,7 @@ public class RestMenuController {
             model.addAttribute("exceptMenuList",restMenuService.rentMenuList(restMenuDTO));
             restMenuDTO.setTrt_seq(recommendMenuDTO.getTrt_seq());
             restMenuDTO.setTrmt_seq(recommendMenuDTO.getTrmt_seq());
-            restMenuDTO.setTmt_login_id(memberSession.getTmt_login_id());
+            restMenuDTO.setTmt_login_id(memberSession.tmt_login_id());
             model.addAttribute("recommendMenuAllList",restMenuService.list(restMenuDTO));
         } catch (NullPointerException e) {
 //            return redirect("",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);

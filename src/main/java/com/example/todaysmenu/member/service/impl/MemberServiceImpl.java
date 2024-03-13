@@ -63,12 +63,18 @@ public class MemberServiceImpl implements MemberService {
             , HttpSession session
             , String tmt_seq
     ) {
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
+
+        log.info("===============memberSession===================={}",memberSession);
+        log.info("===============tmt_pass_word1===================={}",tmt_pass_word1);
+        log.info("===============tmt_pass_word2===================={}",tmt_pass_word2);
+        log.info("===============memberDTO===================={}",memberDTO);
         log.info("===============register1====================");
         String loginId = memberDTO.getTmt_login_id();
         if(loginId == null || loginId.equals("")) {
-            MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
-            memberDTO.setTmt_login_id(memberSession.getTmt_login_id());
-            loginId = memberSession.getTmt_login_id();
+
+            memberDTO.setTmt_login_id(memberSession.tmt_login_id());
+            loginId = memberSession.tmt_login_id();
 
         }
         Pattern idChk = Pattern.compile("^[a-z0-9]+$");
@@ -81,6 +87,7 @@ public class MemberServiceImpl implements MemberService {
         String email = memberDTO.getTmt_memb_email();
         Pattern emailChk = Pattern.compile("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$");
         Matcher emailMatcher = emailChk.matcher(email);
+        log.info("===============register2===================");
 
         if(memberDTO.getTmt_login_id() == null || memberDTO.getTmt_login_id().equals("")||
                 tmt_pass_word1 == null || tmt_pass_word1.equals("")||
@@ -89,23 +96,33 @@ public class MemberServiceImpl implements MemberService {
                 memberDTO.getTmt_memb_age() == 0 ||
                 memberDTO.getTmt_memb_gender() == null || memberDTO.getTmt_memb_gender().equals("")||
                 memberDTO.getTmt_memb_email() == null || memberDTO.getTmt_memb_email().equals("")) {
-            //누락메시지를 가지고 가기? => 객체 바인딩은 jsp로 갈 때 가능하다.
+            log.info("===============register3===================");
+
             return redirect("join.do",rttr,"실패 메세지","모든 내용을 입력하세요 ", DANGER);
         }
         if(passMatcher.matches() || pass.length() < 8){
+            log.info("===============register4===================");
 
             return redirect("join.do",rttr,"실패 메세지","비밀번호는 영어 소문자,특수문자,숫자로 구성된 8글자 이상으로 조합하시오.", DANGER);
         }
         if(!tmt_pass_word1.equals(tmt_pass_word2)) {
+            log.info("===============register5===================");
+
             return redirect("join.do",rttr,"실패 메세지","비밀번호가 서로 다릅니다.", DANGER);
         }
         if(!idMatcher.matches() || loginId.length() < 6) {
+            log.info("===============register6===================");
+
             return redirect("join.do",rttr,"아이디 유효성 검사","아이디는 영소문자,숫자로 구성된 6글자 이상으로 조합하시오.", DANGER);
         }
         if(!emailMatcher.matches()) {
+            log.info("===============register7===================");
+
             return redirect("join.do",rttr,"이메일 유효성 검사","이메일 형식에 맞게 입력해주세요.", DANGER);
         }
         if(duplChek) {
+            log.info("===============register8===================");
+
             return redirect("join.do",rttr,"아이디 중복체크","중복된 아이디 입니다. 다른 아이디를 입력해주시길 바랍니다.", DANGER);
         }
 
@@ -117,23 +134,36 @@ public class MemberServiceImpl implements MemberService {
             String encodePassWord = passwordEncoder.encode(memberDTO.getTmt_pass_word());
             memberDTO.setTmt_pass_word(encodePassWord);
             if(tmt_seq != null && !tmt_seq.equals("")){
+                log.info("===============register9===================");
+                if(memberSession.tmt_user_type().equals("master")) {
+                    memberDTO.setTmt_user_type("master");
+                }else {
+                    memberDTO.setTmt_user_type("user");
 
+                }
                 result = memberRepository.memberUpdate(memberDTO);
                 msg = "회원정보 수정";
             }else{
+                log.info("===============register10===================");
+
                 result = memberRepository.register(memberDTO);
                 msg = "회원가입";
             }
 
             // 성공적으로 등록된 경우 처리할 로직
             if (result == 1) {
+
+                FindResponseLoginModel findResponseLoginModel = new FindResponseLoginModel(memberDTO.getTmt_seq(),memberDTO.getTmt_login_id(),memberDTO.getTmt_pass_word(),memberDTO.getTmt_memb_name(),memberDTO.getTmt_memb_age(),memberDTO.getTmt_memb_gender(),memberDTO.getTmt_memb_email(),memberDTO.getTmt_memb_birth_day(),null,memberDTO.getTmt_user_type(),memberDTO.getTmt_input_date(),memberDTO.getTmt_input_date());
+                log.info("============memberDTO==========={}",memberDTO);
+                log.info("============findResponseLoginModel==========={}",findResponseLoginModel);
                 // 회원가입이 성공하면-> 로그인처리하기
-                session.setAttribute("memberDTO", memberDTO); // ${empty m}
+                session.setAttribute("memberDTO", findResponseLoginModel); // ${empty m}
                 log.info("session{}", session);
                 return redirect("",rttr,msg + " 성공메시지",msg+ "에 성공했습니다.", SUCCESS);
             }
         } catch (Exception e) {
             log.info("result{}",result);
+            e.printStackTrace();
             if(result == 0) {
                 return redirect("join.do",rttr,"실패 메시지","이미 존재하는 회원입니다.", DANGER);
             }
@@ -191,11 +221,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void memImageUpdate(MemFileDTO memFileDTO,HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
 
-        memFileDTO.setTmft_input_ty(memberSession.getTmt_user_type());
-        memFileDTO.setTmft_input_nm(memberSession.getTmt_memb_name());
-        memFileDTO.setTmft_input_id(memberSession.getTmt_login_id());
+        memFileDTO.setTmft_input_ty(memberSession.tmt_user_type());
+        memFileDTO.setTmft_input_nm(memberSession.tmt_memb_name());
+        memFileDTO.setTmft_input_id(memberSession.tmt_login_id());
         memFileDTO.setTmft_input_ip(request.getRemoteAddr());
         int dataSeq = memFileDTO.getTmft_seq();
 
@@ -215,7 +245,7 @@ public class MemberServiceImpl implements MemberService {
         // FileDTO 세팅
         memFileDTO.setTmft_origin_file_name(originalFilename);
         memFileDTO.setTmft_change_fine_name(storedFileName);
-        memFileDTO.setTmft_parent_seq(Integer.parseInt( memberSession.getTmt_seq()));
+        memFileDTO.setTmft_parent_seq(Integer.parseInt( memberSession.tmt_seq()));
         // 파일 저장용 폴더에 파일 저장 처리
 //        String savePath = "/Users/leedongyoung/app/2023/workspace/todaysMenu/src/main/resources/static/upload/";
         String savePath = "C:/project/todaysMenu/src/main/resources/static/upload/";
@@ -256,9 +286,9 @@ public class MemberServiceImpl implements MemberService {
             memFileRepository.insert(memFileDTO);
         }else {
             log.info("==============update============={}",dataSeq);
-            memFileDTO.setTmft_moder_ty(memberSession.getTmt_user_type());
-            memFileDTO.setTmft_moder_nm(memberSession.getTmt_memb_name());
-            memFileDTO.setTmft_moder_id(memberSession.getTmt_login_id());
+            memFileDTO.setTmft_moder_ty(memberSession.tmt_user_type());
+            memFileDTO.setTmft_moder_nm(memberSession.tmt_memb_name());
+            memFileDTO.setTmft_moder_id(memberSession.tmt_login_id());
             memFileDTO.setTmft_moder_ip(request.getRemoteAddr());
             memFileRepository.update(memFileDTO);
 
