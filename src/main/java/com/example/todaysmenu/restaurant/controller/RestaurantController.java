@@ -119,7 +119,6 @@ public class RestaurantController {
                     , @ModelAttribute Criteria cri
             , RedirectAttributes rttr
             , HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
-        log.info("=======================insert========================");
         MemberDTO memberSession = getMemberDTO(restaurantDTO, request);
         try{
                 restaurantService.insert(restaurantDTO,restFileDTO,request);
@@ -144,7 +143,6 @@ public class RestaurantController {
             , @ModelAttribute Criteria cri
             , RedirectAttributes rttr
             , HttpServletRequest request) throws FileExtensionExaption, FileSizeExaption {
-        log.info("=======================update========================");
         int trt_seq = restaurantDTO.getTrt_seq();
         MemberDTO memberSession = getMemberDTO(restaurantDTO, request);
         String memberId = memberSession.getTmt_login_id();
