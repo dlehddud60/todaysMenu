@@ -4,6 +4,10 @@ import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.memFile.DTO.MemFileDTO;
 import com.example.todaysmenu.memFile.repository.MemFileRepository;
+import com.example.todaysmenu.member.model.FindRequestLoginModel;
+import com.example.todaysmenu.member.model.FindResponseLoginModel;
+import com.example.todaysmenu.member.model.FindResponseMemberListModel;
+import com.example.todaysmenu.member.model.FindResponseRegisterCheckModel;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.repository.MemberRepository;
@@ -40,9 +44,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public int registerCheck(String tmt_login_id) {
-        MemberDTO memberDTO = memberRepository.registerCheck(tmt_login_id);
+        FindResponseRegisterCheckModel responseRegisterCheckModel = memberRepository.registerCheck(tmt_login_id);
         log.info("중복체크");
-        if(memberDTO != null || tmt_login_id.equals("")) {
+        if(responseRegisterCheckModel != null || tmt_login_id.equals("")) {
                 duplChek = true;
             return 0;
         }else{
@@ -58,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
             , RedirectAttributes rttr
             , HttpSession session
             , String tmt_seq
-            ) {
+    ) {
         log.info("===============register1====================");
         String loginId = memberDTO.getTmt_login_id();
         if(loginId == null || loginId.equals("")) {
@@ -139,22 +143,25 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public String login(MemberDTO memberDTO, RedirectAttributes rttr, HttpSession session) {
-        if (memberDTO.getTmt_login_id() == null || memberDTO.getTmt_login_id().equals("")||
-                memberDTO.getTmt_pass_word() == null || memberDTO.getTmt_pass_word().equals("")) {
+    public String login(FindRequestLoginModel findRequestLoginModel, RedirectAttributes rttr, HttpSession session) {
+        log.info("==============findRequestLoginModel=============={}",findRequestLoginModel);
+        if (findRequestLoginModel.tmt_login_id() == null || findRequestLoginModel.tmt_login_id().equals("")||
+                findRequestLoginModel.tmt_pass_word() == null || findRequestLoginModel.tmt_pass_word().equals("")) {
             return redirect("loginForm.do",rttr,"실패 메시지","모든 내용을 입력해주세요", DANGER);
         }
-        MemberDTO mvo = null;
+        FindResponseLoginModel memberObj = null;
         String duplLoginErrorMsg = "로그인에 실패했습니다.";
         try {
-            mvo = memberRepository.login(memberDTO);
+            memberObj = memberRepository.login(findRequestLoginModel);
+            log.info("==============findRequestLoginModel=============={}",memberObj);
 
         }catch (Exception e) {
+            e.printStackTrace();
             duplLoginErrorMsg = "중복 로그인이 발생하였습니다.";
         }
         //비밀번호 일치 여부 체크
-        if(mvo != null && passwordEncoder.matches(memberDTO.getTmt_pass_word(), mvo.getTmt_pass_word())) { //로그인 성공
-            session.setAttribute("memberDTO",mvo); // ${empty mvo} 헤더에서 체크하고 있음
+        if(memberObj != null && passwordEncoder.matches(findRequestLoginModel.tmt_pass_word(), memberObj.tmt_pass_word())) { //로그인 성공
+            session.setAttribute("memberDTO",memberObj); // ${empty memberObj} 헤더에서 체크하고 있음
             return redirect("",rttr,"성공 메세지","로그인에 성공했습니다.", SUCCESS);
         }else{ //로그인 실패
             return redirect("loginForm.do",rttr,"실패 메시지",duplLoginErrorMsg, DANGER);
@@ -162,7 +169,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<MemberDTO> memberList(Criteria cri) {
+    public List<FindResponseMemberListModel> memberList(Criteria cri) {
         return memberRepository.memberList(cri);
     }
 

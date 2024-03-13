@@ -29,7 +29,7 @@
         <include refid="where"/>
     </select>
 
-    <select id="registerCheck" resultType="com.example.todaysmenu.member.DTO.MemberDTO">
+    <select id="registerCheck" resultType="com.example.todaysmenu.member.model.FindResponseRegisterCheckModel">
         /*com.example.todaysmenu.member.repository.MemberRepository.registerCheck[중복확인]*/
         SELECT  TMT_SEQ
         ,       TMT_LOGIN_ID
@@ -45,7 +45,7 @@
         WHERE   TMT_LOGIN_ID = #{tmt_login_id}
     </select>
 
-    <select id="memberList" resultType="com.example.todaysmenu.member.DTO.MemberDTO">
+    <select id="memberList" resultType="com.example.todaysmenu.member.model.FindResponseMemberListModel">
         /*com.example.todaysmenu.member.repository.MemberRepository.memberList[멤버정보]*/
         <include refid="pagination.header"/>
             SELECT  T1.*
@@ -114,7 +114,7 @@
         WHERE	TMT_SEQ			        = #{tmt_seq}
     </update>
 
-    <select id="login" resultType="com.example.todaysmenu.member.DTO.MemberDTO" parameterType="com.example.todaysmenu.member.DTO.MemberDTO">
+    <select id="login" resultType="com.example.todaysmenu.member.model.FindResponseLoginModel" parameterType="com.example.todaysmenu.member.model.FindRequestLoginModel">
         /*com.example.todaysmenu.member.repository.MemberRepository.login[로그인]*/
         SELECT  TMT.*
         FROM    TM_MEMBER_TBL TMT

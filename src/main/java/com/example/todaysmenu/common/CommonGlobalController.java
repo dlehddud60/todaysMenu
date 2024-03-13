@@ -3,6 +3,7 @@ package com.example.todaysmenu.common;
 import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.memFile.DTO.MemFileDTO;
 import com.example.todaysmenu.memFile.repository.MemFileRepository;
+import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,11 @@ public class CommonGlobalController {
     @ModelAttribute
     public void globalDataBind(HttpServletRequest request, Model model) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         String userIp = request.getRemoteAddr();
         log.info("USER_IP{}",userIp);
         try{
-            int memberSeq = Integer.parseInt(memberSession.getTmt_seq());
+            int memberSeq = Integer.parseInt(memberSession.tmt_seq());
             MemFileDTO memFileDTO = new MemFileDTO(memberSeq);
             model.addAttribute("memFile",fileRepository.list(memFileDTO));
         }catch (NullPointerException e) {

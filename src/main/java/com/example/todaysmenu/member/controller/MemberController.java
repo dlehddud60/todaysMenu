@@ -3,6 +3,9 @@ package com.example.todaysmenu.member.controller;
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.memFile.DTO.MemFileDTO;
+import com.example.todaysmenu.member.model.FindRequestLoginModel;
+import com.example.todaysmenu.member.model.FindResponseLoginModel;
+import com.example.todaysmenu.member.model.FindResponseMemberListModel;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.pagination.DTO.PageDTO;
 import com.example.todaysmenu.member.DTO.MemberDTO;
@@ -73,9 +76,9 @@ public class MemberController {
         return "member/login";
     }
     @RequestMapping("login.do")
-    public String login(MemberDTO memberDTO, RedirectAttributes rttr, HttpSession session) {
+    public String login(FindRequestLoginModel findRequestLoginModel, RedirectAttributes rttr, HttpSession session) {
 
-        String login = memberService.login(memberDTO,rttr,session);
+        String login = memberService.login(findRequestLoginModel,rttr,session);
         return login;
     }
     @RequestMapping("/imageForm.do")
@@ -92,10 +95,10 @@ public class MemberController {
     @RequestMapping("/memberList.do")
     public String memberList(HttpServletRequest request,Criteria cri, Model model,RedirectAttributes rttr) {
         HttpSession session = request.getSession();
-        MemberDTO memberSession = (MemberDTO) session.getAttribute("memberDTO");
+        FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         String userType = "";
         try {
-            userType = memberSession.getTmt_user_type();
+            userType = memberSession.tmt_user_type();
         }catch (NullPointerException e) {
             e.printStackTrace();
         }finally {

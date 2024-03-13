@@ -8,12 +8,6 @@ import java.util.List;
 @Data
 public class BoardFileDTO {
 
-    public BoardFileDTO() {
-    }
-
-
-
-
     private int tcft_seq;
     private int tcft_parent_seq;
     private String tcft_parent_table_type;
