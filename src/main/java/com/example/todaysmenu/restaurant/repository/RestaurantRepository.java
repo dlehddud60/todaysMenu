@@ -2,6 +2,7 @@ package com.example.todaysmenu.restaurant.repository;
 
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
+import com.example.todaysmenu.restaurant.model.FindResponseRestaurantListModel;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 public interface RestaurantRepository {
     int count(Criteria cri);
     List<RestaurantDTO> list();
-    List<RestaurantDTO> listPaging(Criteria cri);
+    List<FindResponseRestaurantListModel> listPaging(Criteria cri);
     RestaurantDTO info(RestaurantDTO restaurantDTO);
     RestaurantDTO info(int restaurantDTO);
     int insert(RestaurantDTO restaurantDTO);

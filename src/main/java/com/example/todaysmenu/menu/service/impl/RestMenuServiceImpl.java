@@ -2,6 +2,8 @@ package com.example.todaysmenu.menu.service.impl;
 
 import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
+import com.example.todaysmenu.menu.model.FindResponseMenuListModel;
+import com.example.todaysmenu.menu.model.FindResponseSubMenuListModel;
 import com.example.todaysmenu.menu.repository.RestMenuRepository;
 import com.example.todaysmenu.menu.service.RestMenuService;
 import com.example.todaysmenu.pagination.DTO.Criteria;
@@ -32,12 +34,14 @@ public class RestMenuServiceImpl implements RestMenuService {
     }
 
     @Override
-    public List<RestMenuDTO> list(RestMenuDTO restMenuDTO) {
-        return restMenuRepository.list(restMenuDTO);
+    public List<FindResponseSubMenuListModel> list(RestMenuDTO restMenuDTO) {
+        List<FindResponseSubMenuListModel> subMenuListModels = restMenuRepository.list(restMenuDTO);
+        log.info("=============subMenuListModels============={}",subMenuListModels);
+        return subMenuListModels;
     }
 
     @Override
-    public List<RestMenuDTO> listPaging(Criteria cri) {
+    public List<FindResponseMenuListModel> listPaging(Criteria cri) {
         return restMenuRepository.listPaging(cri);
     }
 

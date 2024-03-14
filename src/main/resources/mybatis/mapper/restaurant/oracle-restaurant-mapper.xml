@@ -99,7 +99,7 @@
         </if>
     </select>
 
-    <select id="listPaging" resultType="com.example.todaysmenu.restaurant.DTO.RestaurantDTO">
+    <select id="listPaging" resultType="com.example.todaysmenu.restaurant.model.FindResponseRestaurantListModel">
         /*com.example.todaysmenu.restaurant.repository.RestaurantRepository.listPaging[목록페이징]*/
         <include refid="pagination.header"/>
         SELECT  T1.*

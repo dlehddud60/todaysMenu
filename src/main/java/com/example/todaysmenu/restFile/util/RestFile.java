@@ -5,6 +5,8 @@ import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import com.example.todaysmenu.restFile.DTO.RestFileDTO;
+import com.example.todaysmenu.restFile.model.FindRequestFileListModel;
+import com.example.todaysmenu.restFile.model.FindResponseFileListModel;
 import com.example.todaysmenu.restFile.repository.RestFileRepository;
 import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,9 +33,11 @@ public abstract class RestFile {
             restFileDTO.setTrft_moder_nm(memberSession.tmt_memb_name());
             restFileDTO.setTrft_moder_id(memberSession.tmt_login_id());
             restFileDTO.setTrft_moder_ip(request.getRemoteAddr());
-            List<RestFileDTO> fileList = restFileRepository.list(restFileDTO);
+            FindRequestFileListModel findRequestFileListModel = new FindRequestFileListModel(trt_seq);
+            List<FindResponseFileListModel> fileList = restFileRepository.list(findRequestFileListModel);
+            log.info("=============fileList========{}",fileList);
             for (int i = 0; i < fileList.size(); i++) {
-                String oldFileName = fileList.get(i).getTrft_change_file_name();
+                String oldFileName = fileList.get(i).trft_change_file_name();
                 File oldFile = new File(savePath + "/" + oldFileName);
                     if (oldFile.exists()) { //upload경로에 파일이 존재하는지 확인하는 메서드
                         oldFile.delete();

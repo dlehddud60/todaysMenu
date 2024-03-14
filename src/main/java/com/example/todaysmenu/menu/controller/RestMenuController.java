@@ -2,6 +2,7 @@ package com.example.todaysmenu.menu.controller;
 
 import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
+import com.example.todaysmenu.menu.model.FindResponseSubMenuListModel;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.pagination.DTO.PageDTO;
 import com.example.todaysmenu.menu.DTO.RestMenuDTO;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.DANGER;
 import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.redirect;
@@ -50,7 +53,6 @@ public class RestMenuController {
     public String recommendMenu(@ModelAttribute RestMenuDTO restMenuDTO, Model model, HttpServletRequest request, RedirectAttributes rttr) {
         HttpSession session = request.getSession();
         FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
-
 
         try{
             RestMenuDTO recommendMenuDTO = restMenuService.userRecommendMenu(restMenuDTO, request, rttr);

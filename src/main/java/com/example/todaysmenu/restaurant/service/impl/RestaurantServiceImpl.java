@@ -6,6 +6,7 @@ import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
 import com.example.todaysmenu.restFile.DTO.RestFileDTO;
 import com.example.todaysmenu.restFile.repository.RestFileRepository;
+import com.example.todaysmenu.restaurant.model.FindResponseRestaurantListModel;
 import com.example.todaysmenu.restaurant.repository.RestaurantRepository;
 import com.example.todaysmenu.restaurant.service.RestaurantService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,8 +31,10 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<RestaurantDTO> list(Criteria cri) {
-        return restaurantRepository.listPaging(cri);
+    public List<FindResponseRestaurantListModel> list(Criteria cri) {
+        List<FindResponseRestaurantListModel> findResponseRestaurantListModels = restaurantRepository.listPaging(cri);
+        log.info("============findResponseRestaurantListModels================{}",findResponseRestaurantListModels);
+        return findResponseRestaurantListModels;
     }
 
     @Override

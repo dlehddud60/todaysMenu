@@ -1,5 +1,7 @@
 package com.example.todaysmenu.menu.repository;
 
+import com.example.todaysmenu.menu.model.FindResponseMenuListModel;
+import com.example.todaysmenu.menu.model.FindResponseSubMenuListModel;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.menu.DTO.RestMenuDTO;
 import org.apache.ibatis.annotations.Mapper;
@@ -9,10 +11,10 @@ import java.util.List;
 @Mapper
 public interface RestMenuRepository {
     int count(Criteria cri);
-    List<RestMenuDTO> list(RestMenuDTO restMenuDTO);
-    List<RestMenuDTO> listPaging(Criteria cri);
+    List<FindResponseSubMenuListModel> list(RestMenuDTO restMenuDTO); // 추천페이지 서브메뉴 리스트에서 사용
+    List<FindResponseMenuListModel> listPaging(Criteria cri); // 메뉴 리스트에서 사용
     List<RestMenuDTO> rentMenuList(int trt_seq);
-    List<RestMenuDTO> rentMenuList(RestMenuDTO restMenuDTO);
+    List<RestMenuDTO> rentMenuList(RestMenuDTO restMenuDTO); // 식당 상세보기의 메뉴 리스트에서 사용
 
     int insert(RestMenuDTO restaurantDTO);
     int update(RestMenuDTO restaurantDTO);

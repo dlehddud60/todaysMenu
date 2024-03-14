@@ -7,7 +7,7 @@
         WHERE 1 = 1
     </sql>
 
-    <select id="list" resultType="com.example.todaysmenu.restFile.DTO.RestFileDTO">
+    <select id="list" resultType="com.example.todaysmenu.restFile.model.FindResponseFileListModel">
         /*com.example.todaysmenu.boardFile.repository.BoardFileRepository.registerCheck[파일 리스트]*/
         SELECT TRFT.TRFT_SEQ
         , TRFT.TRFT_PARENT_SEQ

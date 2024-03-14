@@ -1,5 +1,7 @@
 package com.example.todaysmenu.menu.service;
 
+import com.example.todaysmenu.menu.model.FindResponseMenuListModel;
+import com.example.todaysmenu.menu.model.FindResponseSubMenuListModel;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.menu.DTO.RestMenuDTO;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,8 +12,8 @@ import java.util.List;
 
 public interface RestMenuService {
     int count(Criteria cri);
-    List<RestMenuDTO> list(RestMenuDTO restMenuDTO);
-    List<RestMenuDTO> listPaging(Criteria cri);
+    List<FindResponseSubMenuListModel> list(RestMenuDTO restMenuDTO);
+    List<FindResponseMenuListModel> listPaging(Criteria cri);
     List<RestMenuDTO> rentMenuList(int trt_seq);
     List<RestMenuDTO> rentMenuList(RestMenuDTO restMenuDTO);
     int insert(RestMenuDTO restaurantDTO);

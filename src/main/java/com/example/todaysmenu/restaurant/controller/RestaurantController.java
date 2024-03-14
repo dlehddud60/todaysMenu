@@ -6,6 +6,7 @@ import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.pagination.DTO.PageDTO;
+import com.example.todaysmenu.restFile.model.FindRequestFileListModel;
 import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
 import com.example.todaysmenu.restFile.DTO.RestFileDTO;
 import com.example.todaysmenu.restFile.service.RestFileService;
@@ -15,6 +16,7 @@ import com.example.todaysmenu.keyword.model.FindRequestKeywordListModel;
 import com.example.todaysmenu.keyword.model.FindResponseKeywordListModel;
 import com.example.todaysmenu.keyword.service.KeywordService;
 import com.example.todaysmenu.menu.service.impl.RestMenuServiceImpl;
+import com.example.todaysmenu.restaurant.model.FindResponseRestaurantListModel;
 import com.example.todaysmenu.restaurant.service.RestaurantService;
 import com.example.todaysmenu.star.DTO.RestStarDTO;
 import com.example.todaysmenu.star.service.RestStarService;
@@ -52,7 +54,6 @@ public class RestaurantController {
         int total = restaurantService.count(cri);
         model.addAttribute("list", restaurantService.list(cri));
         model.addAttribute("pageMaker",new PageDTO(total,cri));
-
         return "restaurant/list";
     }
 
@@ -75,6 +76,7 @@ public class RestaurantController {
             loginId = memberSession.tmt_login_id();
             memberType = memberSession.tmt_user_type();
             memberId = restaurantDTO.getTrt_input_id();
+
         } catch (NullPointerException e) {
             if(memberSession == null) {
                 return redirect("restaurant/index.do",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
@@ -99,12 +101,8 @@ public class RestaurantController {
                 List<FindResponseKeywordListModel> keywordDetailList = keywordService.list(findRequestKeywordListModel);
                 model.addAttribute("keywordList" + i,keywordDetailList);
             }
-
-
-
             model.addAttribute("info",restaurantService.info(restaurantDTOInfo));
             model.addAttribute("menuList",restaurantService.info(restaurantDTOInfo));
-
             model.addAttribute("rentMenuList", restMenuService.rentMenuList(restMenuDTO));
             return "restaurant/update";
         }else{
@@ -169,6 +167,7 @@ public class RestaurantController {
 
     @GetMapping("/view.do")
     public String view(@ModelAttribute RestaurantDTO restaurantDTO,@ModelAttribute Criteria cri,  Model model, HttpServletRequest request, RedirectAttributes rttr) {
+        log.info("==============restaurantDTO================{}",restaurantDTO);
         HttpSession session = request.getSession();
         FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         try{
@@ -176,7 +175,6 @@ public class RestaurantController {
         }catch (NullPointerException e) {
             return redirect("",rttr,"실패 메세지","비로그인 유저는 진입하실 수 없습니다.",DANGER);
         }
-        RestFileDTO restFileDTO = new RestFileDTO();
         RestMenuDTO restMenuDTO = new RestMenuDTO();
         int trt_seq = restaurantDTO.getTrt_seq();
         restMenuDTO.setTrt_seq(trt_seq);
@@ -188,9 +186,9 @@ public class RestaurantController {
             model.addAttribute("keywordList" + i,keywordDetailList);
         }
         restaurantService.updateCount(trt_seq);
-        restFileDTO.setTrft_parent_seq(trt_seq);
+        FindRequestFileListModel findRequestFileListModel = new FindRequestFileListModel(trt_seq);
         model.addAttribute("info", restaurantService.info(restaurantDTO));
-        model.addAttribute("restFileList", restFileService.list(restFileDTO));
+        model.addAttribute("restFileList", restFileService.list(findRequestFileListModel));
         model.addAttribute("rentMenuList", restMenuDTOList);
         return "restaurant/view";
     }

@@ -1,6 +1,8 @@
 package com.example.todaysmenu.restFile.service.impl;
 
 import com.example.todaysmenu.restFile.DTO.RestFileDTO;
+import com.example.todaysmenu.restFile.model.FindRequestFileListModel;
+import com.example.todaysmenu.restFile.model.FindResponseFileListModel;
 import com.example.todaysmenu.restFile.repository.RestFileRepository;
 import com.example.todaysmenu.restFile.service.RestFileService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +19,9 @@ public class RestFileServiceImpl implements RestFileService {
     private final RestFileRepository restFileRepository;
 
     @Override
-    public List<RestFileDTO> list(RestFileDTO restFileDTO) {
-        return restFileRepository.list(restFileDTO);
+    public List<FindResponseFileListModel> list(FindRequestFileListModel findRequestFileListModel) {
+        log.info("=========RestFileDTO================={}",findRequestFileListModel);
+        return restFileRepository.list(findRequestFileListModel);
     }
 
     @Override

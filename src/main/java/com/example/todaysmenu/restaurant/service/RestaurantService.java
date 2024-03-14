@@ -5,13 +5,14 @@ import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.pagination.DTO.Criteria;
 import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
 import com.example.todaysmenu.restFile.DTO.RestFileDTO;
+import com.example.todaysmenu.restaurant.model.FindResponseRestaurantListModel;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
 public interface RestaurantService {
     int count(Criteria cri);
-    List<RestaurantDTO> list(Criteria cri);
+    List<FindResponseRestaurantListModel> list(Criteria cri);
     RestaurantDTO info(RestaurantDTO restaurantDTO);
     RestaurantDTO info(int trt_Seq);
     int insert(RestaurantDTO restaurantDTO);
