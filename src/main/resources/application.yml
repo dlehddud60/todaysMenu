@@ -9,24 +9,64 @@ spring:
     livereload:
       enabled: true
     restart:
-      enabled: true
+      enabled: false
   freemarker:
     cache: false
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-  #
-#server:
-#  tomcat:
-#    max-swallow-size: 1
+  datasource:
+      url: jdbc:log4jdbc:oracle:thin:@localhost:1521:XE
+      username: TODAY
+      password: Oracle12345678
+      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+logging:
+  level:
+    jdbc :
+      sqlonly: info
+      sqltiming : off
+      resultsettable : info
+      audit : off
+      resultset : off
+      connection : off
+    root: info
+  file:
+    name: C:\project\todaysMenu\build\libs\todayMenu.log
+  logback:
+    rollingpolicy:
+      max-history: 7
+      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.log
+      max-file-size: 10MB
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss.SSS,Asia/Seoul
+mybatis:
+  mapper-locations: classpath:mybatis/mapper/**/*.xml
+  configuration:
+    cache-enabled: false
+    jdbc-type-for-null: NULL
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#
 
 #  datasource:
-#    url: jdbc:log4jdbc:oracle:thin:@jakedb37_high?TNS_ADMIN=/Users/leedongyoung/opt/OracleCloudWallet/JAKEDB
+#    url: jdbc:log4jdbc:oracle:thin:@jakedb37_high?TNS_ADMIN=C:/opt/oralceCloud/JAKEDB
 #    username: TODAY
 #    password: Oracle12345678
 #    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
@@ -39,37 +79,4 @@ spring:
 #      data-source-j-n-d-i: jdbc/HikariCP
 #      minimum-idle: 2
 #      idle-timeout: 10000
-
-
-
-
-
-
-
-
-  datasource:
-      url: jdbc:log4jdbc:oracle:thin:@localhost:1521:xe
-      username: TODAY
-      password: Oracle12345678
-      driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-      hikari:
-        connectionTimeout: 1000
-        maximumPoolSize: 30
-        maxLifetime: 1800000
-        poolName: HikariCP
-        connection-test-query: SELECT 1 FROM dual
-        data-source-j-n-d-i: jdbc/HikariCP
-        minimum-idle: 2
-        idle-timeout: 10000
-
-
-#driver-class-name: oracle.jdbc.OracleDriver
-#  url: jdbc:oracle:thin:@112.65.186.215:1521:testname
-
-mybatis:
-  mapper-locations: classpath:mybatis/mapper/**/*.xml
-  configuration:
-    cache-enabled: false
-    jdbc-type-for-null: NULL
-
 
