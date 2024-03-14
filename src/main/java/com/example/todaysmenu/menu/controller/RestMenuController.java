@@ -1,5 +1,6 @@
 package com.example.todaysmenu.menu.controller;
 
+import com.example.todaysmenu.keyword.service.KeywordService;
 import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import com.example.todaysmenu.menu.model.FindResponseSubMenuListModel;
@@ -31,6 +32,7 @@ public class RestMenuController {
 
 
     private final RestMenuServiceImpl restMenuService;
+    private final KeywordService keywordService;
 
 
     @GetMapping("/index.do")
@@ -56,12 +58,14 @@ public class RestMenuController {
 
         try{
             RestMenuDTO recommendMenuDTO = restMenuService.userRecommendMenu(restMenuDTO, request, rttr);
+
             model.addAttribute("recommendMenu",recommendMenuDTO);
             model.addAttribute("exceptMenuList",restMenuService.rentMenuList(restMenuDTO));
             restMenuDTO.setTrt_seq(recommendMenuDTO.getTrt_seq());
             restMenuDTO.setTrmt_seq(recommendMenuDTO.getTrmt_seq());
             restMenuDTO.setTmt_login_id(memberSession.tmt_login_id());
             model.addAttribute("recommendMenuAllList",restMenuService.list(restMenuDTO));
+            model.addAttribute("keywordRankingList",keywordService.keywordRankingList());
         } catch (NullPointerException e) {
 //            return redirect("",rttr,"실패 메세지","로그인을 해주시길 바랍니다.",DANGER);
         }

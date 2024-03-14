@@ -202,6 +202,14 @@ $(function () {
                 <p>4. 사용자 개인 데이터에 의한 맞춤형 추천 서비스가 제공 됩니다.</p>
                 <p>5. 메뉴의 추천은 사용자가 음식을 안먹은지 3일된 메뉴 이면서 평점이 3점이상 식당평점3점 평균메뉴평점 3점 이상 조건으로 맨 처음으로 추천됩니다.</p>
             </div>
+            <div class="keywordArea" style="margin-top: 20px; font-size: 1.2rem;background: #dddddd">
+                <p style="font-size: 2.5rem; color: #ff8585" th:text="해시태그"></p>
+                <th:block th:each="list : ${keywordRankingList}">
+                    <span th:text="${list.keyword_rank}"></span>
+                </th:block>
+            </div>
+
+
             <th:block th:if="${not #strings.isEmpty(recommendMenu)}">
                 <div class="exeptArea">
                     <span th:if="${not #lists.isEmpty(param?.trmt_menu_nameSh)}">추천받아본 메뉴 : </span>

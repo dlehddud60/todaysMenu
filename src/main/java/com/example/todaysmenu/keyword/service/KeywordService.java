@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface KeywordService {
     List<FindResponseKeywordListModel> list(FindRequestKeywordListModel findRequestKeywordListModel);
+    List<FindResponseKeywordRankingListModel>keywordRankingList();
     int insert(InsertRequsetKeywordModel insertRequsetKeywordModel);
     int update(UpdateRequsetKeywordModel updateRequsetKeywordModel);
     int delete(DeleteRequsetKeywordModel deleteRequsetKeywordModel);

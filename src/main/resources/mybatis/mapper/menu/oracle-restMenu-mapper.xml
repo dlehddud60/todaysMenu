@@ -366,31 +366,6 @@
         WHERE T1.RN = RANDOM_NUM
     </select>
 
-    <select id="keywordRanking" resultType="com.example.todaysmenu.menu.DTO.RestMenuDTO">
-        /*com.example.todaysmenu.restaurant.menu.repository.RestMenuRepository.rentMenuList[식당메뉴리스트]*/
-        SELECT	 '[NEW]' || T1.TRMKW_KEY_WORD AS KEYWORD_RANK
-        FROM(
-                SELECT *
-                FROM TM_REST_MENU_KEY_WORD TRMKW
-                LEFT JOIN TM_REST_MENU_TBL TRMT
-                ON		TRMKW.TRMKW_PARENT_SEQ = TRMT.TRMT_SEQ
-                ORDER BY	TRMKW_INPUT_DT DESC
-        ) T1
-        WHERE ROWNUM <![CDATA[<=]]> 5
-
-        UNION ALL
-
-        SELECT	ROWNUM || '위 : ' || T1.TRMKW_KEY_WORD
-        FROM(
-                SELECT TRMKW_KEY_WORD ,COUNT(TRMKW_KEY_WORD) AS KEY_WORD_LANK
-                FROM TM_REST_MENU_KEY_WORD TRMKW
-                LEFT JOIN TM_REST_MENU_TBL TRMT
-                ON		TRMKW.TRMKW_PARENT_SEQ = TRMT.TRMT_SEQ
-                GROUP BY TRMKW.TRMKW_KEY_WORD
-                ORDER BY KEY_WORD_LANK DESC
-        ) T1
-        WHERE ROWNUM <![CDATA[<=]]> 10
-    </select>
 
 
 

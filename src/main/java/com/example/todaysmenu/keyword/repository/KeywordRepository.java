@@ -8,6 +8,7 @@ import java.util.List;
 @Mapper
 public interface KeywordRepository {
     List<FindResponseKeywordListModel> list(FindRequestKeywordListModel findRequestKeywordListModel);
+    List<FindResponseKeywordRankingListModel>keywordRankingList();
     int insert(InsertRequsetKeywordModel insertRequsetKeywordModel);
     int update(UpdateRequsetKeywordModel updateRequsetKeywordModel);
     int delete(DeleteRequsetKeywordModel deleteRequsetKeywordModel);

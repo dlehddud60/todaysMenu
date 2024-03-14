@@ -22,6 +22,12 @@ public class KeywordServiceImpl implements KeywordService {
     }
 
     @Override
+    public List<FindResponseKeywordRankingListModel> keywordRankingList() {
+        log.info("=========keywordRankingList호출=============");
+        return keywordRepository.keywordRankingList();
+    }
+
+    @Override
     public int insert(InsertRequsetKeywordModel insertRequsetKeywordModel) {
         return keywordRepository.insert(insertRequsetKeywordModel);
     }
