@@ -2,7 +2,7 @@ package com.example.todaysmenu.restaurant.service.impl;
 
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
-import com.example.todaysmenu.pagination.DTO.Criteria;
+import com.example.todaysmenu.pagination.VO.Criteria;
 import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
 import com.example.todaysmenu.restFile.DTO.RestFileDTO;
 import com.example.todaysmenu.restFile.repository.RestFileRepository;

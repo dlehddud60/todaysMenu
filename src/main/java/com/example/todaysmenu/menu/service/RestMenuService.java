@@ -2,7 +2,7 @@ package com.example.todaysmenu.menu.service;
 
 import com.example.todaysmenu.menu.model.FindResponseMenuListModel;
 import com.example.todaysmenu.menu.model.FindResponseSubMenuListModel;
-import com.example.todaysmenu.pagination.DTO.Criteria;
+import com.example.todaysmenu.pagination.VO.Criteria;
 import com.example.todaysmenu.menu.DTO.RestMenuDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;

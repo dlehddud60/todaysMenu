@@ -1,11 +1,11 @@
-package com.example.todaysmenu.pagination.DTO;
+package com.example.todaysmenu.pagination.VO;
 
 import lombok.Getter;
 import lombok.ToString;
 
 @Getter
 @ToString
-public class PageDTO {
+public class PageVO {
     //amount 페이지당 데이터 수
 
     private int startPage;
@@ -15,7 +15,7 @@ public class PageDTO {
     private int total;
     private Criteria cri;
 
-    public PageDTO(int total, Criteria cri) {
+    public PageVO(int total, Criteria cri) {
         this.total = total;
         this.cri = cri;
         this.endPage = (int) (Math.ceil(cri.getPageNum() / 10.0)) * 10; //페이징 끝 번호 계산

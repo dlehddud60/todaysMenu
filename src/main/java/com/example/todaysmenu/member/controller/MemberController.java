@@ -5,9 +5,8 @@ import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.memFile.DTO.MemFileDTO;
 import com.example.todaysmenu.member.model.FindRequestLoginModel;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
-import com.example.todaysmenu.member.model.FindResponseMemberListModel;
-import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.pagination.DTO.PageDTO;
+import com.example.todaysmenu.pagination.VO.Criteria;
+import com.example.todaysmenu.pagination.VO.PageVO;
 import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.service.MemberService;
 
@@ -108,7 +107,7 @@ public class MemberController {
         }
         int total = memberService.count(cri);
         model.addAttribute("memberList", memberService.memberList(cri));
-        model.addAttribute("pageMaker",new PageDTO(total,cri));
+        model.addAttribute("pageMaker",new PageVO(total,cri));
 
         return "member/memberList";
     }

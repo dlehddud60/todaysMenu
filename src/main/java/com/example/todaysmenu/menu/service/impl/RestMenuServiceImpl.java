@@ -1,12 +1,11 @@
 package com.example.todaysmenu.menu.service.impl;
 
-import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import com.example.todaysmenu.menu.model.FindResponseMenuListModel;
 import com.example.todaysmenu.menu.model.FindResponseSubMenuListModel;
 import com.example.todaysmenu.menu.repository.RestMenuRepository;
 import com.example.todaysmenu.menu.service.RestMenuService;
-import com.example.todaysmenu.pagination.DTO.Criteria;
+import com.example.todaysmenu.pagination.VO.Criteria;
 import com.example.todaysmenu.menu.DTO.RestMenuDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

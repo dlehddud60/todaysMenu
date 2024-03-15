@@ -1,36 +1,29 @@
 <div th:insert="~{include/Header.html}" th:remove="tag"></div>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d7c247130688fc47e72341dd6fa5081c"></script>
 <script>
-    let recomNum = [[${param.recomNum}]]
 
 $(function () {
+
+    let paramKeywordSh = "[[${param.keywordSh}]]"
     let trmtSeq = "[[${recommendMenu?.trmt_seq}]]";
     let trtSeq = "[[${recommendMenu?.trt_seq}]]";
     let trtRestNameSh = "[[${recommendMenu?.trt_rest_name}]]";
     let trmtMenuNameSh = "[[${recommendMenu?.trmt_menu_name}]]";
     let restAddress = "[[${recommendMenu?.trt_addr}]]";
     $(".nextBtn").on("click",function () {
-        $("input[name=recomNum]").val(recomNum);
         $("#frmList").append("<input type=\"hidden\" name=\"trmt_seqArr\" value='"+trmtSeq+"'>")
         $("#frmList").append("<input type=\"hidden\" name=\"trmt_menu_nameSh\" value='"+trmtMenuNameSh+"'>")
-
-
-        // $("input[name=trmt_seq]").val(trmtSeq);
+        $("input[name=keywordSh]").val(paramKeywordSh);
         $("#frmList").submit();
     })
     $(".restExcept").on("click",function () {
-        $("input[name=recomNum]").val(recomNum);
+        $("input[name=keywordSh]").val(paramKeywordSh);
         $("#frmList").append("<input type=\"hidden\" name=\"trt_seqArr\" value='"+trtSeq+"'>")
         $("#frmList").append("<input type=\"hidden\" name=\"trt_rest_nameSh\" value='"+trtRestNameSh+"'>")
-
-        // $("input[name=trmt_seq]").val(trmtSeq);
         $("#frmList").submit();
     })
     $(".resetBtn").on("click",function () {
-        console.log("gdgd")
-        recomNum = 1;
-        $("input[name=recomNum]").val(recomNum);
-        location.replace('/restMenu/recommendMenu.do?recomNum=1');
+        location.replace('/restMenu/recommendMenu.do');
 
     })
     $.ajax({
@@ -99,6 +92,11 @@ $(function () {
         //
         // });
     }
+    function keywordClickFunk(obj) {
+        let keywordResult = obj.slice(5).replace(/ /g,"")
+        $("input[name=keywordSh]").val(keywordResult);
+        $("#frmList").submit();
+    }
 </script>
 <style>
     ul {
@@ -136,7 +134,11 @@ $(function () {
     }
 
     #midTitle {
-        font-size: 2rem;
+        border-radius: 20px;
+        margin-top: 30px; margin-bottom: 30px;
+        padding: 50px;
+        font-size: 2.3rem;
+        background: #dddddd;
     }
     .parentBtnArea {
         position: relative;
@@ -181,8 +183,35 @@ $(function () {
     .subMenuText {
         font-size: 2rem;
     }
+    .keywordArea {
+        padding: 30px;
+        border-radius: 20px;
+        margin-top: 30px;
+        font-size: 1.5rem;
+        background: #dddddd
+    }
+    .keywordArea p{
+        font-size: 2.5rem; color: #ff8585
+    }
+    .keywordTextOnclick {
+        cursor: pointer;
+    }
+    .recommenKeyword {
+        font-size: 2.5rem;
+    }
+    .recommenKeywordTitle {
+        color: deeppink;
+    }
+    .exeptArea {
+        margin-top: 30px; margin-bottom: 30px;
+        padding: 30px;
+        border-radius: 30px;
+        background: #dddddd;
+        font-size: 1.5rem;
+    }
 </style>
 <form method="get" id="frmList">
+    <input type="hidden" name="keywordSh">
     <input type="hidden" name="trt_seq" th:value="${recommendMenu?.trt_seq}">
     <th:block th:each="list : ${param?.trmt_seqArr}">
         <input type="hidden" name="trmt_seqArr" th:value="${list}">
@@ -191,7 +220,6 @@ $(function () {
         <input type="hidden" name="trt_seqArr" th:value="${list}">
     </th:block>
 
-    <input type="hidden" name="recomNum">
     <div class="form-group">
         <div class="container pt-5 recommendArea">
             <p id="title">오늘의 메뉴 추천</p>
@@ -202,17 +230,20 @@ $(function () {
                 <p>4. 사용자 개인 데이터에 의한 맞춤형 추천 서비스가 제공 됩니다.</p>
                 <p>5. 메뉴의 추천은 사용자가 음식을 안먹은지 3일된 메뉴 이면서 평점이 3점이상 식당평점3점 평균메뉴평점 3점 이상 조건으로 맨 처음으로 추천됩니다.</p>
             </div>
-            <div class="keywordArea" style="margin-top: 20px; font-size: 1.2rem;background: #dddddd">
-                <p style="font-size: 2.5rem; color: #ff8585" th:text="해시태그"></p>
+            <div class="keywordArea" >
+                <p th:text="해시태그"></p>
+                <th:block th:if="${not #strings.isEmpty(param.keywordSh)}">
+                    <div class="recommenKeyword">현재 <span class="recommenKeywordTitle">[ [[${param.keywordSh}]] ]</span> 키워드로 추천되고 있습니다</div>
+                </th:block>
                 <th:block th:each="list : ${keywordRankingList}">
-                    <span th:text="${list.keyword_rank}"></span>
+                    <span th:text="${list.keyword_rank}" class="keywordTextOnclick" th:onclick="keywordClickFunk([[${list.keyword_rank}]])"></span>
                 </th:block>
             </div>
 
 
             <th:block th:if="${not #strings.isEmpty(recommendMenu)}">
-                <div class="exeptArea">
-                    <span th:if="${not #lists.isEmpty(param?.trmt_menu_nameSh)}">추천받아본 메뉴 : </span>
+                <div  th:if="${not #lists.isEmpty(param?.trmt_menu_nameSh)}" class="exeptArea">
+                    <span>추천받아본 메뉴 : </span>
                     <th:div th:each="list, listStatus : ${param?.trmt_menu_nameSh}">
                         [<span th:text="${listStatus.count}"></span>.&nbsp;<span th:text="${list}"></span>]
                         <input type="hidden" name="trmt_menu_nameSh" th:value="${list}">

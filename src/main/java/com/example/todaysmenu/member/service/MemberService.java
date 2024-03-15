@@ -5,7 +5,7 @@ import com.example.todaysmenu.exception.FileSizeExaption;
 import com.example.todaysmenu.memFile.DTO.MemFileDTO;
 import com.example.todaysmenu.member.model.FindRequestLoginModel;
 import com.example.todaysmenu.member.model.FindResponseMemberListModel;
-import com.example.todaysmenu.pagination.DTO.Criteria;
+import com.example.todaysmenu.pagination.VO.Criteria;
 import com.example.todaysmenu.member.DTO.MemberDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;

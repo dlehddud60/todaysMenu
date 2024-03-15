@@ -2,10 +2,9 @@ package com.example.todaysmenu.restaurant.controller;
 
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
-import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
-import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.pagination.DTO.PageDTO;
+import com.example.todaysmenu.pagination.VO.Criteria;
+import com.example.todaysmenu.pagination.VO.PageVO;
 import com.example.todaysmenu.restFile.model.FindRequestFileListModel;
 import com.example.todaysmenu.restaurant.DTO.RestaurantDTO;
 import com.example.todaysmenu.restFile.DTO.RestFileDTO;
@@ -16,7 +15,6 @@ import com.example.todaysmenu.keyword.model.FindRequestKeywordListModel;
 import com.example.todaysmenu.keyword.model.FindResponseKeywordListModel;
 import com.example.todaysmenu.keyword.service.KeywordService;
 import com.example.todaysmenu.menu.service.impl.RestMenuServiceImpl;
-import com.example.todaysmenu.restaurant.model.FindResponseRestaurantListModel;
 import com.example.todaysmenu.restaurant.service.RestaurantService;
 import com.example.todaysmenu.star.DTO.RestStarDTO;
 import com.example.todaysmenu.star.service.RestStarService;
@@ -53,7 +51,7 @@ public class RestaurantController {
         log.info("index.do 호출 cri{}",cri);
         int total = restaurantService.count(cri);
         model.addAttribute("list", restaurantService.list(cri));
-        model.addAttribute("pageMaker",new PageDTO(total,cri));
+        model.addAttribute("pageMaker",new PageVO(total,cri));
         return "restaurant/list";
     }
 

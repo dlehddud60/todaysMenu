@@ -1,11 +1,9 @@
 package com.example.todaysmenu.menu.controller;
 
 import com.example.todaysmenu.keyword.service.KeywordService;
-import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
-import com.example.todaysmenu.menu.model.FindResponseSubMenuListModel;
-import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.pagination.DTO.PageDTO;
+import com.example.todaysmenu.pagination.VO.Criteria;
+import com.example.todaysmenu.pagination.VO.PageVO;
 import com.example.todaysmenu.menu.DTO.RestMenuDTO;
 import com.example.todaysmenu.menu.service.impl.RestMenuServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,8 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.DANGER;
 import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.redirect;
@@ -47,7 +43,7 @@ public class RestMenuController {
         log.info("=======list 호출======{}",cri);
         int total = restMenuService.count(cri);
         model.addAttribute("list", restMenuService.listPaging(cri));
-        model.addAttribute("pageMaker",new PageDTO(total,cri));
+        model.addAttribute("pageMaker",new PageVO(total,cri));
         return "restaurant/restMenu/list";
     }
 

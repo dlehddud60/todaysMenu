@@ -6,10 +6,9 @@ import com.example.todaysmenu.boardFile.DTO.BoardFileDTO;
 import com.example.todaysmenu.boardFile.service.BoardFileService;
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
-import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
-import com.example.todaysmenu.pagination.DTO.Criteria;
-import com.example.todaysmenu.pagination.DTO.PageDTO;
+import com.example.todaysmenu.pagination.VO.Criteria;
+import com.example.todaysmenu.pagination.VO.PageVO;
 import com.example.todaysmenu.board.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -44,7 +43,7 @@ public class BoardController {
         log.info("index.do 호출 cri{}",cri);
         int total = boardService.count(cri);
         model.addAttribute("list", boardService.list(cri));
-        model.addAttribute("pageMaker",new PageDTO(total,cri));
+        model.addAttribute("pageMaker",new PageVO(total,cri));
 
         return "board/list";
     }

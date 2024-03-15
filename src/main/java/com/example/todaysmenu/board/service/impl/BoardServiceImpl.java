@@ -7,7 +7,7 @@ import com.example.todaysmenu.boardFile.DTO.BoardFileDTO;
 import com.example.todaysmenu.boardFile.repository.BoardFileRepository;
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
-import com.example.todaysmenu.pagination.DTO.Criteria;
+import com.example.todaysmenu.pagination.VO.Criteria;
 import com.example.todaysmenu.board.repository.BoardRepository;
 import com.example.todaysmenu.board.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;

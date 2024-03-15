@@ -1,4 +1,4 @@
-package com.example.todaysmenu.pagination.DTO;
+package com.example.todaysmenu.pagination.VO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +20,7 @@ public class Criteria {
     private String startPriceSh;
     private String endPriceSh;
     private String tmt_login_id;
+
 
 
 

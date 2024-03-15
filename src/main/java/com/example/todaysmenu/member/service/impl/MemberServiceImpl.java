@@ -8,7 +8,7 @@ import com.example.todaysmenu.member.model.FindRequestLoginModel;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import com.example.todaysmenu.member.model.FindResponseMemberListModel;
 import com.example.todaysmenu.member.model.FindResponseRegisterCheckModel;
-import com.example.todaysmenu.pagination.DTO.Criteria;
+import com.example.todaysmenu.pagination.VO.Criteria;
 import com.example.todaysmenu.member.DTO.MemberDTO;
 import com.example.todaysmenu.member.repository.MemberRepository;
 import com.example.todaysmenu.member.service.MemberService;

@@ -21,6 +21,7 @@
             AND     T1.TRT_FOOD_TYPE = #{trt_food_typeSh}
         </if>
 
+
     </sql>
 
     <select id="count" resultType="int">
@@ -325,20 +326,27 @@
                                                     ) T1
                                 )T1
                                 WHERE   1 = 1
+                                <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(keywordSh)">
+                                    AND T1.TRMT_SEQ IN (
+                                                            SELECT	TRMKW_PARENT_SEQ
+                                                            FROM	TM_REST_MENU_KEY_WORD
+                                                            WHERE 	 TRMKW_KEY_WORD = #{keywordSh}
+                                                        )
+                                </if>
                                 AND T1.TRST_MENU_AVG_SCORE NOT BETWEEN 1 AND 2.9
                                 AND T1.TRST_REST_AVG_SCORE NOT BETWEEN 1 AND 2.9
-                                    <if test='trmt_seqArr != null'>
-                                        AND T1.TRMT_SEQ NOT IN
-                                        <foreach collection="trmt_seqArr" item="item" index="index" separator="," open="(" close=")">
-                                            #{item}
-                                        </foreach>
-                                    </if>
-                                    <if test='trt_seqArr != null'>
-                                        AND T1.TRT_SEQ NOT IN
-                                        <foreach collection="trt_seqArr" item="item" index="index" separator="," open="(" close=")">
-                                            #{item}
-                                        </foreach>
-                                    </if>
+                                <if test='trmt_seqArr != null'>
+                                    AND T1.TRMT_SEQ NOT IN
+                                    <foreach collection="trmt_seqArr" item="item" index="index" separator="," open="(" close=")">
+                                        #{item}
+                                    </foreach>
+                                </if>
+                                <if test='trt_seqArr != null'>
+                                    AND T1.TRT_SEQ NOT IN
+                                    <foreach collection="trt_seqArr" item="item" index="index" separator="," open="(" close=")">
+                                        #{item}
+                                    </foreach>
+                                </if>
                                 <choose>
                                     <when test="status == 0">
                                         AND TO_CHAR(SYSDATE-7 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD
@@ -359,7 +367,6 @@
                                         AND T1.TRST_MENU_AVG_SCORE >= 3
                                     </when>
                                 </choose>
-
                         )T1
                 )T1
         )T1

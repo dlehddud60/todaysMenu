@@ -6,7 +6,7 @@ import com.example.todaysmenu.board.model.FindResponseBoardListModel;
 import com.example.todaysmenu.boardFile.DTO.BoardFileDTO;
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
-import com.example.todaysmenu.pagination.DTO.Criteria;
+import com.example.todaysmenu.pagination.VO.Criteria;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;

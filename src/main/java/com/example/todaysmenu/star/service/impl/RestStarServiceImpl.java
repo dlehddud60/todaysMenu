@@ -1,6 +1,6 @@
 package com.example.todaysmenu.star.service.impl;
 
-import com.example.todaysmenu.pagination.DTO.Criteria;
+import com.example.todaysmenu.pagination.VO.Criteria;
 import com.example.todaysmenu.star.DTO.RestStarDTO;
 import com.example.todaysmenu.star.repository.RestStarRepository;
 import com.example.todaysmenu.star.service.RestStarService;

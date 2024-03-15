@@ -78,6 +78,7 @@ public class RestMenuDTO {
     private int status = 0;
 
 
+    private String keywordSh;
 
 
 }

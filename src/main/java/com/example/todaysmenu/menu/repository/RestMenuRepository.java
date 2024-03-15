@@ -2,7 +2,7 @@ package com.example.todaysmenu.menu.repository;
 
 import com.example.todaysmenu.menu.model.FindResponseMenuListModel;
 import com.example.todaysmenu.menu.model.FindResponseSubMenuListModel;
-import com.example.todaysmenu.pagination.DTO.Criteria;
+import com.example.todaysmenu.pagination.VO.Criteria;
 import com.example.todaysmenu.menu.DTO.RestMenuDTO;
 import org.apache.ibatis.annotations.Mapper;
 
