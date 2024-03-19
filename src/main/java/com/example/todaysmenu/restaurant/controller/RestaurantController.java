@@ -2,6 +2,7 @@ package com.example.todaysmenu.restaurant.controller;
 
 import com.example.todaysmenu.exception.FileExtensionExaption;
 import com.example.todaysmenu.exception.FileSizeExaption;
+import com.example.todaysmenu.keyword.model.FindRequestRedirectKewordModel;
 import com.example.todaysmenu.member.model.FindResponseLoginModel;
 import com.example.todaysmenu.pagination.VO.Criteria;
 import com.example.todaysmenu.pagination.VO.PageVO;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.todaysmenu.common.globalCommonMethod.modal.ComModal.*;
@@ -48,7 +50,6 @@ public class RestaurantController {
 
     @GetMapping("/index.do")
     public String list(Criteria cri, Model model) {
-        log.info("index.do 호출 cri{}",cri);
         int total = restaurantService.count(cri);
         model.addAttribute("list", restaurantService.list(cri));
         model.addAttribute("pageMaker",new PageVO(total,cri));
@@ -121,6 +122,36 @@ public class RestaurantController {
                 restaurantService.insert(restaurantDTO,restFileDTO,request);
                 restInsertMeth(restaurantDTO, restMenuDTO,keyword,request, memberSession,restMenuService,keywordService);
             }catch (Exception e) {
+            List<String> insert = restMenuDTO.getTrmt_menu_nameArr();
+            List<RestMenuDTO> restMenuLists = new ArrayList<>();
+            try {
+                for (int i = 0; i < insert.size(); i++) {
+                    restMenuLists.add(new RestMenuDTO());
+                    restMenuLists.get(i).setTrmt_menu_name(restMenuDTO.getTrmt_menu_nameArr().get(i));
+                    restMenuLists.get(i).setTrmt_price(restMenuDTO.getTrmt_priceArr().get(i));
+                    restMenuLists.get(i).setTrmt_menu_text(restMenuDTO.getTrmt_menu_textArr().get(i));
+                }
+            }catch (Exception ex) {
+               log.info("Excepiton");
+            }
+
+            try{
+                for (int i = 0; i < keyword.getList().size(); i++) {
+                    List<FindRequestRedirectKewordModel> keywordDetailList = new ArrayList<>();
+                    List<String> trmkwKeyWordList  = keyword.getList().get(i).getTrmkw_key_word();
+                    for (int j = 0; j < trmkwKeyWordList.size(); j++) {
+                        keywordDetailList.add(new FindRequestRedirectKewordModel(trmkwKeyWordList.get(j)));
+                    }
+                    rttr.addFlashAttribute("keywordList" + i,keywordDetailList);
+                    keywordDetailList = null;
+                }
+            }catch (Exception ex) {
+                log.info("Excepiton");
+            }
+
+            e.printStackTrace();
+                rttr.addFlashAttribute("restaurantDTO",restaurantDTO);
+                rttr.addFlashAttribute("restMenuList",restMenuLists);
                 return redirect("restaurant/write.do",rttr,"실패 메시지","게시글을 전부 작성해주시길 바랍니다..",DANGER);
             }
         rttr.addFlashAttribute("result","success");
@@ -165,7 +196,6 @@ public class RestaurantController {
 
     @GetMapping("/view.do")
     public String view(@ModelAttribute RestaurantDTO restaurantDTO,@ModelAttribute Criteria cri,  Model model, HttpServletRequest request, RedirectAttributes rttr) {
-        log.info("==============restaurantDTO================{}",restaurantDTO);
         HttpSession session = request.getSession();
         FindResponseLoginModel memberSession = (FindResponseLoginModel) session.getAttribute("memberDTO");
         try{

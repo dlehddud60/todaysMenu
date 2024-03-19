@@ -1,10 +1,6 @@
 <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d7c247130688fc47e72341dd6fa5081c&libraries=services"></script>
 <div th:insert="~{include/Header.html}" th:remove="tag"></div>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
-
-
-
 <style>
 
 
@@ -143,6 +139,7 @@
     var marker;
     var map;
     let menuAreaHeight = 300;
+    let restMenuList = `[[${restMenuList}]]`
     $(function () {
         $(document).on("keydown","input[type=text]", function() {
             if (event.keyCode === 13) {
@@ -150,12 +147,21 @@
             }
         });
         let menuShowLength = $(".menuCopyAreaShow").length;
-        menuAreaCopyFunc();
+        if(restMenuList == "") {
+            menuAreaCopyFunc();
+        }else {
+            $(".menuCopyAreaShow").show();
+            if(menuShowLength == 0){
+                menuAreaCopyFunc();
+            }
+            menuAreaHeight += (menuShowLength * 110);
+            $("#menuArea").css("height",menuAreaHeight)
+
+        }
         $(document).on("click",".menuPlusBtn",function () {
             menuAreaCopyFunc();
             menuAreaHeight += 150;
             $("#menuArea").css("height",menuAreaHeight)
-            console.log($(".menuCopyAreaShow").index())
         });
         $(document).on("click",".menuRemoveBtn",function () {
             menuShowLength = $(".menuCopyAreaShow").length;
@@ -172,7 +178,6 @@
             if (window.event.keyCode == 13) {
                 let inputVal = $(this).parent().parent().find("input");
                 let keywordIdx = $(this).parent().closest("div").index() -1;
-                console.log(keywordIdx)
                 if(!inputVal.val() == "") {
                     $(this).parent().parent().find("ul").append("<input type=\"hidden\" name=\"list["+keywordIdx+"].trmkw_key_word\" value=\""+inputVal.val()+"\">")
                     $(this).parent().parent().find("ul").append(" <li><span class=\"xBtn\">❌</span>#"+inputVal.val()+"</li>")
@@ -219,14 +224,11 @@
     function sample5_execDaumPostcode() {
         new daum.Postcode({
             oncomplete: function(data) {
-                console.log("======================" + data)
                 var addr = data.address; // 최종 주소 변수
-                console.log("addr=========================",addr)
                 // 주소 정보를 해당 필드에 넣는다.
                 document.getElementById("sample5_address").value = addr;
                 // 주소로 상세 정보를 검색
                 geocoder.addressSearch(data.address, function(results, status) {
-                    console.log("======================" + results)
 
                     // 정상적으로 검색이 완료됐으면
                     if (status === daum.maps.services.Status.OK) {
@@ -251,13 +253,12 @@
     }
 </script>
 
-
 <form method="post" action="/restaurant/insert.do" enctype="multipart/form-data"  id="frm">
-    <div class="container pt-5 restArea">
+     <div class="container pt-5 restArea">
         <p class="restAreaTitle">식당 등록</p>
         <div class="form-group">
             <label class="col-form-label mt-4" for="inputDefault">식당명</label>
-            <input type="text" class="form-control" placeholder="식당명을 입력해주세요." id="inputDefault" name="trt_rest_name">
+            <input type="text" class="form-control" placeholder="식당명을 입력해주세요." id="inputDefault" name="trt_rest_name" th:value="${restaurantDTO != null ? (restaurantDTO.trt_rest_name ?: '') : ''}">
         </div>
         <div class="form-group mapArea">
             <label class="col-form-label mt-4" for="inputDefault">지도</label>
@@ -265,40 +266,90 @@
         </div>
         <div class="form-group">
             <label class="col-form-label mt-4" for="inputDefault">식당 주소</label>
-            <input type="text" id="sample5_address" placeholder="주소"  class="form-control" name="trt_addr" readonly>
+            <input type="text" id="sample5_address" placeholder="주소"  class="form-control" name="trt_addr" th:value="${restaurantDTO != null ? (restaurantDTO.trt_addr ?: '') : ''}" readonly >
             <input type="button"   onclick="sample5_execDaumPostcode()"  value="주소 검색"><br>
         </div>
 
         <div class="form-group">
             <label class="col-form-label mt-4" for="inputDefault">식당 타입</label>
             <select class="form-select"  style=" width: 100px" name="trt_food_type">
-                <option th:text="한식" th:value="한식"></option>
-                <option th:text="일식" th:value="일식"></option>
-                <option th:text="양식" th:value="양식"></option>
-                <option th:text="중식" th:value="중식"></option>
-                <option th:text="기타" th:value="기타"></option>
+                <option th:text="한식" th:value="한식" th:selected="${restaurantDTO != null ? (restaurantDTO.trt_food_type == '한식' ?: '') : ''}"></option>
+                <option th:text="일식" th:value="일식" th:selected="${restaurantDTO != null ? (restaurantDTO.trt_food_type == '일식' ?: '') : ''}"></option>
+                <option th:text="양식" th:value="양식" th:selected="${restaurantDTO != null ? (restaurantDTO.trt_food_type == '양식' ?: '') : ''}"></option>
+                <option th:text="중식" th:value="중식" th:selected="${restaurantDTO != null ? (restaurantDTO.trt_food_type == '중식' ?: '') : ''}"></option>
+                <option th:text="기타" th:value="기타" th:selected="${restaurantDTO != null ? (restaurantDTO.trt_food_type == '기타' ?: '') : ''}"></option>
             </select>
             <label class="col-form-label mt-4" for="inputDefault">지역</label>
             <select class="form-select" name="trt_regi" style=" width: 100px">
-                <option th:text="서울" th:value="서울"></option>
-                <option th:text="경기" th:value="경기"></option>
-                <option th:text="인천" th:value="인천"></option>
+                <option th:text="서울" th:value="서울" th:selected="${restaurantDTO != null ? (restaurantDTO.trt_regi == '서울' ?: '') : ''}"></option>
+                <option th:text="경기" th:value="경기" th:selected="${restaurantDTO != null ? (restaurantDTO.trt_regi == '경기' ?: '') : ''}"></option>
+                <option th:text="인천" th:value="인천" th:selected="${restaurantDTO != null ? (restaurantDTO.trt_regi == '인천' ?: '') : ''}"></option>
             </select>
         </div>
         <div class="form-group">
             <label class="form-label mt-4">내용</label>
-            <textarea class="form-control" id="" rows="10" placeholder="내용을 입력해주세요" name="trt_rest_text"></textarea>
+            <textarea class="form-control" id="" rows="10" placeholder="내용을 입력해주세요" name="trt_rest_text" th:text="${restaurantDTO != null ? (restaurantDTO.trt_rest_text ?: '') : ''}"></textarea>
         </div>
         <br>
         <div class="input-group mb-3">
             <label class="input-group-text" for="inputGroupFile01">이미지 첨부</label>
-            <input type="file" class="form-control" id="inputGroupFile01"  name="trft_multi_file" multiple>
+            <input type="file" class="form-control" id="inputGroupFile01"  name="trft_multi_file" th:value="${restFileDTO != null ? (restFileDTO.trft_multi_file ?: '') : ''}" multiple >
         </div>
 
     </div>
     <div id="menuArea">
         <p class="menuText">메뉴 등록</p>
 
+        <th:block th:each="list, listState : ${restMenuList}">
+            <div class="menuCopyAreaShow" style="display: none">
+                <table class="menuTable">
+                    <tr class="menuTitleTr">
+                        <td style="width: 150px">메뉴명</td>
+                        <td style="width: 150px">가격</td>
+                        <td>상세내용</td>
+                        <td style="width: 150px">추가/제거</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control" placeholder="메뉴" name="trmt_menu_nameArr" th:value="${list.trmt_menu_name}">
+                            <input type="hidden" class="form-control" name="trmt_seqArr" th:value="${list.trmt_seq}">
+
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" placeholder="가격" name="trmt_priceArr" th:value="${list.trmt_price}">
+
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="상세내용" name="trmt_menu_textArr" th:value="${list.trmt_menu_text}">
+                        </td>
+                        <td class="menuBtnArea">
+                            <div class="menuPlusBtn">추가</div>
+                            <div class="menuRemoveBtn">제거</div>
+                        </td>
+                    </tr>
+                    <tr class="hashTagTr">
+                        <td>해시태그</td>
+                        <td>
+                            <input type="text" class="form-control keyword" placeholder="해시태그 입력" >
+                        </td>
+                        <td colspan="2"  class="hashTagTd">
+                            <ul>
+                                <th:block th:with="keywordList='keywordList' + ${listState.index}">
+
+                                    <span th:each="keyword: ${#vars[keywordList]}">
+
+                                        <li>
+                                            <span class="xBtn"  th:text="'❌' + '#' +${keyword.trmkw_key_word}"/>
+                                            <input type="hidden" th:name="list+'['+${listState.index}+']'+.trmkw_key_word" th:value="${keyword.trmkw_key_word}">
+                                        </li>
+                                    </span>
+                                </th:block>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </th:block>
     </div>
     <div class="procBtnArea">
         <div th:replace="~{include/modal/procModal::globalProcBtn(null,restaurant)}"></div>
