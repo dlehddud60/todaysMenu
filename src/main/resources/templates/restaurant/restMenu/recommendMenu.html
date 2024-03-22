@@ -11,15 +11,15 @@ $(function () {
     let trmtMenuNameSh = "[[${recommendMenu?.trmt_menu_name}]]";
     let restAddress = "[[${recommendMenu?.trt_addr}]]";
     $(".nextBtn").on("click",function () {
-        $("#frmList").append("<input type=\"hidden\" name=\"trmt_seqArr\" value='"+trmtSeq+"'>")
-        $("#frmList").append("<input type=\"hidden\" name=\"trmt_menu_nameSh\" value='"+trmtMenuNameSh+"'>")
+        $("#frmList").append("<input type=\"hidden\" name=\"trmt_seqArr\" value='"+trmtSeq+"'>");
+        $("#frmList").append("<input type=\"hidden\" name=\"trmt_menu_nameSh\" value='"+trmtMenuNameSh+"'>");
         $("input[name=keywordSh]").val(paramKeywordSh);
         $("#frmList").submit();
     })
     $(".restExcept").on("click",function () {
+        $("#frmList").append("<input type=\"hidden\" name=\"trt_seqArr\" value='"+trtSeq+"'>");
+        $("#frmList").append("<input type=\"hidden\" name=\"trt_rest_nameSh\" value='"+trtRestNameSh+"'>");
         $("input[name=keywordSh]").val(paramKeywordSh);
-        $("#frmList").append("<input type=\"hidden\" name=\"trt_seqArr\" value='"+trtSeq+"'>")
-        $("#frmList").append("<input type=\"hidden\" name=\"trt_rest_nameSh\" value='"+trtRestNameSh+"'>")
         $("#frmList").submit();
     })
     $(".resetBtn").on("click",function () {
@@ -211,6 +211,7 @@ $(function () {
     }
 </style>
 <form method="get" id="frmList">
+    [[${param.trt_rest_nameSh}]]
     <input type="hidden" name="keywordSh">
     <input type="hidden" name="trt_seq" th:value="${recommendMenu?.trt_seq}">
     <th:block th:each="list : ${param?.trmt_seqArr}">
@@ -242,8 +243,8 @@ $(function () {
 
 
             <th:block th:if="${not #strings.isEmpty(recommendMenu)}">
-                <div  th:if="${not #lists.isEmpty(param?.trmt_menu_nameSh)}" class="exeptArea">
-                    <span>추천받아본 메뉴 : </span>
+                <div  th:if="${not #lists.isEmpty(param?.trmt_menu_nameSh) or not #lists.isEmpty(param?.trt_rest_nameSh)}" class="exeptArea">
+                    <span th:if="${not #lists.isEmpty(param?.trmt_menu_nameSh)}">추천받아본 메뉴 : </span>
                     <th:div th:each="list, listStatus : ${param?.trmt_menu_nameSh}">
                         [<span th:text="${listStatus.count}"></span>.&nbsp;<span th:text="${list}"></span>]
                         <input type="hidden" name="trmt_menu_nameSh" th:value="${list}">

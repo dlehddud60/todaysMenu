@@ -326,15 +326,20 @@
                                                     ) T1
                                 )T1
                                 WHERE   1 = 1
-                                <if test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(keywordSh)">
-                                    AND T1.TRMT_SEQ IN (
-                                                            SELECT	TRMKW_PARENT_SEQ
-                                                            FROM	TM_REST_MENU_KEY_WORD
-                                                            WHERE 	 TRMKW_KEY_WORD = #{keywordSh}
-                                                        )
-                                </if>
-                                AND T1.TRST_MENU_AVG_SCORE NOT BETWEEN 1 AND 2.9
-                                AND T1.TRST_REST_AVG_SCORE NOT BETWEEN 1 AND 2.9
+                                <choose>
+                                    <when test="@com.example.todaysmenu.lib.mybatis.Util@isNotEmpty(keywordSh)">
+                                        AND T1.TRMT_SEQ IN (
+                                                                SELECT	TRMKW_PARENT_SEQ
+                                                                FROM	TM_REST_MENU_KEY_WORD
+                                                                WHERE 	 TRMKW_KEY_WORD = #{keywordSh}
+                                                            )
+                                    </when>
+                                    <otherwise>
+                                        AND T1.TRST_MENU_AVG_SCORE NOT BETWEEN 1 AND 2.9
+                                        AND T1.TRST_REST_AVG_SCORE NOT BETWEEN 1 AND 2.9
+                                        AND T1.TRST_STAR_SCORE NOT BETWEEN 1 AND 2.9
+                                    </otherwise>
+                                </choose>
                                 <if test='trmt_seqArr != null'>
                                     AND T1.TRMT_SEQ NOT IN
                                     <foreach collection="trmt_seqArr" item="item" index="index" separator="," open="(" close=")">
@@ -347,26 +352,26 @@
                                         #{item}
                                     </foreach>
                                 </if>
-                                <choose>
-                                    <when test="status == 0">
-                                        AND TO_CHAR(SYSDATE-7 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD
-                                        AND	T1.TRST_STAR_SCORE >= 5
-                                        AND T1.TRST_MENU_AVG_SCORE >= 5
-                                        AND T1.TRST_REST_AVG_SCORE >= 5
-                                    </when>
-                                    <when test="status == 1">
-                                        AND TO_CHAR(SYSDATE-7 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD
-                                        AND	T1.TRST_STAR_SCORE >= 4
-                                        AND T1.TRST_MENU_AVG_SCORE >= 4
-                                    </when>
-                                    <when test="status == 2">
-                                        AND	T1.TRST_STAR_SCORE >= 3
-                                        AND T1.TRST_MENU_AVG_SCORE >= 3
-                                    </when>
-                                    <when test="status == 3">
-                                        AND T1.TRST_MENU_AVG_SCORE >= 3
-                                    </when>
-                                </choose>
+<!--                                <choose>-->
+<!--                                    <when test="status == 0">-->
+<!--                                        AND TO_CHAR(SYSDATE-7 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD-->
+<!--                                        AND	T1.TRST_STAR_SCORE >= 5-->
+<!--                                        AND T1.TRST_MENU_AVG_SCORE >= 5-->
+<!--                                        AND T1.TRST_REST_AVG_SCORE >= 5-->
+<!--                                    </when>-->
+<!--                                    <when test="status == 1">-->
+<!--                                        AND TO_CHAR(SYSDATE-7 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD-->
+<!--                                        AND	T1.TRST_STAR_SCORE >= 4-->
+<!--                                        AND T1.TRST_MENU_AVG_SCORE >= 4-->
+<!--                                    </when>-->
+<!--                                    <when test="status == 2">-->
+<!--                                        AND	T1.TRST_STAR_SCORE >= 3-->
+<!--                                        AND T1.TRST_MENU_AVG_SCORE >= 3-->
+<!--                                    </when>-->
+<!--                                    <when test="status == 3">-->
+<!--                                        AND T1.TRST_MENU_AVG_SCORE >= 3-->
+<!--                                    </when>-->
+<!--                                </choose>-->
                         )T1
                 )T1
         )T1
