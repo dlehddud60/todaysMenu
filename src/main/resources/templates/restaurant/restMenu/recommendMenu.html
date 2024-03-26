@@ -211,7 +211,6 @@ $(function () {
     }
 </style>
 <form method="get" id="frmList">
-    [[${param.trt_rest_nameSh}]]
     <input type="hidden" name="keywordSh">
     <input type="hidden" name="trt_seq" th:value="${recommendMenu?.trt_seq}">
     <th:block th:each="list : ${param?.trmt_seqArr}">

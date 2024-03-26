@@ -312,9 +312,27 @@ html
 3. TRMKW_KEY_WORD
 4.
 -----------------------------------------------------------------------------
+컨트롤러명 : BoardReplyController
+서비스명  : BoardReplyService
+리포지토리 : BoardReplyRepository
+마이바티스 : oracle-boardReply-mapper
+테이블명  : TM_BOARD_REPLY_TBL
+
+
+
 대댓글
 1. 번호
-2. 게시글 부모 시퀀스
-3. 댓글 내용
-4. 깊이 DEPTH
-5. 그룹 GROUP 대댓글일 경우 모댓글의 SEQ값을 저장하여 누구의 대댓글인지 확인 한다.
+2. 부모 시퀀스
+3. 게시판 번호
+4. 댓글 내용
+5. 댓글 삭제여부
+6. 프로필
+
+
+
+1. TBRT_SEQ
+2. TBRT_PARENT_SEQ
+3. TBRT_BOARD_SEQ
+4. TBRT_REPLY_TEXT
+5. TBRT_DELETE_YN
+6. TBRT_MEM_PROFILE

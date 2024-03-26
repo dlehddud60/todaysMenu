@@ -338,6 +338,7 @@
                                         AND T1.TRST_MENU_AVG_SCORE NOT BETWEEN 1 AND 2.9
                                         AND T1.TRST_REST_AVG_SCORE NOT BETWEEN 1 AND 2.9
                                         AND T1.TRST_STAR_SCORE NOT BETWEEN 1 AND 2.9
+                                        AND (TO_CHAR(SYSDATE-7 ,'YYYY-MM-dd') > T1.TRST_TODAY_YMD OR T1.TRST_TODAY_YMD = '안먹어본 메뉴')
                                     </otherwise>
                                 </choose>
                                 <if test='trmt_seqArr != null'>
